@@ -1,0 +1,88 @@
+/* greens */
+
+.g1 {fill:rgb(247,252,245)}
+.g2 {fill:rgb(229,245,224)}
+.g3 {fill:rgb(199,233,192)}
+.g4 {fill:rgb(161,217,155)}
+.g5 {fill:rgb(116,196,118)}
+.g6 {fill:rgb(65,171,93)}
+.g7 {fill:rgb(35,139,69)}
+.g8 {fill:rgb(0,109,44)}
+.g9 {fill:rgb(0,68,27)}
+
+/* oranges */
+.o1 { fill: #fdbe85; }
+.o2 { fill: #fd8d3c; }
+.o3 { fill: #e6550d; }
+
+/* blues */
+.u1 { fill: #eff3ff }
+.u2 { fill: #c6dbef }
+.u3 { fill: #9ecae1 }
+.u4 { fill: #6baed6 }
+.u5 { fill: #4292c6 }
+.u6 { fill: #2171b5 }
+.u7 { fill: #084594 }
+
+/* reds */
+.r1 { fill: #fcbba1 }
+.r2 { fill: #fc9272 }
+.r3 { fill: #fb6a4a }
+.r4 { fill: #ef3b2c }
+.r5 { fill: #cb181d }
+.r6 { fill: #99000d }
+
+/* blacks/grays */
+.k1 { fill: #f7f7f7 }
+.k2 { fill: #d9d9d9 }
+.k3 { fill: #bdbdbd }
+.k4 { fill: #969696 }
+.k5 { fill: #636363 }
+.k6 { fill: #252525 }
+
+/* yellow-to-blue */
+.yb1 { fill: #ffffcc }
+.yb2 { fill: #c7e9b4 }
+.yb3 { fill: #7fcdbb }
+.yb4 { fill: #41b6c4 }
+.yb5 { fill: #1d91c0 }
+.yb6 { fill: #225ea8 }
+.yb7 { fill: #0c2c84 }
+
+/* yellow-green */
+.yg1 { fill: #ffffcc }
+.yg2 { fill: #d9f0a3 }
+.yg3 { fill: #addd8e }
+.yg4 { fill: #78c679 }
+.yg5 { fill: #41ab5d }
+.yg6 { fill: #238443 }
+.yg7 { fill: #005a32 }
+
+.gb1 { fill: #f0f9e8 }
+.gb2 { fill: #ccebc5 }
+.gb3 { fill: #a8ddb5 }
+.gb4 { fill: #7bccc4 }
+.gb5 { fill: #4eb3d3 }
+.gb6 { fill: #2b8cbe }
+.gb7 { fill: #08589e }
+
+/* purples */
+.p1 { fill: #feebe2 }
+.p2 { fill: #fcc5c0 }
+.p3 { fill: #fa9fb5 }
+.p4 { fill: #f768a1 }
+.p5 { fill: #dd3497 }
+.p6 { fill: #ae017e }
+.p7 { fill: #7a0177 }
+
+/* pastels */
+.pastel1 { fill: #fbb4ae }
+.pastel2 { fill: #b3cde3 }
+.pastel3 { fill: #ccebc5 }
+.pastel4 { fill: #decbe4 }
+.pastel5 { fill: #fed9a6 }
+.pastel6 { fill: #ffffcc }
+.pastel7 { fill: #e5d8bd }
+.pastel8 { fill: #fddaec }
+.pastel9 { fill: #f2f2f2 }
+
