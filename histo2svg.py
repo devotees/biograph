@@ -5,6 +5,13 @@ import svgwrite
 import datetime
 import dateutil.parser
 
+"""
+TODO:
+    * Reorder functions so that the called appear before the caller.
+    * Store events in a markdown file and write a handler instead of hard-coding them in main.
+    * Add weekend horizontal axis.
+"""
+
 left_grid = 50
 right_grid = 950
 top_grid = 100    # today
