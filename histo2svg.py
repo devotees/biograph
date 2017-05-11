@@ -26,6 +26,16 @@ bottom_date = None # Date of birth
 weekday_start_hour=8
 weekday_end_hour=24
 
+def weekday_hour(hr):
+    """
+    Returns the x-axis coordinate for a weekday time.
+    Args:
+        hr (int): Represents the time in 24h notation (E.g. 9 --> '9h00').
+    Returns:
+        int: An x-axis coordinate.
+    """
+    x_scale = (right_grid - left_grid)/14
+    return left_grid + (hr-8)*x_scale
 
 def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwargs):
     """
@@ -48,17 +58,6 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     draw.add(draw.polygon(points, **kwargs))
     draw.add(draw.text(str(event_label), x=[x1], y=[y1], stroke='black', style='color:black', **kwargs))
 
-def weekday_hour(hr):
-    """
-    Returns the x-axis coordinate for a weekday time.
-    Args:
-        hr (int): Represents the time in 24h notation (E.g. 9 --> '9h00').
-    Returns:
-        int: An x-axis coordinate.
-    """
-    x_scale = (right_grid - left_grid)/14
-    return left_grid + (hr-8)*x_scale
-
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     """
     Draws a weekend event.
@@ -77,28 +76,6 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     # Drawing
     draw.add(draw.polygon(points, **kwargs))
     draw.add(draw.text(str(event_label), x=[x2], y=[y1], stroke='black', style='color:black', **kwargs))
-
-def timespan(start_datestr, end_datestr):
-    """
-    Draws the histomap grid.
-    Args:
-        start_datestr(string): The starting date of the timeline in ISO format (YYYY-MM-DD).
-        end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
-    """
-    # Set y-axis boundaries of grid
-    global bottom_date, top_date
-    top_date = dateutil.parser.parse(end_datestr)
-    bottom_date = dateutil.parser.parse(start_datestr)
-    # Set year ticks on y-axis
-    for y in range(bottom_date.year, top_date.year+1):
-        dt = parse_date('%s-01-01' % y)
-        draw.add(draw.line((0, dt), (left_grid, dt), stroke='grey'))
-        draw.add(draw.text(str(y), x=[0], y=[dt], style='color:black'))
-    # Set hour ticks on x-axis
-    for h in range(weekday_start_hour, weekday_end_hour+1):
-        x = weekday_hour(h)
-        draw.add(draw.line((x, 0), (x, top_grid), stroke='gray'))
-        draw.add(draw.text(str(h), x=[x], y=[top_grid], style='color:black'))
 
 def parse_date(datestr):
     """
@@ -129,6 +106,28 @@ def residence(start_datestr, end_datestr, address, **kwargs):
     draw.add(draw.polygon(points, **kwargs))
     draw.add(draw.text(address, x=[left_grid], y=[start_y], style='color:black'))
 
+def timespan(start_datestr, end_datestr):
+    """
+    Draws the histomap grid.
+    Args:
+        start_datestr(string): The starting date of the timeline in ISO format (YYYY-MM-DD).
+        end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
+    """
+    # Set y-axis boundaries of grid
+    global bottom_date, top_date
+    top_date = dateutil.parser.parse(end_datestr)
+    bottom_date = dateutil.parser.parse(start_datestr)
+    # Set year ticks on y-axis
+    for y in range(bottom_date.year, top_date.year+1):
+        dt = parse_date('%s-01-01' % y)
+        draw.add(draw.line((0, dt), (left_grid, dt), stroke='grey'))
+        draw.add(draw.text(str(y), x=[0], y=[dt], style='color:black'))
+    # Set hour ticks on x-axis
+    for h in range(weekday_start_hour, weekday_end_hour+1):
+        x = weekday_hour(h)
+        draw.add(draw.line((x, 0), (x, top_grid), stroke='gray'))
+        draw.add(draw.text(str(h), x=[x], y=[top_grid], style='color:black'))
+
 def main():
     # Initialise Grid
     timespan('1991-06-20','2017-06-20')
@@ -139,10 +138,7 @@ def main():
 
 if __name__ == '__main__':
     fnout = sys.argv[1]
-
     draw = svgwrite.Drawing(fnout, preserveAspectRatio='xMidYMid meet')
     draw.add_stylesheet('timeline.css', title='some title')
-
     main()
-
     draw.save()
