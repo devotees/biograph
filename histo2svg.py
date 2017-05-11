@@ -126,12 +126,15 @@ def timespan(start_datestr, end_datestr):
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         dwg.add(dwg.line((0, dt), (left_grid, dt), stroke='grey'))
-        dwg.add(dwg.text(str(y), x=[0], y=[dt], style='color:black'))
+        text(0,dt, y)
+
     # Set hour ticks on x-axis
     for h in range(weekday_start_hour, weekday_end_hour+1):
         x = weekday_hour(h)
-        dwg.add(dwg.line((x, 0), (x, top_grid), stroke='gray'))
-        dwg.add(dwg.text(str(h), x=[x], y=[top_grid], style='color:black'))
+        dwg.add(dwg.line((x, top_label_y), (x, top_grid), stroke='gray'))
+        text(x,top_grid, h)
+    text(left_grid,top_grid-45, 'Mon-Fri')
+    text(weekend_left_grid,top_grid, 'Weekend')
 
 def main():
     # Initialise Grid
