@@ -5,11 +5,6 @@ import svgwrite
 import datetime
 import dateutil.parser
 
-"""
-TODO:
-    * Store events in a markdown file and write a handler instead of hard-coding them in main.
-    * Add weekend horizontal axis.
-"""
 
 # Timeline Grid Dimensions
 left_grid = 50
