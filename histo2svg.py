@@ -53,7 +53,7 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
     # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
-    dwg.add(dwg.text(str(event_label), x=[x1], y=[y1], stroke='black', style='color:black', **kwargs))
+    text(x1, y1, event_label)
 
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     """
@@ -74,7 +74,10 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
     # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
-    dwg.add(dwg.text(str(event_label), x=[x2], y=[y1], stroke='black', style='color:black', **kwargs))
+    text(x1, y1, event_label)
+
+def text(x, y, label):
+    dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:black'))
 
 def parse_date(datestr):
     """
