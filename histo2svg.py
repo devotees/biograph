@@ -54,8 +54,8 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     x2 = weekday_hour(end_hour)
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
     # Drawing
-    draw.add(draw.polygon(points, **kwargs))
-    draw.add(draw.text(str(event_label), x=[x1], y=[y1], stroke='black', style='color:black', **kwargs))
+    dwg.add(dwg.polygon(points, **kwargs))
+    dwg.add(dwg.text(str(event_label), x=[x1], y=[y1], stroke='black', style='color:black', **kwargs))
 
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     """
@@ -73,8 +73,8 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     x2 = (y2-y1)/(num_hours*sqpx_per_hour) + x1
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
     # Drawing
-    draw.add(draw.polygon(points, **kwargs))
-    draw.add(draw.text(str(event_label), x=[x2], y=[y1], stroke='black', style='color:black', **kwargs))
+    dwg.add(dwg.polygon(points, **kwargs))
+    dwg.add(dwg.text(str(event_label), x=[x2], y=[y1], stroke='black', style='color:black', **kwargs))
 
 def parse_date(datestr):
     """
@@ -102,8 +102,8 @@ def residence(start_datestr, end_datestr, address, **kwargs):
     start_y = parse_date(start_datestr)
     end_y = parse_date(end_datestr)
     points = [(left_grid,start_y), (right_grid,start_y), (right_grid,end_y), (left_grid,end_y)]
-    draw.add(draw.polygon(points, **kwargs))
-    draw.add(draw.text(address, x=[left_grid], y=[start_y], style='color:black'))
+    dwg.add(dwg.polygon(points, **kwargs))
+    dwg.add(dwg.text(address, x=[left_grid], y=[start_y], style='color:black'))
 
 def timespan(start_datestr, end_datestr):
     """
@@ -119,13 +119,13 @@ def timespan(start_datestr, end_datestr):
     # Set year ticks on y-axis
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
-        draw.add(draw.line((0, dt), (left_grid, dt), stroke='grey'))
-        draw.add(draw.text(str(y), x=[0], y=[dt], style='color:black'))
+        dwg.add(dwg.line((0, dt), (left_grid, dt), stroke='grey'))
+        dwg.add(dwg.text(str(y), x=[0], y=[dt], style='color:black'))
     # Set hour ticks on x-axis
     for h in range(weekday_start_hour, weekday_end_hour+1):
         x = weekday_hour(h)
-        draw.add(draw.line((x, 0), (x, top_grid), stroke='gray'))
-        draw.add(draw.text(str(h), x=[x], y=[top_grid], style='color:black'))
+        dwg.add(dwg.line((x, 0), (x, top_grid), stroke='gray'))
+        dwg.add(dwg.text(str(h), x=[x], y=[top_grid], style='color:black'))
 
 def main():
     # Initialise Grid
@@ -137,7 +137,7 @@ def main():
 
 if __name__ == '__main__':
     fnout = sys.argv[1]
-    draw = svgwrite.Drawing(fnout, preserveAspectRatio='xMidYMid meet')
-    draw.add_stylesheet('timeline.css', title='some title')
+    dwg = svgwrite.Drawing(fnout, preserveAspectRatio='xMidYMid meet')
+    dwg.add_stylesheet('timeline.css', title='some title')
     main()
-    draw.save()
+    dwg.save()
