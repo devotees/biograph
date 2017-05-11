@@ -63,6 +63,7 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
         end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
         num_hours (int): The time invested in the event.
         event_label (string): The name of the event.
+        **kwargs: css styling of main rectangle
     """
     # Coordinates
     y1 = parse_date(start_datestr)
@@ -120,6 +121,7 @@ def timespan(start_datestr, end_datestr):
     global bottom_date, top_date
     top_date = dateutil.parser.parse(end_datestr)
     bottom_date = dateutil.parser.parse(start_datestr)
+
     # Set year ticks on y-axis
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
