@@ -79,7 +79,7 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
     x1 = weekday_hour(30)
-    x2 = (y2-y1)/(nhours*sqpx_per_hour) + x1
+    x2 = (y2-y1)/(num_hours*sqpx_per_hour) + x1
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
     # Drawing
     draw.add(draw.polygon(points, **kwargs))
@@ -116,6 +116,10 @@ def parse_date(datestr):
         int: y-axis coordinate.
     """
     parsed_date = dateutil.parser.parse(datestr)
+    days_alive = (top_date - bottom_date).days # Total days alive
+    day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
+    scale = (bottom_grid - top_grid) / days_alive
+    return bottom_grid - scale * (days_alive - day_count)
 
 def residence(start_datestr, end_datestr, address, **kwargs):
     """
@@ -126,8 +130,11 @@ def residence(start_datestr, end_datestr, address, **kwargs):
         address (string): Address of residence.
         **kwargs: CSS stylesheet shenanigans.
     """
+    start_y = parse_date(start_datestr)
+    end_y = parse_date(end_datestr)
+    points = [(left_grid,start_y), (right_grid,start_y), (right_grid,end_y), (left_grid,end_y)]
     draw.add(draw.polygon(points, **kwargs))
-    draw.add(draw.text(address, x=[left_grid], y=[start], style='color:black'))
+    draw.add(draw.text(address, x=[left_grid], y=[start_y], style='color:black'))
 
 
 if __name__ == '__main__':
