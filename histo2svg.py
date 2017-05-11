@@ -7,7 +7,6 @@ import dateutil.parser
 
 """
 TODO:
-    * Reorder functions so that the called appear before the caller.
     * Store events in a markdown file and write a handler instead of hard-coding them in main.
     * Add weekend horizontal axis.
 """
