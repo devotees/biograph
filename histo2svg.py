@@ -8,9 +8,12 @@ import dateutil.parser
 
 # Timeline Grid Dimensions
 left_grid = 50
+weekday_right_grid = 500
+weekend_left_grid = 600
 right_grid = 950
 top_grid = 100    # Today's date
 bottom_grid = 900 # Date of birth
+top_label_y = 75
 
 sqpx_per_hour = .001 # Amount of square pixels which represent a unit of time
 
@@ -28,8 +31,8 @@ def weekday_hour(hr):
     Returns:
         int: An x-axis coordinate.
     """
-    x_scale = (right_grid - left_grid)/14
-    return left_grid + (hr-8)*x_scale
+    x_scale = (weekday_right_grid - left_grid)/(weekday_end_hour-weekday_start_hour)
+    return left_grid + (hr-weekday_start_hour)*x_scale
 
 def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwargs):
     """
@@ -64,8 +67,10 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     # Coordinates
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
-    x1 = weekday_hour(30)
-    x2 = (y2-y1)/(num_hours*sqpx_per_hour) + x1
+    x1 = weekend_left_grid
+    x2 = (y1-y2)/(num_hours*sqpx_per_hour) + x1
+    assert x2 > weekday_right_grid, (x1, x2, weekday_right_grid)
+
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
     # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
@@ -92,13 +97,14 @@ def residence(start_datestr, end_datestr, address, **kwargs):
         start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
         end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
         address (string): Address of residence.
-        **kwargs: CSS stylesheet shenanigans.
+        **kwargs: css styling
     """
     start_y = parse_date(start_datestr)
     end_y = parse_date(end_datestr)
     points = [(left_grid,start_y), (right_grid,start_y), (right_grid,end_y), (left_grid,end_y)]
     dwg.add(dwg.polygon(points, **kwargs))
-    dwg.add(dwg.text(address, x=[left_grid], y=[start_y], style='color:black'))
+    if address:
+        text(weekday_right_grid, start_y, address)
 
 def timespan(start_datestr, end_datestr):
     """
