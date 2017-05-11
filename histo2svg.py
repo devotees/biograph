@@ -26,13 +26,6 @@ bottom_date = None # Date of birth
 weekday_start_hour=8
 weekday_end_hour=24
 
-def main():
-    # Initialise Grid
-    timespan('1991-06-20','2017-06-20')
-    # Hardcoded Events
-    residence('1991-06-20', '1993-11-20', 'Beograd, Srbija', class_='g9')
-    weekday('2016-02-20', '2016-12-31', 9, 21, 'Grad school', class_='o2')
-    weekend('2016-02-20', '2016-04-05', 50, 'Tower of Hanoi', class_='u7')
 
 def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwargs):
     """
@@ -136,6 +129,13 @@ def residence(start_datestr, end_datestr, address, **kwargs):
     draw.add(draw.polygon(points, **kwargs))
     draw.add(draw.text(address, x=[left_grid], y=[start_y], style='color:black'))
 
+def main():
+    # Initialise Grid
+    timespan('1991-06-20','2017-06-20')
+    # Hardcoded Events
+    residence('1991-06-20', '1993-11-20', 'Beograd, Srbija', class_='g9')
+    weekday('2016-02-20', '2016-12-31', 9, 21, 'Grad school', class_='o2')
+    weekend('2016-02-20', '2016-04-05', 50, 'Tower of Hanoi', class_='u7')
 
 if __name__ == '__main__':
     fnout = sys.argv[1]
