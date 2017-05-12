@@ -24,18 +24,18 @@ weekday_start_hour=8
 weekday_end_hour=24
 
 def weekday_hour(hr):
-    """
+    '''
     Returns the x-axis coordinate for a weekday time.
     Args:
         hr (int): Represents the time in 24h notation (E.g. 9 --> '9h00').
     Returns:
         int: An x-axis coordinate.
-    """
+    '''
     x_scale = (weekday_right_grid - left_grid)/(weekday_end_hour-weekday_start_hour)
     return left_grid + (hr-weekday_start_hour)*x_scale
 
 def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwargs):
-    """
+    '''
     Draws a weekday event.
     Args:
         start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
@@ -44,7 +44,7 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
         end_hour (int): The event ending time in 24h notation (E.g. 21 --> '21h00').
         event_label (string): The name of the event.
         **kwargs: css styling
-    """
+    '''
     # Coordinates
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
@@ -56,7 +56,7 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     text(x1, y1, event_label)
 
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
-    """
+    '''
     Draws a weekend event.
     Args:
         start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
@@ -64,7 +64,7 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
         num_hours (int): The time invested in the event.
         event_label (string): The name of the event.
         **kwargs: css styling of main rectangle
-    """
+    '''
     # Coordinates
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
@@ -81,13 +81,13 @@ def text(x, y, label):
     dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:black'))
 
 def parse_date(datestr):
-    """
+    '''
     Returns the y-axis coordinate for a date.
     Args:
         datestr (string): A date in ISO format (YYYY-MM-DD).
     Returns:
         int: y-axis coordinate.
-    """
+    '''
     parsed_date = dateutil.parser.parse(datestr)
     days_alive = (top_date - bottom_date).days # Total days alive
     day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
@@ -95,14 +95,14 @@ def parse_date(datestr):
     return bottom_grid - scale * (days_alive - day_count)
 
 def residence(start_datestr, end_datestr, address, **kwargs):
-    """
+    '''
     Draws a box of y-axis length = duration of stay at a residence.
     Args:
         start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
         end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
         address (string): Address of residence.
         **kwargs: css styling
-    """
+    '''
     start_y = parse_date(start_datestr)
     end_y = parse_date(end_datestr)
     points = [(left_grid,start_y), (right_grid,start_y), (right_grid,end_y), (left_grid,end_y)]
@@ -111,12 +111,12 @@ def residence(start_datestr, end_datestr, address, **kwargs):
         text(weekday_right_grid, start_y, address)
 
 def timespan(start_datestr, end_datestr):
-    """
+    '''
     Draws the histomap grid.
     Args:
         start_datestr(string): The starting date of the timeline in ISO format (YYYY-MM-DD).
         end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
-    """
+    '''
     # Set y-axis boundaries of grid
     global bottom_date, top_date
     top_date = dateutil.parser.parse(end_datestr)
