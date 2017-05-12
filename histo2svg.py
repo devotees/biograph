@@ -131,7 +131,7 @@ def timespan(start_datestr, end_datestr):
     # Set hour ticks on x-axis
     for h in range(weekday_start_hour, weekday_end_hour+1):
         x = weekday_hour(h)
-        dwg.add(dwg.line((x, top_label_y), (x, top_grid), stroke='gray'))
+        dwg.add(dwg.line((x, top_label_y), (x, top_grid), stroke='grey'))
         text(x,top_grid, h)
     text(left_grid,top_grid-45, 'Mon-Fri')
     text(weekend_left_grid,top_grid, 'Weekend')
