@@ -14,6 +14,7 @@ right_grid = 950
 top_grid = 100    # Today's date
 bottom_grid = 900 # Date of birth
 top_label_y = 75
+event_line_x = right_grid+20
 
 sqpx_per_hour = .001 # Amount of square pixels which represent a unit of time
 
@@ -77,6 +78,17 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     dwg.add(dwg.polygon(points, **kwargs))
     text(x1, y1, event_label)
 
+def event(start_datestr, end_datestr, event_label):
+    #dwg.add(dwg.line((right_grid+20, top_grid), (right_grid+20, bottom_grid), stroke='grey'))
+    #text(right_grid, top_label_y, 'Events')
+    start_y = parse_date(start_datestr)
+    end_y = parse_date(end_datestr)
+    event_midpoint = (start_y+end_y)/2
+    event_radius = start_y-end_y+5
+    dwg.add(dwg.circle((event_line_x, event_midpoint), (end_y-start_y+5), fill='white', stroke='grey'))
+    dwg.add(dwg.line((event_line_x+event_radius, event_midpoint), (event_line_x+event_radius+20, event_midpoint), stroke='grey'))
+    text(event_line_x+event_radius+20, event_midpoint+8, event_label)
+
 def text(x, y, label):
     dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:black'))
 
@@ -135,6 +147,10 @@ def timespan(start_datestr, end_datestr):
         text(x,top_grid, h)
     text(left_grid,top_grid-45, 'Mon-Fri')
     text(weekend_left_grid,top_grid, 'Weekend')
+
+   # Draw the event line
+    dwg.add(dwg.line((event_line_x, top_grid), (event_line_x, bottom_grid), stroke='grey'))
+    text(right_grid, top_label_y, 'Events')
 
 def main(func, fnout):
     global dwg
