@@ -90,13 +90,13 @@ def event(start_datestr, end_datestr, event_label):
         event_label (string): The name of the event.
     '''
     # Coordinates
-    start_y = parse_date(start_datestr)
-    end_y = parse_date(end_datestr)
-    event_midpoint = (start_y+end_y)/2
-    event_radius = start_y-end_y+5
+    start_date = parse_date(start_datestr)
+    end_date = parse_date(end_datestr)
+    event_midpoint = (start_date+end_date)/2
+    event_radius = start_date-end_date+5
 
     # Drawing
-    dwg.add(dwg.circle((event_line_x, event_midpoint), (end_y-start_y+5), fill='white', stroke='grey'))
+    dwg.add(dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey'))
     dwg.add(dwg.line((event_line_x+event_radius, event_midpoint), (event_line_x+event_radius+20, event_midpoint), stroke='grey'))
     text(event_line_x+event_radius+20, event_midpoint+8, event_label)
 
@@ -134,14 +134,14 @@ def residence(start_datestr, end_datestr, address, **kwargs):
         **kwargs: css styling
     '''
     # Coordinates
-    start_y = parse_date(start_datestr)
-    end_y = parse_date(end_datestr)
-    points = [(left_grid,start_y), (right_grid,start_y), (right_grid,end_y), (left_grid,end_y)]
+    start_date = parse_date(start_datestr)
+    end_date = parse_date(end_datestr)
+    points = [(left_grid,start_date), (right_grid,start_date), (right_grid,end_date), (left_grid,end_date)]
 
     # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
     if address:
-        text(weekday_right_grid, start_y, address)
+        text(weekday_right_grid, start_date, address)
 
 def timespan(start_datestr, end_datestr):
     '''
