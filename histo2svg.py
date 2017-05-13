@@ -37,6 +37,18 @@ def text(x, y, label, color='black'):
     '''
     dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:%s'%color))
 
+def line(x1, y1, x2, y2, color='grey'):
+    '''
+    Draws a line from (x1, y1) to (x2, y2).
+    Args:
+        x1(float)
+        y1(float)
+        x2(float)
+        y2(float)
+        color(string): Color of line.
+    '''
+    dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
+
 def weekday_hour(hr):
     '''
     Returns the x-axis coordinate for a weekday time.
@@ -108,18 +120,9 @@ def event(start_datestr, end_datestr, event_label):
 
     # Drawing
     dwg.add(dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey'))
-    dwg.add(dwg.line((event_line_x+event_radius, event_midpoint), (event_line_x+event_radius+20, event_midpoint), stroke='grey'))
+    line(event_line_x+event_radius, event_midpoint, event_line_x+event_radius+20, event_midpoint)
     text(event_line_x+event_radius+20, event_midpoint+8, event_label)
 
-def text(x, y, label):
-    '''
-    Draws label at (x,y).
-    Args:
-        x(float)
-        y(float)
-        label(string)
-    '''
-    dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:black'))
 
 def parse_date(datestr):
     '''
@@ -169,19 +172,19 @@ def timespan(start_datestr, end_datestr):
     # Set year ticks on y-axis
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
-        dwg.add(dwg.line((0, dt), (left_grid, dt), stroke='grey'))
+        line(0, dt, left_grid, dt)
         text(0,dt, y)
 
     # Set hour ticks on x-axis
     for h in range(weekday_start_hour, weekday_end_hour+1):
         x = weekday_hour(h)
-        dwg.add(dwg.line((x, top_label_y), (x, top_grid), stroke='grey'))
+        line(x, top_label_y, x, top_grid)
         text(x,top_grid, h)
     text(left_grid,top_grid-45, 'Mon-Fri')
     text(weekend_left_grid,top_grid, 'Weekend')
 
    # Draw the event line
-    dwg.add(dwg.line((event_line_x, top_grid), (event_line_x, bottom_grid), stroke='grey'))
+    line(event_line_x, top_grid, event_line_x, bottom_grid)
     text(right_grid, top_label_y, 'Events')
 
 def main(func, fnout):
