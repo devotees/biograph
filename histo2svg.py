@@ -6,23 +6,25 @@ import datetime
 import dateutil.parser
 
 
-# Timeline Grid Dimensions
+# Timeline X Grid Dimensions
 left_grid = 50
 weekday_right_grid = 500
 weekend_left_grid = 600
 right_grid = 950
+event_line_x = right_grid+20 # X coordinate of the event line
+
+# Timeline Y Grid Dimensions
+top_label_y = 75
 top_grid = 100    # Today's date
 bottom_grid = 900 # Date of birth
-top_label_y = 75
-event_line_x = right_grid+20
 
 sqpx_per_hour = .001 # Amount of square pixels which represent a unit of time
 
 # Time Range
 top_date = None # Today's date
 bottom_date = None # Date of birth
-weekday_start_hour=8
-weekday_end_hour=24
+weekday_start_hour = 8
+weekday_end_hour = 24
 
 def weekday_hour(hr):
     '''
@@ -52,6 +54,7 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     x1 = weekday_hour(start_hour)
     x2 = weekday_hour(end_hour)
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
+
     # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
     text(x1, y1, event_label)
@@ -72,24 +75,39 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     x1 = weekend_left_grid
     x2 = (y1-y2)/(num_hours*sqpx_per_hour) + x1
     assert x2 > weekday_right_grid, (x1, x2, weekday_right_grid)
-
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
+
     # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
     text(x1, y1, event_label)
 
 def event(start_datestr, end_datestr, event_label):
-    #dwg.add(dwg.line((right_grid+20, top_grid), (right_grid+20, bottom_grid), stroke='grey'))
-    #text(right_grid, top_label_y, 'Events')
+    '''
+    Draws short duration events.
+    Args:
+        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
+        end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
+        event_label (string): The name of the event.
+    '''
+    # Coordinates
     start_y = parse_date(start_datestr)
     end_y = parse_date(end_datestr)
     event_midpoint = (start_y+end_y)/2
     event_radius = start_y-end_y+5
+
+    # Drawing
     dwg.add(dwg.circle((event_line_x, event_midpoint), (end_y-start_y+5), fill='white', stroke='grey'))
     dwg.add(dwg.line((event_line_x+event_radius, event_midpoint), (event_line_x+event_radius+20, event_midpoint), stroke='grey'))
     text(event_line_x+event_radius+20, event_midpoint+8, event_label)
 
 def text(x, y, label):
+    '''
+    Draws label at (x,y).
+    Args:
+        x(float)
+        y(float)
+        label(string)
+    '''
     dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:black'))
 
 def parse_date(datestr):
@@ -115,9 +133,12 @@ def residence(start_datestr, end_datestr, address, **kwargs):
         address (string): Address of residence.
         **kwargs: css styling
     '''
+    # Coordinates
     start_y = parse_date(start_datestr)
     end_y = parse_date(end_datestr)
     points = [(left_grid,start_y), (right_grid,start_y), (right_grid,end_y), (left_grid,end_y)]
+
+    # Drawing
     dwg.add(dwg.polygon(points, **kwargs))
     if address:
         text(weekday_right_grid, start_y, address)
