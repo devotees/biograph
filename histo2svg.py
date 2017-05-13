@@ -26,6 +26,17 @@ bottom_date = None # Date of birth
 weekday_start_hour = 8
 weekday_end_hour = 24
 
+def text(x, y, label, color='black'):
+    '''
+    Draws label at (x,y).
+    Args:
+        x(float)
+        y(float)
+        label(string)
+        color(string): Font color of label.
+    '''
+    dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:%s'%color))
+
 def weekday_hour(hr):
     '''
     Returns the x-axis coordinate for a weekday time.
