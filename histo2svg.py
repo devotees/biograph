@@ -216,8 +216,9 @@ def timespan(start_datestr, end_datestr):
     afternoon_start = weekday_hour(12)
     evening_start = weekday_hour(18)
     day_end = weekday_hour(24)
-    
+
     # Drawing
+    # Monday to Friday
     text((left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
     line(morning_start, top_label_y+30, morning_start-1, top_grid-50)
     text((morning_start+afternoon_start)/2-30, top_grid, 'morning')
@@ -229,8 +230,9 @@ def timespan(start_datestr, end_datestr):
     # ZzzzzzZZZ
     line(day_end, top_label_y+30, day_end, top_grid-30)
     text((day_end+weekend_left_grid)/2-15, top_grid, 'zzz')
-    line(weekend_left_grid, top_label_y+30, weekend_left_grid, top_grid-50)
 
+    # Saturday to Sunday
+    line(weekend_left_grid, top_label_y+30, weekend_left_grid, top_grid-50)
     text((weekend_left_grid+right_grid)/2-30,top_grid-45, 'Sat-Sun')
     line(right_grid-1, top_label_y+30, right_grid-1, top_grid-50)
 
