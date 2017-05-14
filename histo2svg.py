@@ -57,6 +57,11 @@ def weekday_hour(hr):
     Returns:
         int: An x-axis coordinate.
     '''
+    # Input Quality
+    # Assert hour is an int that is between 8 -24
+    assert isinstance(hr, int)
+    assert (hr <= 24) and (hr >= 8)
+
     x_scale = (weekday_right_grid - left_grid)/(weekday_end_hour-weekday_start_hour)
     return left_grid + (hr-weekday_start_hour)*x_scale
 
@@ -71,11 +76,15 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
         event_label (string): The name of the event.
         **kwargs: css styling
     '''
+    # Input Quality
+    assert start_datestr < end_datestr
+
     # Coordinates
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
     x1 = weekday_hour(start_hour)
     x2 = weekday_hour(end_hour)
+
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
     # Drawing
@@ -92,6 +101,9 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
         event_label (string): The name of the event.
         **kwargs: css styling of main rectangle
     '''
+    # Input Quality
+    assert start_datestr < end_datestr
+
     # Coordinates
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
@@ -112,6 +124,9 @@ def event(start_datestr, end_datestr, event_label):
         end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
         event_label (string): The name of the event.
     '''
+    # Input Quality
+    assert start_datestr < end_datestr
+
     # Coordinates
     start_date = parse_date(start_datestr)
     end_date = parse_date(end_datestr)
@@ -147,6 +162,9 @@ def residence(start_datestr, end_datestr, address, **kwargs):
         address (string): Address of residence.
         **kwargs: css styling
     '''
+    # Input Quality
+    assert start_datestr < end_datestr
+
     # Coordinates
     start_date = parse_date(start_datestr)
     end_date = parse_date(end_datestr)
@@ -164,6 +182,9 @@ def timespan(start_datestr, end_datestr):
         start_datestr(string): The starting date of the timeline in ISO format (YYYY-MM-DD).
         end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
     '''
+    # Input Quality
+    assert start_datestr < end_datestr
+
     # Set y-axis boundaries of grid
     global bottom_date, top_date
     top_date = dateutil.parser.parse(end_datestr)
