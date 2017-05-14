@@ -32,8 +32,8 @@ def text(x, y, label, color='black'):
     Args:
         x(float)
         y(float)
-        label(string)
-        color(string): Font color of label.
+        label(str)
+        color(str): Font color of label.
     '''
     dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:%s'%color))
 
@@ -45,7 +45,7 @@ def line(x1, y1, x2, y2, color='grey'):
         y1(float)
         x2(float)
         y2(float)
-        color(string): Color of line.
+        color(str): Color of line.
     '''
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
@@ -81,46 +81,46 @@ def weekday_hour(hr):
     x_scale = (weekday_right_grid - left_grid)/(weekday_end_hour-weekday_start_hour)
     return left_grid + (hr-weekday_start_hour)*x_scale
 
-def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwargs):
+def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     '''
     Draws a weekday event.
     Args:
-        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
-        end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
+        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
+        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
         start_hour(int): The event starting time in 24h notation (E.g. 9 --> '9h00').
         end_hour (int): The event ending time in 24h notation (E.g. 21 --> '21h00').
-        event_label (string): The name of the event.
+        label (str): The name of the event.
         **kwargs: css styling
     '''
     # Input Quality
-    assert start_datestr < end_datestr
+    assert start_isodate < end_isodate
 
     # Coordinates
-    y1 = parse_date(start_datestr)
-    y2 = parse_date(end_datestr)
+    y1 = parse_date(start_isodate)
+    y2 = parse_date(end_isodate)
     x1 = weekday_hour(start_hour)
     x2 = weekday_hour(end_hour)
 
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, event_label)
+    text(x1, y1, label)
 
-def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
+def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     '''
     Draws pillow cuddle-friends. Really, they are the best friends.
     Args:
-        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
-        end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
-        name_label(string): Name of the pillow cuddle friend.
+        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
+        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
+        name_label(str): Name of the pillow cuddle friend.
         **kwargs: css styling of main rectangle
     '''
 
     # Input Quality
-    assert start_datestr < end_datestr
+    assert start_isodate < end_isodate
 
     # Coordinates
-    y1 = parse_date(start_datestr)
-    y2 = parse_date(end_datestr)
+    y1 = parse_date(start_isodate)
+    y2 = parse_date(end_isodate)
     x1 = weekday_right_grid
     x2 = weekend_left_grid
 
@@ -128,82 +128,82 @@ def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
 
-def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
+def weekend(start_isodate, end_isodate, num_hours, label, **kwargs):
     '''
     Draws a weekend event.
     Args:
-        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
-        end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
+        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
+        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
         num_hours (int): The time invested in the event.
-        event_label (string): The name of the event.
+        label (str): The name of the event.
         **kwargs: css styling of main rectangle
     '''
     # Input Quality
-    assert start_datestr < end_datestr
+    assert start_isodate < end_isodate
 
     # Coordinates
-    y1 = parse_date(start_datestr)
-    y2 = parse_date(end_datestr)
+    y1 = parse_date(start_isodate)
+    y2 = parse_date(end_isodate)
     x1 = weekend_left_grid
     x2 = (y1-y2)/(num_hours*sqpx_per_hour) + x1
     assert x2 > weekday_right_grid, (x1, x2, weekday_right_grid)
 
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, event_label)
+    text(x1, y1, label)
 
-def event(start_datestr, end_datestr, event_label):
+def event(start_isodate, end_isodate, label):
     '''
     Draws short duration events.
     Args:
-        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
-        end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
-        event_label (string): The name of the event.
+        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
+        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
+        label (str): The name of the event.
     '''
     # Input Quality
-    assert start_datestr <= end_datestr
+    assert start_isodate <= end_isodate
 
     # Coordinates
-    start_date = parse_date(start_datestr)
-    end_date = parse_date(end_datestr)
+    start_date = parse_date(start_isodate)
+    end_date = parse_date(end_isodate)
     event_midpoint = (start_date+end_date)/2
     event_radius = start_date-end_date+5
 
     # Drawing
     dwg.add(dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey'))
     line(event_line_x+event_radius, event_midpoint, event_line_x+event_radius+20, event_midpoint)
-    text(event_line_x+event_radius+20, event_midpoint+8, event_label)
+    text(event_line_x+event_radius+20, event_midpoint+8, label)
 
 
-def parse_date(datestr):
+def parse_date(isodate):
     '''
     Returns the y-axis coordinate for a date.
     Args:
-        datestr (string): A date in ISO format (YYYY-MM-DD).
+        isodate (str): A date in ISO format (YYYY-MM-DD).
     Returns:
         int: y-axis coordinate.
     '''
-    parsed_date = dateutil.parser.parse(datestr)
+    parsed_date = dateutil.parser.parse(isodate)
     days_alive = (top_date - bottom_date).days # Total days alive
     day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
     scale = (bottom_grid - top_grid) / days_alive
     return bottom_grid - scale * (days_alive - day_count)
 
-def residence(start_datestr, end_datestr, address, **kwargs):
+def residence(start_isodate, end_isodate, label, **kwargs):
     '''
     Draws a box of y-axis length = duration of stay at a residence.
     Args:
-        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
-        end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
-        address (string): Address of residence.
+        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
+        end_isodate(str): The ending date of the timeline in ISO format (YYYY-MM-DD).
+        label (str): Address of residence.
         **kwargs: css styling
     '''
     # Input Quality
-    assert start_datestr < end_datestr
+    assert start_isodate < end_isodate
 
     # Coordinates
-    start_date = parse_date(start_datestr)
-    end_date = parse_date(end_datestr)
+    start_date = parse_date(start_isodate)
+    end_date = parse_date(end_isodate)
     x1 = left_grid
     y1 = start_date
     x2 = right_grid
@@ -211,23 +211,23 @@ def residence(start_datestr, end_datestr, address, **kwargs):
 
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
-    if address:
-        text(weekday_hour(19), start_date, address)
+    if label:
+        text(weekday_hour(19), start_date, label)
 
-def timespan(start_datestr, end_datestr):
+def timespan(start_isodate, end_isodate):
     '''
     Draws the histomap grid.
     Args:
-        start_datestr(string): The starting date of the timeline in ISO format (YYYY-MM-DD).
-        end_datestr(string): The ending date of the timeline in ISO format (YYYY-MM-DD).
+        start_isodate(str): The starting date of the timeline in ISO format (YYYY-MM-DD).
+        end_isodate(str): The ending date of the timeline in ISO format (YYYY-MM-DD).
     '''
     # Input Quality
-    assert start_datestr < end_datestr
+    assert start_isodate < end_isodate
 
     # Set y-axis boundaries of grid
     global bottom_date, top_date
-    top_date = dateutil.parser.parse(end_datestr)
-    bottom_date = dateutil.parser.parse(start_datestr)
+    top_date = dateutil.parser.parse(end_isodate)
+    bottom_date = dateutil.parser.parse(start_isodate)
 
     # Set year ticks on y-axis
     for y in range(bottom_date.year, top_date.year+1):
