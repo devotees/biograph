@@ -47,11 +47,12 @@ def line(x1, y1, x2, y2, color='grey'):
         y2(float)
         color(string): Color of line.
     '''
+    x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
-def polygon(x1, y1, x2, y2, **kwargs):
+def rectangle(x1, y1, x2, y2, **kwargs):
     '''
-    Draws a rectangle at coordinates.
+    Draws a rectangle from coordinates x1, y1 to x2, y2.
     Args:
         x1(float)
         y1(float)
@@ -101,7 +102,7 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     x2 = weekday_hour(end_hour)
 
     # Drawing
-    polygon(x1, y1, x2, y2, **kwargs)
+    rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, event_label)
 
 def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
@@ -124,7 +125,7 @@ def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
     x2 = weekend_left_grid
 
     # Drawing
-    polygon(x1, y1, x2, y2, **kwargs)
+    rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
 
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
@@ -148,7 +149,7 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     assert x2 > weekday_right_grid, (x1, x2, weekday_right_grid)
 
     # Drawing
-    polygon(x1, y1, x2, y2, **kwargs)
+    rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, event_label)
 
 def event(start_datestr, end_datestr, event_label):
@@ -209,7 +210,7 @@ def residence(start_datestr, end_datestr, address, **kwargs):
     y2 = end_date
 
     # Drawing
-    polygon(x1, y1, x2, y2, **kwargs)
+    rectangle(x1, y1, x2, y2, **kwargs)
     if address:
         text(weekday_hour(19), start_date, address)
 
