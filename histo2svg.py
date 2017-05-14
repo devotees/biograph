@@ -196,17 +196,34 @@ def timespan(start_datestr, end_datestr):
         line(0, dt, left_grid, dt)
         text(0,dt, y)
 
-    # Set hour ticks on x-axis
-    for h in range(weekday_start_hour, weekday_end_hour+1):
-        x = weekday_hour(h)
-        line(x, top_label_y, x, top_grid)
-        text(x,top_grid, h)
-    text(left_grid,top_grid-45, 'Mon-Fri')
-    text(weekend_left_grid,top_grid, 'Weekend')
+    # Set labels on horizontal axis
+    # Coordinates
+    morning_start = weekday_hour(8)
+    afternoon_start = weekday_hour(12)
+    evening_start = weekday_hour(18)
+    day_end = weekday_hour(24)
+    
+    # Drawing
+    text((left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
+    line(morning_start, top_label_y+30, morning_start-1, top_grid-50)
+    text((morning_start+afternoon_start)/2-30, top_grid, 'morning')
+    line(afternoon_start, top_label_y+30, afternoon_start-1, top_grid-30)
+    text((afternoon_start+evening_start)/2-30, top_grid, 'afternoon')
+    line(evening_start, top_label_y+30, evening_start-1, top_grid-30)
+    text((evening_start+day_end)/2-30, top_grid, 'evening')
+
+    # ZzzzzzZZZ
+    line(day_end, top_label_y+30, day_end, top_grid-30)
+    text((day_end+weekend_left_grid)/2-15, top_grid, 'zzz')
+    line(weekend_left_grid, top_label_y+30, weekend_left_grid, top_grid-50)
+
+    text((weekend_left_grid+right_grid)/2-30,top_grid-45, 'Sat-Sun')
+    line(right_grid-1, top_label_y+30, right_grid-1, top_grid-50)
 
    # Draw the event line
     line(event_line_x, top_grid, event_line_x, bottom_grid)
     text(right_grid, top_label_y, 'Events')
+
 
 def main(func, fnout):
     global dwg
