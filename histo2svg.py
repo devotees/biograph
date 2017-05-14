@@ -52,15 +52,8 @@ def line(x1, y1, x2, y2, color='grey'):
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
 def rectangle(x1, y1, x2, y2, href=None, **kwargs):
-    '''
-    Draws a rectangle from coordinates x1, y1 to x2, y2.
-    Args:
-        x1(float)
-        y1(float)
-        x2(float)
-        y2(float)
-        **kwargs: css styling.
-    '''
+    'Draws a rectangle from coordinates x1, y1 to x2, y2.  **kwargs: css styling.'
+
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
