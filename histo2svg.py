@@ -111,7 +111,7 @@ def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
     Args:
         start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
         end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
-        name_lanel(string): Name of the pillow cuddle friend.
+        name_label(string): Name of the pillow cuddle friend.
         **kwargs: css styling of main rectangle
     '''
 
@@ -161,7 +161,7 @@ def event(start_datestr, end_datestr, event_label):
         event_label (string): The name of the event.
     '''
     # Input Quality
-    assert start_datestr < end_datestr
+    assert start_datestr <= end_datestr
 
     # Coordinates
     start_date = parse_date(start_datestr)
