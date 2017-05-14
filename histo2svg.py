@@ -35,6 +35,7 @@ def text(x, y, label, color='black'):
         label(str)
         color(str): Font color of label.
     '''
+    x,y = int(x),int(y)
     dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:%s'%color))
 
 def line(x1, y1, x2, y2, color='grey'):
@@ -60,6 +61,7 @@ def rectangle(x1, y1, x2, y2, **kwargs):
         y2(float)
         **kwargs: css styling.
     '''
+    x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
     # Drawing
