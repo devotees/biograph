@@ -51,7 +51,7 @@ def line(x1, y1, x2, y2, color='grey'):
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
-def rectangle(x1, y1, x2, y2, **kwargs):
+def rectangle(x1, y1, x2, y2, href=None, **kwargs):
     '''
     Draws a rectangle from coordinates x1, y1 to x2, y2.
     Args:
@@ -64,8 +64,15 @@ def rectangle(x1, y1, x2, y2, **kwargs):
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
+    p = dwg.polygon(points, **kwargs)
+    # How to add links to polygons courtesy of Saul
+    if href:
+        outer = svgwrite.container.Hyperlink(href, target='_blank')
+        outer.add(p)
+        p = outer
+
     # Drawing
-    dwg.add(dwg.polygon(points, **kwargs))
+    dwg.add(p)
 
 def weekday_hour(hr):
     '''
