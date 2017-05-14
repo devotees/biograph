@@ -16,7 +16,7 @@ event_line_x = right_grid+20 # X coordinate of the event line
 # Timeline Y Grid Dimensions
 top_label_y = 75
 top_grid = 100    # Today's date
-bottom_grid = 900 # Date of birth
+bottom_grid = 1200 # Date of birth
 
 sqpx_per_hour = .001 # Amount of square pixels which represent a unit of time
 
