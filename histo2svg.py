@@ -91,6 +91,20 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     dwg.add(dwg.polygon(points, **kwargs))
     text(x1, y1, event_label)
 
+def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
+    # Input Quality
+    assert start_datestr < end_datestr
+    
+    # Coordinates
+    y1 = parse_date(start_datestr)
+    y2 = parse_date(end_datestr)
+    x1 = weekday_right_grid
+    x2 = weekend_left_grid
+
+    points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
+    dwg.add(dwg.polygon(points, **kwargs))
+    text(x1, y1, name_label)
+
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     '''
     Draws a weekend event.
