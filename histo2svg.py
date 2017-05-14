@@ -49,6 +49,21 @@ def line(x1, y1, x2, y2, color='grey'):
     '''
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
+def polygon(x1, y1, x2, y2, **kwargs):
+    '''
+    Draws a rectangle at coordinates.
+    Args:
+        x1(float)
+        y1(float)
+        x2(float)
+        y2(float)
+        **kwargs: css styling.
+    '''
+    points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
+
+    # Drawing
+    dwg.add(dwg.polygon(points, **kwargs))
+
 def weekday_hour(hr):
     '''
     Returns the x-axis coordinate for a weekday time.
@@ -85,10 +100,8 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     x1 = weekday_hour(start_hour)
     x2 = weekday_hour(end_hour)
 
-    points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
-
     # Drawing
-    dwg.add(dwg.polygon(points, **kwargs))
+    polygon(x1, y1, x2, y2, **kwargs)
     text(x1, y1, event_label)
 
 def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
@@ -110,8 +123,8 @@ def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
     x1 = weekday_right_grid
     x2 = weekend_left_grid
 
-    points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
-    dwg.add(dwg.polygon(points, **kwargs))
+    # Drawing
+    polygon(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
 
 def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
@@ -133,10 +146,9 @@ def weekend(start_datestr, end_datestr, num_hours, event_label, **kwargs):
     x1 = weekend_left_grid
     x2 = (y1-y2)/(num_hours*sqpx_per_hour) + x1
     assert x2 > weekday_right_grid, (x1, x2, weekday_right_grid)
-    points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
     # Drawing
-    dwg.add(dwg.polygon(points, **kwargs))
+    polygon(x1, y1, x2, y2, **kwargs)
     text(x1, y1, event_label)
 
 def event(start_datestr, end_datestr, event_label):
@@ -191,12 +203,15 @@ def residence(start_datestr, end_datestr, address, **kwargs):
     # Coordinates
     start_date = parse_date(start_datestr)
     end_date = parse_date(end_datestr)
-    points = [(left_grid,start_date), (right_grid,start_date), (right_grid,end_date), (left_grid,end_date)]
+    x1 = left_grid
+    y1 = start_date
+    x2 = right_grid
+    y2 = end_date
 
     # Drawing
-    dwg.add(dwg.polygon(points, **kwargs))
+    polygon(x1, y1, x2, y2, **kwargs)
     if address:
-        text(weekday_right_grid, start_date, address)
+        text(weekday_hour(19), start_date, address)
 
 def timespan(start_datestr, end_datestr):
     '''
