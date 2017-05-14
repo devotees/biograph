@@ -92,9 +92,18 @@ def weekday(start_datestr, end_datestr, start_hour, end_hour, event_label, **kwa
     text(x1, y1, event_label)
 
 def sleepmate(start_datestr, end_datestr, name_label, **kwargs):
+    '''
+    Draws pillow cuddle-friends. Really, they are the best friends.
+    Args:
+        start_datestr(string): The event starting date in ISO format (YYYY-MM-DD).
+        end_datestr(string): The event ending date in ISO format (YYYY-MM-DD).
+        name_lanel(string): Name of the pillow cuddle friend.
+        **kwargs: css styling of main rectangle
+    '''
+
     # Input Quality
     assert start_datestr < end_datestr
-    
+
     # Coordinates
     y1 = parse_date(start_datestr)
     y2 = parse_date(end_datestr)
