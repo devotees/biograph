@@ -26,7 +26,15 @@ bottom_date = None # Date of birth
 weekday_start_hour = 8
 weekday_end_hour = 24
 
-def text(x, y, label, font_size=1.0, color='black'):
+def wraplink(p, href):
+    # How to add links to polygons courtesy of Saul
+    if href:
+        outer = svgwrite.container.Hyperlink(href, target='_blank')
+        outer.add(p)
+        p = outer
+    return p
+
+def text(x, y, label, font_size=1.0, color='black', href=None):
     '''
     Draws label at (x,y).
     Args:
@@ -39,7 +47,8 @@ def text(x, y, label, font_size=1.0, color='black'):
     # 1em - default font size of the document
     # This will scale with different web page sizes
     p = dwg.g(style='font-size:%fem;color:%s'%(font_size, color))
-    p.add(dwg.text(str(label), x=[x+3], y=[y-5]))
+    t = dwg.text(str(label), x=[x+3], y=[y-5])
+    p.add(wraplink(t, href))
     dwg.add(p)
 
 def line(x1, y1, x2, y2, color='grey'):
@@ -62,14 +71,8 @@ def rectangle(x1, y1, x2, y2, href=None, **kwargs):
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
     p = dwg.polygon(points, **kwargs)
-    # How to add links to polygons courtesy of Saul
-    if href:
-        outer = svgwrite.container.Hyperlink(href, target='_blank')
-        outer.add(p)
-        p = outer
 
-    # Drawing
-    dwg.add(p)
+    dwg.add(wraplink(p, href))
 
 def weekday_hour(hr):
     '''
@@ -157,7 +160,7 @@ def weekend(start_isodate, end_isodate, num_hours, label, **kwargs):
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, label)
 
-def event(start_isodate, end_isodate, label):
+def event(start_isodate, end_isodate, label, href=None):
     '''
     Draws short duration events.
     Args:
@@ -175,9 +178,10 @@ def event(start_isodate, end_isodate, label):
     event_radius = start_date-end_date+5
 
     # Drawing
-    dwg.add(dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey'))
+    p = dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey')
+    dwg.add(wraplink(p, href))
     line(event_line_x+event_radius, event_midpoint, event_line_x+event_radius+20, event_midpoint)
-    text(event_line_x+event_radius+20, event_midpoint+8, label)
+    text(event_line_x+event_radius+20, event_midpoint+8, label, href=href)
 
 
 def parse_date(isodate):
