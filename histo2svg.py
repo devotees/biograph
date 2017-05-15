@@ -36,55 +36,43 @@ def wraplink(picture, href):
     return picture
 
 def text(x, y, label, font_size=1.0, color='black', href=None):
-    '''
-    Draws label at (x,y).
-    Args:
-        x(float)
-        y(float)
-        label(str)
-        color(str): Font color of label.
-    '''
+    '''Draws label at (x,y).  Font size is in ems. Optionally, text can link to href.'''
+
+    # Coordinates
     x,y = int(x),int(y)
     # 1em - default font size of the document
     # This will scale with different web page sizes
+
+    # Drawing
     p = dwg.g(style='font-size:%fem;color:%s'%(font_size, color))
     t = dwg.text(str(label), x=[x+3], y=[y-5])
     p.add(wraplink(t, href))
     dwg.add(p)
 
 def line(x1, y1, x2, y2, color='grey'):
-    '''
-    Draws a line from (x1, y1) to (x2, y2).
-    Args:
-        x1(float)
-        y1(float)
-        x2(float)
-        y2(float)
-        color(str): Color of line.
-    '''
+    '''Draws a colored line from (x1, y1) to (x2, y2).'''
+
+    # Coordinates
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
+
+    # Drawing
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
 def rectangle(x1, y1, x2, y2, href=None, **kwargs):
-    'Draws a rectangle from coordinates x1, y1 to x2, y2.  **kwargs: css styling.'
+    '''Draws a rectangle from coordinates x1, y1 to x2, y2.  **kwargs: css styling.'''
 
+    # Coordinates
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
+    # Drawing
     p = dwg.polygon(points, **kwargs)
-
     dwg.add(wraplink(p, href))
 
 def weekday_hour(hr):
-    '''
-    Returns the x-axis coordinate for a weekday time.
-    Args:
-        hr (int): Represents the time in 24h notation (E.g. 9 --> '9h00').
-    Returns:
-        int: An x-axis coordinate.
-    '''
+    '''Returns the x-axis coordinate for a weekday time. hr must be an int between 8 and 24.'''
+
     # Input Quality
-    # Assert hour is an int that is between 8 -24
     assert isinstance(hr, int)
     assert (hr <= 24) and (hr >= 8)
 
@@ -92,16 +80,8 @@ def weekday_hour(hr):
     return left_grid + (hr-weekday_start_hour)*x_scale
 
 def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
-    '''
-    Draws a weekday event.
-    Args:
-        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
-        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
-        start_hour(int): The event starting time in 24h notation (E.g. 9 --> '9h00').
-        end_hour (int): The event ending time in 24h notation (E.g. 21 --> '21h00').
-        label (str): The name of the event.
-        **kwargs: css styling
-    '''
+    '''Draws a weekday event from start_hour, start_isodate (YYYY-MM-DD) to end_hour, end_isodate (YYYY-MM-DD). **kwargs: css styling'''
+
     # Input Quality
     assert start_isodate < end_isodate
 
@@ -116,14 +96,7 @@ def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     text(x1, y1, label)
 
 def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
-    '''
-    Draws pillow cuddle-friends. Really, they are the best friends.
-    Args:
-        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
-        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
-        name_label(str): Name of the pillow cuddle friend.
-        **kwargs: css styling of main rectangle
-    '''
+    '''Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). **kwargs: css styling.'''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -139,15 +112,8 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     text(x1, y1, name_label)
 
 def weekend(start_isodate, end_isodate, num_hours, label, **kwargs):
-    '''
-    Draws a weekend event.
-    Args:
-        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
-        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
-        num_hours (int): The time invested in the event.
-        label (str): The name of the event.
-        **kwargs: css styling of main rectangle
-    '''
+    '''Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). Size of the drawing is proportional to num_hours invested. **kwargs: css styling of main rectangle'''
+
     # Input Quality
     assert start_isodate < end_isodate
 
@@ -162,13 +128,8 @@ def weekend(start_isodate, end_isodate, num_hours, label, **kwargs):
     text(x1, y1, label)
 
 def event(start_isodate, end_isodate, label, href=None):
-    '''
-    Draws short duration events.
-    Args:
-        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
-        end_isodate(str): The event ending date in ISO format (YYYY-MM-DD).
-        label (str): The name of the event.
-    '''
+    '''Draws short duration events on the event line. Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.'''
+
     # Input Quality
     assert start_isodate <= end_isodate
 
@@ -186,13 +147,7 @@ def event(start_isodate, end_isodate, label, href=None):
 
 
 def parse_date(isodate):
-    '''
-    Returns the y-axis coordinate for a date.
-    Args:
-        isodate (str): A date in ISO format (YYYY-MM-DD).
-    Returns:
-        int: y-axis coordinate.
-    '''
+    '''Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'''
     parsed_date = dateutil.parser.parse(isodate)
     days_alive = (top_date - bottom_date).days # Total days alive
     day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
@@ -200,14 +155,8 @@ def parse_date(isodate):
     return bottom_grid - scale * (days_alive - day_count)
 
 def residence(start_isodate, end_isodate, label, **kwargs):
-    '''
-    Draws a box of y-axis length = duration of stay at a residence.
-    Args:
-        start_isodate(str): The event starting date in ISO format (YYYY-MM-DD).
-        end_isodate(str): The ending date of the timeline in ISO format (YYYY-MM-DD).
-        label (str): Address of residence.
-        **kwargs: css styling
-    '''
+    '''Draws a box of y-axis length = duration of stay at a residence. **kwargs: css styling'''
+
     # Input Quality
     assert start_isodate < end_isodate
 
@@ -225,12 +174,8 @@ def residence(start_isodate, end_isodate, label, **kwargs):
         text(weekday_hour(19), start_date, label, font_size=0.7)
 
 def timespan(start_isodate, end_isodate):
-    '''
-    Draws the histomap grid.
-    Args:
-        start_isodate(str): The starting date of the timeline in ISO format (YYYY-MM-DD).
-        end_isodate(str): The ending date of the timeline in ISO format (YYYY-MM-DD).
-    '''
+    '''Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'''
+
     # Input Quality
     assert start_isodate < end_isodate
 
