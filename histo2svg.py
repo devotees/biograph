@@ -22,14 +22,12 @@ top_label_y = 75
 top_grid = 100    # Today's date
 bottom_grid = 1200 # Date of birth
 
-sqpx_per_hour = .001 # Amount of square pixels which represent a unit of time
-
 # Time Range
 top_date = None # Today's date
 bottom_date = None # Date of birth
 
 def wraplink(svg_obj, href):
-    '''Makes a drawing clickable with a link to href.'''
+    '''Makes an svg object clickable with a link to href.'''
 
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
@@ -65,8 +63,8 @@ def line(x1, y1, x2, y2, color='grey'):
     # Drawing
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
-def rectangle(x1, y1, x2, y2, href=None, **kwargs):
-    '''Draws a rectangle from coordinates x1, y1 to x2, y2.  **kwargs: css styling.'''
+def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
+    '''Draws a rectangle from coordinates (x1, y1) to (x2, y2).  **kwargs: css styling.'''
 
     # Coordinates
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
@@ -74,20 +72,19 @@ def rectangle(x1, y1, x2, y2, href=None, **kwargs):
 
     # Drawing
     p = dwg.polygon(points, **kwargs)
-    dwg.add(wraplink(p, href))
+    addobj(parent, wraplink(p, href))
 
 def weekday_hour(hr):
     '''Returns the x-axis coordinate for a weekday time. hr must be an int between 8 and 24.'''
 
     # Input Quality
-    assert isinstance(hr, int)
     assert (hr <= 24) and (hr >= 8)
 
     x_scale = (weekday_right_grid - left_grid)/(weekday_end_hour-weekday_start_hour)
     return left_grid + (hr-weekday_start_hour)*x_scale
 
 def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
-    '''Draws a weekday event from start_hour, start_isodate (YYYY-MM-DD) to end_hour, end_isodate (YYYY-MM-DD). **kwargs: css styling'''
+    '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)). **kwargs: css styling'''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -118,24 +115,34 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
 
-def weekend(start_isodate, end_isodate, num_hours, label, **kwargs):
+def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
     '''Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). Size of the drawing is proportional to num_hours invested. **kwargs: css styling of main rectangle'''
 
     # Input Quality
     assert start_isodate < end_isodate
 
     # Coordinates
+    start_date = dateutil.parser.parse(start_isodate)
+    end_date = dateutil.parser.parse(end_isodate)
+    num_days = (end_date - start_date).days
+    num_hours = hours_per_week * num_days / 7
+
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
     x1 = weekday_right_grid+1
-    x2 = (y1-y2)/(num_hours*sqpx_per_hour) + x1
+    x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, label)
 
-def event(start_isodate, end_isodate, label, href=None):
-    '''Draws short duration events on the event line. Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.'''
+def event(start_isodate, end_isodate, label, href=None, line_length=20):
+    '''
+    Draws a circle representing short duration events on the event line.
+    Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD).
+    Size of the circle is proportional to the event duration.
+    Set line_length to the amount you want the label offset.
+    '''
 
     # Input Quality
     assert start_isodate <= end_isodate
@@ -149,8 +156,8 @@ def event(start_isodate, end_isodate, label, href=None):
     # Drawing
     p = dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey')
     dwg.add(wraplink(p, href))
-    line(event_line_x+event_radius, event_midpoint, event_line_x+event_radius+20, event_midpoint)
-    text(event_line_x+event_radius+20, event_midpoint+8, label, href=href)
+    line(event_line_x+event_radius-3, event_midpoint, event_line_x+event_radius+line_length, event_midpoint)
+    text(event_line_x+event_radius+line_length-4, event_midpoint+8, label, font_size=0.6, href=href)
 
 
 def parse_date(isodate):
