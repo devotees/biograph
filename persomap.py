@@ -256,11 +256,11 @@ def main(func, fnout):
     func()
     dwg.save()
 
-def width_from_hours(ndays, nhours):
-    '''given nhours total spent over ndays, returns width in pixels'''
-    assert nhours <= (ndays * 16)
+def width_from_hours(num_days, num_hours):
+    '''given num_hours total spent over num_days, returns width in pixels'''
+    assert num_hours <= (num_days * 16)
     weekday_hour_width = weekday_hour(10) - weekday_hour(9)
-    return  (nhours/260) * weekday_hour_width / (ndays/365)
+    return  (num_hours/260) * weekday_hour_width / (num_days/365)
 
 def run_tests():
     assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
