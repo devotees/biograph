@@ -5,13 +5,17 @@ import svgwrite
 import datetime
 import dateutil.parser
 
+weekday_start_hour = 7
+weekday_end_hour = 24
 
 # Timeline X Grid Dimensions
 left_grid = 50
 weekday_right_grid = 500
 weekend_right_grid=850
 right_grid = 950
-event_line_x = right_grid+20 # X coordinate of the event line
+age_left = right_grid
+age_right = right_grid+35
+event_line_x = right_grid+50 # X coordinate of the event line
 
 # Timeline Y Grid Dimensions
 top_label_y = 75
@@ -23,8 +27,6 @@ sqpx_per_hour = .001 # Amount of square pixels which represent a unit of time
 # Time Range
 top_date = None # Today's date
 bottom_date = None # Date of birth
-weekday_start_hour = 8
-weekday_end_hour = 24
 
 def wraplink(svg_obj, href):
     '''Makes a drawing clickable with a link to href.'''
@@ -35,7 +37,12 @@ def wraplink(svg_obj, href):
         svg_obj = outer
     return svg_obj
 
-def text(x, y, label, font_size=1.0, color='black', href=None):
+def addobj(parent, obj):
+    if not parent:
+        parent = dwg
+    parent.add(obj)
+
+def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
     '''Draws label at (x,y).  Font size is in ems. Optionally, text can link to href.'''
 
     # Coordinates
@@ -44,10 +51,10 @@ def text(x, y, label, font_size=1.0, color='black', href=None):
     # This will scale with different web page sizes
 
     # Drawing
-    p = dwg.g(style='font-size:%fem;color:%s'%(font_size, color))
+    p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, color))
     t = dwg.text(str(label), x=[x+3], y=[y-5])
     p.add(wraplink(t, href))
-    dwg.add(p)
+    addobj(parent, p)
 
 def line(x1, y1, x2, y2, color='grey'):
     '''Draws a colored line from (x1, y1) to (x2, y2).'''
@@ -188,7 +195,20 @@ def timespan(start_isodate, end_isodate):
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         line(0, dt, left_grid, dt)
-        text(0,dt, y)
+        text(0,dt, y, font_size=0.9)
+
+    # Set ages on y-axis
+    age = 0
+    for y in range(bottom_date.year, top_date.year):
+        g = svgwrite.container.Group(class_='age')
+        dwg.add(g)
+        dt = parse_date('%d-%d-%d' % (y, bottom_date.month, bottom_date.day))
+        endt = parse_date('%d-%d-%d' % (y+1, bottom_date.month, bottom_date.day))
+        rectangle(age_left, dt, age_right, endt, parent=g)
+        if age > 0:
+            text(age_left-3, dt, str(age), parent=g, font_size=0.8)
+        age += 1
+
 
     # Set labels on horizontal axis
     # Coordinates
