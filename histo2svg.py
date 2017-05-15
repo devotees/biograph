@@ -26,7 +26,7 @@ bottom_date = None # Date of birth
 weekday_start_hour = 8
 weekday_end_hour = 24
 
-def text(x, y, label, color='black'):
+def text(x, y, label, font_size=1.0, color='black'):
     '''
     Draws label at (x,y).
     Args:
@@ -36,7 +36,11 @@ def text(x, y, label, color='black'):
         color(str): Font color of label.
     '''
     x,y = int(x),int(y)
-    dwg.add(dwg.text(str(label), x=[x+3], y=[y-5], style='color:%s'%color))
+    # 1em - default font size of the document
+    # This will scale with different web page sizes
+    p = dwg.g(style='font-size:%fem;color:%s'%(font_size, color))
+    p.add(dwg.text(str(label), x=[x+3], y=[y-5]))
+    dwg.add(p)
 
 def line(x1, y1, x2, y2, color='grey'):
     '''
@@ -214,7 +218,7 @@ def residence(start_isodate, end_isodate, label, **kwargs):
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text(weekday_hour(19), start_date, label)
+        text(weekday_hour(19), start_date, label, font_size=0.7)
 
 def timespan(start_isodate, end_isodate):
     '''
