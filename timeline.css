@@ -86,3 +86,8 @@
 .pastel8 { fill: #fddaec }
 .pastel9 { fill: #f2f2f2 }
 
+a polygon:hover { fill: #ffffff }
+
+.age:nth-child(even) polygon { fill: pink; }
+.age:nth-child(odd) polygon { fill: cyan; }
+
