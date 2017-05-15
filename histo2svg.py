@@ -26,14 +26,14 @@ bottom_date = None # Date of birth
 weekday_start_hour = 8
 weekday_end_hour = 24
 
-def wraplink(picture, href):
+def wraplink(svg_obj, href):
     '''Makes a drawing clickable with a link to href.'''
 
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
-        outer.add(picture)
-        picture = outer
-    return picture
+        outer.add(svg_obj)
+        svg_obj = outer
+    return svg_obj
 
 def text(x, y, label, font_size=1.0, color='black', href=None):
     '''Draws label at (x,y).  Font size is in ems. Optionally, text can link to href.'''
