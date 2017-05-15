@@ -10,8 +10,9 @@ weekday_end_hour = 24
 
 # Timeline X Grid Dimensions
 left_grid = 50
-weekday_right_grid = 500
-weekend_right_grid=850
+weekday_hour_width = 30
+weekday_right_grid = left_grid + weekday_hour_width*(weekday_end_hour-weekday_start_hour)
+weekend_right_grid = weekday_right_grid + (32/260 * weekday_hour_width / (7/365))
 right_grid = 950
 age_left = right_grid
 age_right = right_grid+35
@@ -254,3 +255,16 @@ def main(func, fnout):
     dwg.add_stylesheet('timeline.css', title='some title')
     func()
     dwg.save()
+
+def width_from_hours(ndays, nhours):
+    '''given nhours total spent over ndays, returns width in pixels'''
+    assert nhours <= (ndays * 16)
+    weekday_hour_width = weekday_hour(10) - weekday_hour(9)
+    return  (nhours/260) * weekday_hour_width / (ndays/365)
+
+def run_tests():
+    assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
+    print("tests pass")
+
+if __name__ == '__main__':
+    run_tests()
