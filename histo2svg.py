@@ -9,7 +9,7 @@ import dateutil.parser
 # Timeline X Grid Dimensions
 left_grid = 50
 weekday_right_grid = 500
-weekend_left_grid = 600
+weekend_right_grid=850
 right_grid = 950
 event_line_x = right_grid+20 # X coordinate of the event line
 
@@ -127,8 +127,8 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekday_right_grid
-    x2 = weekend_left_grid
+    x1 = weekend_right_grid
+    x2 = right_grid
 
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
@@ -150,9 +150,8 @@ def weekend(start_isodate, end_isodate, num_hours, label, **kwargs):
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_left_grid
+    x1 = weekday_right_grid+1
     x2 = (y1-y2)/(num_hours*sqpx_per_hour) + x1
-    assert x2 > weekday_right_grid, (x1, x2, weekday_right_grid)
 
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
@@ -258,14 +257,14 @@ def timespan(start_isodate, end_isodate):
     line(evening_start, top_label_y+30, evening_start-1, top_grid-30)
     text((evening_start+day_end)/2-30, top_grid, 'evening')
 
-    # ZzzzzzZZZ
-    line(day_end, top_label_y+30, day_end, top_grid-30)
-    text((day_end+weekend_left_grid)/2-15, top_grid, 'zzz')
-
     # Saturday to Sunday
-    line(weekend_left_grid, top_label_y+30, weekend_left_grid, top_grid-50)
-    text((weekend_left_grid+right_grid)/2-30,top_grid-45, 'Sat-Sun')
-    line(right_grid-1, top_label_y+30, right_grid-1, top_grid-50)
+    line(day_end, top_label_y+30, day_end, top_grid-50)
+    text((day_end+weekend_right_grid)/2-30,top_grid-45, 'Sat-Sun')
+    line(weekend_right_grid-1, top_label_y+30, weekend_right_grid-1, top_grid-30)
+
+    # ZzzzzzZZZ
+    line(right_grid, top_label_y+30, right_grid, top_grid-30)
+    text((weekend_right_grid+right_grid)/2-15, top_grid, 'zzz')
 
    # Draw the event line
     line(event_line_x, top_grid, event_line_x, bottom_grid)
