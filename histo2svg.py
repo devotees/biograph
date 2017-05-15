@@ -26,13 +26,14 @@ bottom_date = None # Date of birth
 weekday_start_hour = 8
 weekday_end_hour = 24
 
-def wraplink(p, href):
-    # How to add links to polygons courtesy of Saul
+def wraplink(picture, href):
+    '''Makes a drawing clickable with a link to href.'''
+
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
-        outer.add(p)
-        p = outer
-    return p
+        outer.add(picture)
+        picture = outer
+    return picture
 
 def text(x, y, label, font_size=1.0, color='black', href=None):
     '''
