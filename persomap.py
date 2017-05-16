@@ -174,8 +174,8 @@ def parse_date(isodate):
     '''Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'''
 
     parsed_date = dateutil.parser.parse(isodate)
-    days_alive = (top_date - bottom_date).days # Total days alive
-    day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
+    days_alive = (options.top_date - options.bottom_date).days # Total days alive
+    day_count = (options.top_date - parsed_date).days # Number of days into life at which event occurred
     scale = (options.bottom_grid - options.top_grid) / days_alive
     return options.bottom_grid - scale * (days_alive - day_count)
 
@@ -210,55 +210,55 @@ class AttrDict(dict):
 def timespan(start_isodate, end_isodate, **kwargs):
     '''Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'''
 
-    # Set Options
+    # Set options
     timeline_options = dict(
-                            left_grid = 50,
-                            right_grid = 950,
-                            top_grid = 100,    # Today's date
-                            bottom_grid = 1200, # Date of birth
-                            weekday_start_hour = 7,
-                            weekday_end_hour = 24,
-                            weekday_hour_width = 30,
-                            year_height = None
+                            bottom_date = None,      # First recorded day
+                            top_date = None,         # Final recorded day
+                            left_grid = 50,          # x coordinate of the left grid border
+                            right_grid = 950,        # x coordinate of the right grid border
+                            top_grid = 100,          # y coordinate of the top grid border
+                            bottom_grid = 1200,      # y coordinate of the bottom grid border
+                            weekday_start_hour = 7,  # Time the day starts
+                            weekday_end_hour = 24,   # Time the day ends
+                            weekday_hour_width = 30, # Number of x pixels per hour n a weekday
+                            year_height = None       # Number of y pixels per year
                             )
 
+    timeline_options.update(**kwargs)
+
+    # Allow convenient access of dictionary values (dict.key)
     global options
     options = AttrDict(timeline_options)
 
-    global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_label_y
-    # Timeline X Grid Dimensions
-    weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour)
-    weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))
-
-    age_left = options.right_grid
-    age_right = options.right_grid+35
-    event_line_x = options.right_grid+50 # X coordinate of the event line
-
-    # Timeline Y Grid Dimensions
-    top_label_y = options.top_grid-25
-
-
-    # Input Quality
+    # Set grid variables
     assert start_isodate < end_isodate
+    options.top_date = dateutil.parser.parse(end_isodate)
+    options.bottom_date = dateutil.parser.parse(start_isodate)
 
-    # Set y-axis boundaries of grid
-    global bottom_date, top_date
-    top_date = dateutil.parser.parse(end_isodate)
-    bottom_date = dateutil.parser.parse(start_isodate)
+    global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_label_y
+
+    weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
+    weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
+
+    age_left = options.right_grid        # x coordinate of where the placement of the ages starts
+    age_right = options.right_grid+35    # x coordinate of the right border for ages
+    event_line_x = options.right_grid+50 # x coordinate of the event line
+    top_label_y = options.top_grid-25    # y coordinate of where the top labels are placed
+
 
     # Set year ticks on y-axis
-    for y in range(bottom_date.year, top_date.year+1):
+    for y in range(options.bottom_date.year, options.top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         line(0, dt, options.left_grid, dt)
         text(0,dt, y, font_size=0.9)
 
     # Set ages on y-axis
     age = 0
-    for y in range(bottom_date.year, top_date.year):
+    for y in range(options.bottom_date.year, options.top_date.year):
         g = svgwrite.container.Group(class_='age')
         dwg.add(g)
-        dt = parse_date('%d-%d-%d' % (y, bottom_date.month, bottom_date.day))
-        endt = parse_date('%d-%d-%d' % (y+1, bottom_date.month, bottom_date.day))
+        dt = parse_date('%d-%d-%d' % (y, options.bottom_date.month, options.bottom_date.day))
+        endt = parse_date('%d-%d-%d' % (y+1, options.bottom_date.month, options.bottom_date.day))
         rectangle(age_left, dt, age_right, endt, parent=g)
         if age > 0:
             text(age_left-3, dt, str(age), parent=g, font_size=0.8)
