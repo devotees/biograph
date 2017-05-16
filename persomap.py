@@ -28,7 +28,7 @@ top_date = None # Today's date
 bottom_date = None # Date of birth
 
 def wraplink(svg_obj, href):
-    '''Makes an svg object clickable with a link to href.'''
+    '''Makes an svg_obj clickable with a link to href.'''
 
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
@@ -37,7 +37,7 @@ def wraplink(svg_obj, href):
     return svg_obj
 
 def addobj(parent, svg_obj):
-    ''' Add svgobj as a subelement to parent'''
+    ''' Add svg_obj as a subelement to parent'''
 
     if not parent:
         parent = dwg
@@ -46,8 +46,8 @@ def addobj(parent, svg_obj):
 def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
     '''
     Draws label at (x,y).
-    Font size is in ems.
-    Optionally, text can link to href.
+    font_size is in ems.
+    Optionally, label can link to href.
     '''
 
     # Coordinates
@@ -85,7 +85,7 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
     addobj(parent, wraplink(p, href))
 
 def width_from_hours(num_days, num_hours):
-    '''Given total num_hours spent over num_days, returns width the :in pixels'''
+    '''Given total num_hours spent over num_days, returns the width in pixels'''
 
     # Input Quality
     assert num_hours <= (num_days * 16)
@@ -106,7 +106,8 @@ def weekday_hour(hr):
     return left_grid + (hr-weekday_start_hour)*x_scale
 
 def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
-    '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
+    '''
+    Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     **kwargs: css styling
     '''
 
@@ -145,7 +146,7 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
 def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
-    Size of the drawing is proportional to num_hours invested.
+    Width of the drawing is proportional to the hours_per_week invested.
     **kwargs: css styling of main rectangle.
     '''
 
@@ -201,7 +202,7 @@ def parse_date(isodate):
 
 def residence(start_isodate, end_isodate, label, **kwargs):
     '''
-    Draws a box of y-axis length = duration of stay at a residence. 
+    Draws a box of y-axis length = duration of stay at a residence.
     **kwargs: css styling.
     '''
 
@@ -290,12 +291,12 @@ def main(func, fnout):
     func()
     dwg.save()
 
-# Tests
-def test_time_per_pixel_consistency():
+def run_tests():
+    '''Tests'''
+
+    #test_time_per_pixel_consistency
     assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
 
-def run_tests():
-    test_time_per_pixel_consistency()
     print("Tests pass")
 
 if __name__ == '__main__':
