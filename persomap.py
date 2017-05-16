@@ -290,10 +290,13 @@ def main(func, fnout):
     func()
     dwg.save()
 
+# Tests
+def test_time_per_pixel_consistency():
+    assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
 
 def run_tests():
-    assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
-    print("tests pass")
+    test_time_per_pixel_consistency()
+    print("Tests pass")
 
 if __name__ == '__main__':
     run_tests()
