@@ -36,10 +36,12 @@ def wraplink(svg_obj, href):
         svg_obj = outer
     return svg_obj
 
-def addobj(parent, obj):
+def addobj(parent, svg_obj):
+    ''' Add svgobj as a subelement to parent'''
+
     if not parent:
         parent = dwg
-    parent.add(obj)
+    parent.add(svg_obj)
 
 def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
     '''Draws label at (x,y).  Font size is in ems. Optionally, text can link to href.'''
