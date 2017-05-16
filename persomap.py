@@ -44,7 +44,11 @@ def addobj(parent, svg_obj):
     parent.add(svg_obj)
 
 def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
-    '''Draws label at (x,y).  Font size is in ems. Optionally, text can link to href.'''
+    '''
+    Draws label at (x,y).
+    Font size is in ems.
+    Optionally, text can link to href.
+    '''
 
     # Coordinates
     x,y = int(x),int(y)
@@ -67,7 +71,10 @@ def line(x1, y1, x2, y2, color='grey'):
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
 def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
-    '''Draws a rectangle from coordinates (x1, y1) to (x2, y2).  **kwargs: css styling.'''
+    '''
+    Draws a rectangle from coordinates (x1, y1) to (x2, y2).
+    **kwargs: css styling.
+    '''
 
     # Coordinates
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
@@ -78,7 +85,10 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
     addobj(parent, wraplink(p, href))
 
 def weekday_hour(hr):
-    '''Returns the x-axis coordinate for a weekday time. hr must be an int between 8 and 24.'''
+    '''
+    Returns the x-axis coordinate for a weekday time. 
+    hr must be an int between 8 and 24.
+    '''
 
     # Input Quality
     assert (hr <= 24) and (hr >= 8)
@@ -87,7 +97,9 @@ def weekday_hour(hr):
     return left_grid + (hr-weekday_start_hour)*x_scale
 
 def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
-    '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)). **kwargs: css styling'''
+    '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
+    **kwargs: css styling
+    '''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -103,7 +115,10 @@ def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     text(x1, y1, label)
 
 def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
-    '''Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). **kwargs: css styling.'''
+    '''
+    Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). 
+    **kwargs: css styling.
+    '''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -119,7 +134,11 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     text(x1, y1, name_label)
 
 def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
-    '''Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). Size of the drawing is proportional to num_hours invested. **kwargs: css styling of main rectangle'''
+    '''
+    Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
+    Size of the drawing is proportional to num_hours invested.
+    **kwargs: css styling of main rectangle.
+    '''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -142,8 +161,7 @@ def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
 def event(start_isodate, end_isodate, label, href=None, line_length=20):
     '''
     Draws a circle representing short duration events on the event line.
-    Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD).
-    Size of the circle is proportional to the event duration.
+    Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.
     Set line_length to the amount you want the label offset.
     '''
 
@@ -165,6 +183,7 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
 
 def parse_date(isodate):
     '''Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'''
+
     parsed_date = dateutil.parser.parse(isodate)
     days_alive = (top_date - bottom_date).days # Total days alive
     day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
@@ -172,7 +191,10 @@ def parse_date(isodate):
     return bottom_grid - scale * (days_alive - day_count)
 
 def residence(start_isodate, end_isodate, label, **kwargs):
-    '''Draws a box of y-axis length = duration of stay at a residence. **kwargs: css styling'''
+    '''
+    Draws a box of y-axis length = duration of stay at a residence. 
+    **kwargs: css styling.
+    '''
 
     # Input Quality
     assert start_isodate < end_isodate
