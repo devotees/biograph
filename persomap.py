@@ -84,6 +84,15 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
     p = dwg.polygon(points, **kwargs)
     addobj(parent, wraplink(p, href))
 
+def width_from_hours(num_days, num_hours):
+    '''Given total num_hours spent over num_days, returns width the :in pixels'''
+
+    # Input Quality
+    assert num_hours <= (num_days * 16)
+
+    weekday_hour_width = weekday_hour(10) - weekday_hour(9)
+    return  (num_hours/260) * weekday_hour_width / (num_days/365)
+
 def weekday_hour(hr):
     '''
     Returns the x-axis coordinate for a weekday time. 
@@ -274,17 +283,13 @@ def timespan(start_isodate, end_isodate):
 
 
 def main(func, fnout):
+
     global dwg
     dwg = svgwrite.Drawing(fnout, preserveAspectRatio='xMidYMid meet')
     dwg.add_stylesheet('timeline.css', title='some title')
     func()
     dwg.save()
 
-def width_from_hours(num_days, num_hours):
-    '''given num_hours total spent over num_days, returns width in pixels'''
-    assert num_hours <= (num_days * 16)
-    weekday_hour_width = weekday_hour(10) - weekday_hour(9)
-    return  (num_hours/260) * weekday_hour_width / (num_days/365)
 
 def run_tests():
     assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
