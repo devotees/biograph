@@ -95,7 +95,7 @@ def width_from_hours(num_days, num_hours):
 
 def weekday_hour(hr):
     '''
-    Returns the x-axis coordinate for a weekday time. 
+    Returns the x-axis coordinate for a weekday time.
     hr must be an int between 8 and 24.
     '''
 
@@ -125,7 +125,7 @@ def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
 
 def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     '''
-    Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD). 
+    Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     **kwargs: css styling.
     '''
 
