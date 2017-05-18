@@ -228,10 +228,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     global options
     options = AttrDict(timeline_options)
 
-    # Set grid variables
-
-
-
+    # Set dates
     assert start_isodate < end_isodate
     options.top_date = dateutil.parser.parse(end_isodate)
     options.bottom_date = dateutil.parser.parse(start_isodate)
@@ -241,6 +238,10 @@ def timespan(start_isodate, end_isodate, **kwargs):
         num_years = options.top_date.year - options.bottom_date.year
         options.bottom_grid = num_years * options.year_height
 
+    # Set the bounds of the viewport such that the entire map can be viewed.
+    dwg.viewbox(width=options.right_grid+100, height=options.bottom_grid+50)
+
+    # Set grid variables
     global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
     top_grid = 100                       # y coordinate of the top grid border
