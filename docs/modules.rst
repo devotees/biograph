@@ -1,5 +1,0 @@
-==========
-Drawing
-=========
-.. automodule:: persomap
-    :members:
