@@ -121,7 +121,6 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
-
 def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
@@ -176,7 +175,7 @@ def parse_date(isodate):
     parsed_date = dateutil.parser.parse(isodate)
     days_alive = (options.top_date - options.bottom_date).days # Total days alive
     day_count = (options.top_date - parsed_date).days # Number of days into life at which event occurred
-    scale = (options.bottom_grid - options.top_grid) / days_alive
+    scale = (options.bottom_grid - top_grid) / days_alive
     return options.bottom_grid - scale * (days_alive - day_count)
 
 def residence(start_isodate, end_isodate, label, **kwargs):
@@ -216,7 +215,6 @@ def timespan(start_isodate, end_isodate, **kwargs):
                             top_date = None,         # Final recorded day
                             left_grid = 50,          # x coordinate of the left grid border
                             right_grid = 950,        # x coordinate of the right grid border
-                            top_grid = 100,          # y coordinate of the top grid border
                             bottom_grid = 1200,      # y coordinate of the bottom grid border
                             weekday_start_hour = 7,  # Time the day starts
                             weekday_end_hour = 24,   # Time the day ends
@@ -231,11 +229,17 @@ def timespan(start_isodate, end_isodate, **kwargs):
     options = AttrDict(timeline_options)
 
     # Set grid variables
+
+
+
     assert start_isodate < end_isodate
     options.top_date = dateutil.parser.parse(end_isodate)
     options.bottom_date = dateutil.parser.parse(start_isodate)
 
-    global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_label_y
+    global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
+
+    top_grid = 100                       # y coordinate of the top grid border
+    top_label_y = top_grid-25    # y coordinate of where the top labels are placed
 
     weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
     weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
@@ -243,7 +247,6 @@ def timespan(start_isodate, end_isodate, **kwargs):
     age_left = options.right_grid        # x coordinate of where the placement of the ages starts
     age_right = options.right_grid+35    # x coordinate of the right border for ages
     event_line_x = options.right_grid+50 # x coordinate of the event line
-    top_label_y = options.top_grid-25    # y coordinate of where the top labels are placed
 
 
     # Set year ticks on y-axis
@@ -274,25 +277,25 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Drawing
     # Monday to Friday
-    text((options.left_grid+weekday_right_grid)/2,options.top_grid-45, 'Mon-Fri')
-    line(morning_start, top_label_y+30, morning_start-1, options.top_grid-50)
-    text((morning_start+afternoon_start)/2-30, options.top_grid, 'morning')
-    line(afternoon_start, top_label_y+30, afternoon_start-1, options.top_grid-30)
-    text((afternoon_start+evening_start)/2-30, options.top_grid, 'afternoon')
-    line(evening_start, top_label_y+30, evening_start-1, options.top_grid-30)
-    text((evening_start+day_end)/2-30, options.top_grid, 'evening')
+    text((options.left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
+    line(morning_start, top_label_y+30, morning_start-1, top_grid-50)
+    text((morning_start+afternoon_start)/2-30, top_grid, 'morning')
+    line(afternoon_start, top_label_y+30, afternoon_start-1, top_grid-30)
+    text((afternoon_start+evening_start)/2-30, top_grid, 'afternoon')
+    line(evening_start, top_label_y+30, evening_start-1, top_grid-30)
+    text((evening_start+day_end)/2-30, top_grid, 'evening')
 
     # Saturday to Sunday
-    line(day_end, top_label_y+30, day_end, options.top_grid-50)
-    text((day_end+weekend_right_grid)/2-30,options.top_grid-45, 'Sat-Sun')
-    line(weekend_right_grid-1, top_label_y+30, weekend_right_grid-1, options.top_grid-30)
+    line(day_end, top_label_y+30, day_end, top_grid-50)
+    text((day_end+weekend_right_grid)/2-30,top_grid-45, 'Sat-Sun')
+    line(weekend_right_grid-1, top_label_y+30, weekend_right_grid-1, top_grid-30)
 
     # ZzzzzzZZZ
-    line(options.right_grid, top_label_y+30, options.right_grid, options.top_grid-30)
-    text((weekend_right_grid+options.right_grid)/2-15, options.top_grid, 'zzz')
+    line(options.right_grid, top_label_y+30, options.right_grid, top_grid-30)
+    text((weekend_right_grid+options.right_grid)/2-15, top_grid, 'zzz')
 
    # Draw the event line
-    line(event_line_x, options.top_grid, event_line_x, options.bottom_grid)
+    line(event_line_x, top_grid, event_line_x, options.bottom_grid)
     text(options.right_grid, top_label_y, 'Events')
 
 
