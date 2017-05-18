@@ -9,9 +9,10 @@ Welcome to Persomap's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :hidden:
+
+   modules
 
 
 
-.. automodule:: persomap
-    :members:
