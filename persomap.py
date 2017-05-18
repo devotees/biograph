@@ -236,6 +236,11 @@ def timespan(start_isodate, end_isodate, **kwargs):
     options.top_date = dateutil.parser.parse(end_isodate)
     options.bottom_date = dateutil.parser.parse(start_isodate)
 
+    # If year_height is set, it takes priority over bottom_grid
+    if options.year_height is not None:
+        num_years = options.top_date.year - options.bottom_date.year
+        options.bottom_grid = num_years * options.year_height
+
     global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
     top_grid = 100                       # y coordinate of the top grid border
