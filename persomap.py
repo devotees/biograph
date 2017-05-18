@@ -201,6 +201,11 @@ def residence(start_isodate, end_isodate, label, **kwargs):
         text(weekday_hour(19), start_date, label, font_size=0.7)
 
 class AttrDict(dict):
+    '''
+    A recipe which allows you to treat dict keys like attributions.
+    dict.key
+    '''
+
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
@@ -244,8 +249,8 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Set grid variables
     global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
-    top_grid = 100                       # y coordinate of the top grid border
-    top_label_y = top_grid-25    # y coordinate of where the top labels are placed
+    top_grid = 100               # y coordinate of the top grid border
+    top_label_y = top_grid+5    # y coordinate of where the top labels are placed
 
     weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
     weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
@@ -276,7 +281,10 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Set labels on horizontal axis
     # Coordinates
-    morning_start = weekday_hour(8)
+    if options.weekday_start_hour < 8:
+        morning_start = weekday_hour(weekday_start_hour)
+    else:
+        morning_start = weekday_hour(8)
     afternoon_start = weekday_hour(12)
     evening_start = weekday_hour(18)
     day_end = weekday_hour(24)
@@ -284,20 +292,20 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Drawing
     # Monday to Friday
     text((options.left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
-    line(morning_start, top_label_y+30, morning_start-1, top_grid-50)
+    line(morning_start, top_label_y, morning_start-1, top_grid-50)
     text((morning_start+afternoon_start)/2-30, top_grid, 'morning')
-    line(afternoon_start, top_label_y+30, afternoon_start-1, top_grid-30)
+    line(afternoon_start, top_label_y, afternoon_start-1, top_grid-30)
     text((afternoon_start+evening_start)/2-30, top_grid, 'afternoon')
-    line(evening_start, top_label_y+30, evening_start-1, top_grid-30)
+    line(evening_start, top_label_y, evening_start-1, top_grid-30)
     text((evening_start+day_end)/2-30, top_grid, 'evening')
 
     # Saturday to Sunday
-    line(day_end, top_label_y+30, day_end, top_grid-50)
+    line(day_end, top_label_y, day_end, top_grid-50)
     text((day_end+weekend_right_grid)/2-30,top_grid-45, 'Sat-Sun')
-    line(weekend_right_grid-1, top_label_y+30, weekend_right_grid-1, top_grid-30)
+    line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-30)
 
     # ZzzzzzZZZ
-    line(options.right_grid, top_label_y+30, options.right_grid, top_grid-30)
+    line(options.right_grid, top_label_y, options.right_grid, top_grid-30)
     text((weekend_right_grid+options.right_grid)/2-15, top_grid, 'zzz')
 
    # Draw the event line
