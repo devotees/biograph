@@ -121,7 +121,8 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     # Drawing
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
-def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
+
+def weekend(start_isodate, end_isodate, hours_per_week, label, start_point = 0, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
@@ -131,6 +132,11 @@ def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
     # Input Quality
     assert start_isodate < end_isodate
 
+    if start_point < 0:
+        start_point = 0
+    elif start_point > 4:
+        start_point = 4
+
     # Coordinates
     start_date = dateutil.parser.parse(start_isodate)
     end_date = dateutil.parser.parse(end_isodate)
@@ -139,7 +145,7 @@ def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
 
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekday_right_grid+1
+    x1 = weekday_right_grid+1+width_from_hours(2, start_point*2)
     x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
@@ -249,7 +255,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Set grid variables
     global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
-    top_grid = 100               # y coordinate of the top grid border
+    top_grid = 100              # y coordinate of the top grid border
     top_label_y = top_grid+5    # y coordinate of where the top labels are placed
 
     weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
