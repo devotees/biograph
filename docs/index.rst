@@ -6,12 +6,9 @@
 Welcome to Persomap's documentation!
 ====================================
 
-Contents:
-
-.. toctree::
-   :maxdepth: 1
-
-   modules
-
-
+==========
+Drawing
+=========
+.. automodule:: persomap
+    :members:
 
