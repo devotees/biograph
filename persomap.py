@@ -78,9 +78,6 @@ def weekday_hour(hr):
     hr must be an int between 8 and 24.
     '''
 
-    # Input Quality
-    assert (hr <= 24) and (hr >= 8)
-
     x_scale = (weekday_right_grid - options.left_grid)/(options.weekday_end_hour-options.weekday_start_hour)
     return options.left_grid + (hr-options.weekday_start_hour)*x_scale
 
@@ -292,7 +289,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Set labels on horizontal axis
     # Coordinates
     if options.weekday_start_hour < 8:
-        morning_start = weekday_hour(weekday_start_hour)
+        morning_start = weekday_hour(options.weekday_start_hour)
     else:
         morning_start = weekday_hour(8)
     afternoon_start = weekday_hour(12)
