@@ -84,7 +84,7 @@ def weekday_hour(hr):
     x_scale = (weekday_right_grid - options.left_grid)/(options.weekday_end_hour-options.weekday_start_hour)
     return options.left_grid + (hr-options.weekday_start_hour)*x_scale
 
-def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
+def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     '''
     Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     **kwargs: css styling
@@ -100,10 +100,11 @@ def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     x2 = weekday_hour(end_hour)
 
     # Drawing
+    kwargs['class_'] = css_color
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, label)
 
-def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
+def sleepmate(css_color, start_isodate, end_isodate, name_label, **kwargs):
     '''
     Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     **kwargs: css styling.
@@ -119,10 +120,11 @@ def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
     x2 = options.right_grid
 
     # Drawing
+    kwargs['class_'] = css_color
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, name_label)
 
-def weekend(start_isodate, end_isodate, hours_per_week, label, start_point = 0, **kwargs):
+def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, start_point = 0, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
@@ -149,6 +151,7 @@ def weekend(start_isodate, end_isodate, hours_per_week, label, start_point = 0, 
     x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
+    kwargs['class_'] = css_color
     rectangle(x1, y1, x2, y2, **kwargs)
     text(x1, y1, label)
 
@@ -184,7 +187,7 @@ def parse_date(isodate):
     scale = (options.bottom_grid - top_grid) / days_alive
     return options.bottom_grid - scale * (days_alive - day_count)
 
-def residence(start_isodate, end_isodate, label, **kwargs):
+def residence(css_color, start_isodate, end_isodate, label, **kwargs):
     '''
     Draws a box of y-axis length = duration of stay at a residence.
     **kwargs: css styling.
@@ -202,6 +205,7 @@ def residence(start_isodate, end_isodate, label, **kwargs):
     y2 = end_date
 
     # Drawing
+    kwargs['class_'] = css_color
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
         text(weekday_hour(19), start_date, label, font_size=0.7)
@@ -229,7 +233,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
                             bottom_grid = 1200,      # y coordinate of the bottom grid border
                             weekday_start_hour = 7,  # Time the day starts
                             weekday_end_hour = 24,   # Time the day ends
-                            weekday_hour_width = 30, # Number of x pixels per hour n a weekday
+                            weekday_hour_width = 30, # Number of x pixels per hour in a weekday
                             year_height = None       # Number of y pixels per year
                             )
 
