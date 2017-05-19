@@ -84,7 +84,8 @@ def weekday_hour(hr):
 def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     '''
     Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
-    **kwargs: css styling
+    css_color receives a css coloring class as defined in timeline.css.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
@@ -104,7 +105,8 @@ def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, 
 def sleepmate(css_color, start_isodate, end_isodate, name_label, **kwargs):
     '''
     Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
-    **kwargs: css styling.
+    css_color receives a css coloring class as defined in timeline.css.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
@@ -125,7 +127,8 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, start_
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
-    **kwargs: css styling of main rectangle.
+    css_color receives a css coloring class as defined in timeline.css.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
@@ -187,7 +190,8 @@ def parse_date(isodate):
 def residence(css_color, start_isodate, end_isodate, label, **kwargs):
     '''
     Draws a box of y-axis length = duration of stay at a residence.
-    **kwargs: css styling.
+    css_color receives a css coloring class as defined in timeline.css.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
