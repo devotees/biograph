@@ -5,17 +5,30 @@ import svgwrite
 import datetime
 import dateutil.parser
 
+# Grid Options
+timeline_options = dict(
+                        bottom_date = None,      # First recorded day
+                        top_date = None,         # Final recorded day
+                        left_grid = 50,          # x coordinate of the left grid border
+                        right_grid = 800,        # x coordinate of the right grid border
+                        bottom_grid = 1200,      # y coordinate of the bottom grid border
+                        weekday_start_hour = 7,  # Time the day starts
+                        weekday_end_hour = 24,   # Time the day ends
+                        weekday_hour_width = 30, # Number of x pixels per hour in a weekday
+                        year_height = None       # Number of y pixels per year
+                        )
 
-def wraplink(svg_obj, href):
+def wrap_link(svg_obj, href):
     '''Makes an svg_obj clickable with a link to href.'''
 
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
         outer.add(svg_obj)
         svg_obj = outer
+
     return svg_obj
 
-def addobj(parent, svg_obj):
+def add_obj(parent, svg_obj):
     ''' Add svg_obj as a subelement to parent'''
 
     if not parent:
@@ -61,7 +74,8 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
 
     # Drawing
     p = dwg.polygon(points, **kwargs)
-    addobj(parent, wraplink(p, href))
+    add_obj(parent, wrap_link(p, href))
+    return p
 
 def width_from_hours(num_days, num_hours):
     '''Given total num_hours spent over num_days, returns the width in pixels'''
@@ -173,7 +187,7 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
 
     # Drawing
     p = dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey')
-    dwg.add(wraplink(p, href))
+    dwg.add(wrap_link(p, href))
     line(event_line_x+event_radius-3, event_midpoint, event_line_x+event_radius+line_length, event_midpoint)
     text(event_line_x+event_radius+line_length-4, event_midpoint+8, label, font_size=0.6, href=href)
 
@@ -224,19 +238,6 @@ class AttrDict(dict):
 
 def timespan(start_isodate, end_isodate, **kwargs):
     '''Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'''
-
-    # Set options
-    timeline_options = dict(
-                            bottom_date = None,      # First recorded day
-                            top_date = None,         # Final recorded day
-                            left_grid = 50,          # x coordinate of the left grid border
-                            right_grid = 950,        # x coordinate of the right grid border
-                            bottom_grid = 1200,      # y coordinate of the bottom grid border
-                            weekday_start_hour = 7,  # Time the day starts
-                            weekday_end_hour = 24,   # Time the day ends
-                            weekday_hour_width = 30, # Number of x pixels per hour in a weekday
-                            year_height = None       # Number of y pixels per year
-                            )
 
     timeline_options.update(**kwargs)
 
@@ -321,7 +322,8 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
    # Draw the event line
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
-    text(options.right_grid, top_label_y, 'Events')
+    text(age_right, top_label_y, 'Events')
+
 
 
 def main(func, fnout):
@@ -338,7 +340,7 @@ def run_tests():
     #test_time_per_pixel_consistency
     assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
 
-    print("Tests pass")
+    print('Tests pass')
 
 if __name__ == '__main__':
     run_tests()
