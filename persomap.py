@@ -5,48 +5,49 @@ import svgwrite
 import datetime
 import dateutil.parser
 
-weekday_start_hour = 7
-weekday_end_hour = 24
+# Grid Options
+timeline_options = dict(
+                        bottom_date = None,      # First recorded day
+                        top_date = None,         # Final recorded day
+                        left_grid = 50,          # x coordinate of the left grid border
+                        right_grid = 800,        # x coordinate of the right grid border
+                        bottom_grid = 1200,      # y coordinate of the bottom grid border
+                        weekday_start_hour = 7,  # Time the day starts
+                        weekday_end_hour = 24,   # Time the day ends
+                        weekday_hour_width = 30, # Number of x pixels per hour in a weekday
+                        year_height = None       # Number of y pixels per year
+                        )
 
-# Timeline X Grid Dimensions
-left_grid = 50
-weekday_hour_width = 30
-weekday_right_grid = left_grid + weekday_hour_width*(weekday_end_hour-weekday_start_hour)
-weekend_right_grid = weekday_right_grid + (32/260 * weekday_hour_width / (7/365))
-right_grid = 950
-age_left = right_grid
-age_right = right_grid+35
-event_line_x = right_grid+50 # X coordinate of the event line
-
-# Timeline Y Grid Dimensions
-top_label_y = 75
-top_grid = 100    # Today's date
-bottom_grid = 1200 # Date of birth
-
-# Time Range
-top_date = None # Today's date
-bottom_date = None # Date of birth
-
-def wraplink(svg_obj, href):
+def wrap_link(svg_obj, href):
     '''Makes an svg_obj clickable with a link to href.'''
 
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
         outer.add(svg_obj)
         svg_obj = outer
+
     return svg_obj
 
-def addobj(parent, svg_obj):
+def add_class(kwargs, cls):
+    '''Adds a css styling cls to kwargs.'''
+
+    if 'class_' in kwargs:
+        kwargs['class_'] = kwargs.get('class_') + ' ' + cls
+    else:
+        kwargs['class_'] = cls
+
+def add_obj(parent, svg_obj):
     ''' Add svg_obj as a subelement to parent'''
 
     if not parent:
         parent = dwg
     parent.add(svg_obj)
 
-def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
+def text(x, y, label, font_size=1.0,  align = None, parent=None, href=None, **kwargs):
     '''
     Draws label at (x,y).
     font_size is in ems.
+    align can be set to left, middle or right and controls the alignment of the string relative to (x, y).
     Optionally, label can link to href.
     '''
 
@@ -56,10 +57,36 @@ def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
     # This will scale with different web page sizes
 
     # Drawing
-    p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, color))
+    if align is not None:
+        add_class(kwargs, align)
+        p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'), **kwargs)
+    else:
+        p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'))
     t = dwg.text(str(label), x=[x+3], y=[y-5])
-    p.add(wraplink(t, href))
-    addobj(parent, p)
+    p.add(wrap_link(t, href))
+    add_obj(parent, p)
+
+def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kwargs):
+    '''
+    Draws label at coordinate x1, in between coordinats y1 to y2.
+    font_size is in ems.
+    Optionally, label can link to href.
+    '''
+
+    text(x1, (y1+y2+underhang_offset)/2, label, font_size, None, parent, href)
+
+def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **kwargs):
+    '''
+    Draws label in the center of coordinates (x1, y1) to (x2, y2).
+    font_size is in ems.
+    Optionally, label can link to href.
+    '''
+
+    # TODO: detect whether it should be vertical
+    if abs(y2-y1) > abs(x2-x1):
+        text((x1+x2-underhang_offset)/2, ((y1+y2)/2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
+    else:
+        text((x1+x2-underhang_offset)/2, ((y1+y2)/2)+(underhang_offset+5), label, font_size, 'middle', parent, href)
 
 def line(x1, y1, x2, y2, color='grey'):
     '''Draws a colored line from (x1, y1) to (x2, y2).'''
@@ -82,7 +109,8 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
 
     # Drawing
     p = dwg.polygon(points, **kwargs)
-    addobj(parent, wraplink(p, href))
+    add_obj(parent, wrap_link(p, href))
+    return p
 
 def width_from_hours(num_days, num_hours):
     '''Given total num_hours spent over num_days, returns the width in pixels'''
@@ -90,8 +118,8 @@ def width_from_hours(num_days, num_hours):
     # Input Quality
     assert num_hours <= (num_days * 16)
 
-    weekday_hour_width = weekday_hour(10) - weekday_hour(9)
-    return  (num_hours/260) * weekday_hour_width / (num_days/365)
+    options.weekday_hour_width = weekday_hour(10) - weekday_hour(9)
+    return  (num_hours/260) * options.weekday_hour_width / (num_days/365)
 
 def weekday_hour(hr):
     '''
@@ -99,16 +127,15 @@ def weekday_hour(hr):
     hr must be an int between 8 and 24.
     '''
 
-    # Input Quality
-    assert (hr <= 24) and (hr >= 8)
+    x_scale = (weekday_right_grid - options.left_grid)/(options.weekday_end_hour-options.weekday_start_hour)
+    return options.left_grid + (hr-options.weekday_start_hour)*x_scale
 
-    x_scale = (weekday_right_grid - left_grid)/(weekday_end_hour-weekday_start_hour)
-    return left_grid + (hr-weekday_start_hour)*x_scale
-
-def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
+def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify = 'middle', **kwargs):
     '''
     Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
-    **kwargs: css styling
+    css_color receives a css coloring class as defined in timeline.css.
+    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
@@ -121,37 +148,56 @@ def weekday(start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
     x2 = weekday_hour(end_hour)
 
     # Drawing
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, label)
+    if justify == 'middle':
+        text_center(x1, y1, x2, y2, label, **kwargs)
+    elif justify == 'left':
+        text_left(x1, y1, x2, y2, label, **kwargs)
 
-def sleepmate(start_isodate, end_isodate, name_label, **kwargs):
+def sleepmate(css_color, start_isodate, end_isodate, label,  slot = 0, justify = 'middle',**kwargs):
     '''
     Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
-    **kwargs: css styling.
+    css_color receives a css coloring class as defined in timeline.css.
+    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
     assert start_isodate < end_isodate
 
+    offset = (options.right_grid - weekend_right_grid)/4
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_right_grid
-    x2 = right_grid
+    x1 = weekend_right_grid + (offset * slot)
+    x2 = options.right_grid - (offset*(3-slot))
 
     # Drawing
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, name_label)
+    if justify == 'middle':
+        text_center(x1, y1, x2, y2, label)
+    elif justify == 'left':
+        text_left(x1, y1, x2, y2, label)
 
-def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
+
+def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', slot = 0, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
-    **kwargs: css styling of main rectangle.
+    css_color receives a css coloring class as defined in timeline.css.
+    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
     assert start_isodate < end_isodate
+
+    if slot < 0:
+        slot = 0
+    elif slot > 4:
+        slot = 4
 
     # Coordinates
     start_date = dateutil.parser.parse(start_isodate)
@@ -161,12 +207,16 @@ def weekend(start_isodate, end_isodate, hours_per_week, label, **kwargs):
 
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekday_right_grid+1
+    x1 = weekday_right_grid+1+width_from_hours(2, slot*2)
     x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, label)
+    if justify == 'middle':
+        text_center(x1, y1, x2, y2, label)
+    elif justify == 'left':
+        text_left(x1, y1, x2, y2, label)
 
 def event(start_isodate, end_isodate, label, href=None, line_length=20):
     '''
@@ -186,7 +236,7 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
 
     # Drawing
     p = dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey')
-    dwg.add(wraplink(p, href))
+    dwg.add(wrap_link(p, href))
     line(event_line_x+event_radius-3, event_midpoint, event_line_x+event_radius+line_length, event_midpoint)
     text(event_line_x+event_radius+line_length-4, event_midpoint+8, label, font_size=0.6, href=href)
 
@@ -195,15 +245,16 @@ def parse_date(isodate):
     '''Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'''
 
     parsed_date = dateutil.parser.parse(isodate)
-    days_alive = (top_date - bottom_date).days # Total days alive
-    day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
-    scale = (bottom_grid - top_grid) / days_alive
-    return bottom_grid - scale * (days_alive - day_count)
+    days_alive = (options.top_date - options.bottom_date).days # Total days alive
+    day_count = (options.top_date - parsed_date).days # Number of days into life at which event occurred
+    scale = (options.bottom_grid - top_grid) / days_alive
+    return options.bottom_grid - scale * (days_alive - day_count)
 
-def residence(start_isodate, end_isodate, label, **kwargs):
+def residence(css_color, start_isodate, end_isodate, label, **kwargs):
     '''
     Draws a box of y-axis length = duration of stay at a residence.
-    **kwargs: css styling.
+    css_color receives a css coloring class as defined in timeline.css.
+    **kwargs: optional css styling.
     '''
 
     # Input Quality
@@ -212,75 +263,117 @@ def residence(start_isodate, end_isodate, label, **kwargs):
     # Coordinates
     start_date = parse_date(start_isodate)
     end_date = parse_date(end_isodate)
-    x1 = left_grid
+    x1 = options.left_grid
     y1 = start_date
-    x2 = right_grid
+    x2 = options.right_grid
     y2 = end_date
 
     # Drawing
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text(weekday_hour(19), start_date, label, font_size=0.7)
+        text_center(x1, y1, x2, y2, label, font_size=0.7)
 
-def timespan(start_isodate, end_isodate):
+class AttrDict(dict):
+    '''
+    A recipe which allows you to treat dict keys like attributions.
+    dict.key
+    '''
+
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
+
+
+def timespan(start_isodate, end_isodate, **kwargs):
     '''Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'''
 
-    # Input Quality
-    assert start_isodate < end_isodate
+    timeline_options.update(**kwargs)
 
-    # Set y-axis boundaries of grid
-    global bottom_date, top_date
-    top_date = dateutil.parser.parse(end_isodate)
-    bottom_date = dateutil.parser.parse(start_isodate)
+    # Allow convenient access of dictionary values (dict.key)
+    global options
+    options = AttrDict(timeline_options)
+
+    # Set dates
+    assert start_isodate < end_isodate
+    options.top_date = dateutil.parser.parse(end_isodate)
+    options.bottom_date = dateutil.parser.parse(start_isodate)
+
+    # If year_height is set, it takes priority over bottom_grid
+    if options.year_height is not None:
+        num_years = options.top_date.year - options.bottom_date.year
+        options.bottom_grid = num_years * options.year_height
+
+    # Set the bounds of the viewport such that the entire map can be viewed.
+    dwg.viewbox(width=options.right_grid+100, height=options.bottom_grid+50)
+
+    # Set grid variables
+    global underhang_offset, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
+
+    underhang_offset = 5        # ensures text does sit below drawn lines
+    top_grid = 100              # y coordinate of the top grid border
+    top_label_y = top_grid+5    # y coordinate of where the top labels are placed
+
+    weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
+    weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
+
+    age_left = options.right_grid        # x coordinate of where the placement of the ages starts
+    age_right = options.right_grid+35    # x coordinate of the right border for ages
+    event_line_x = options.right_grid+50 # x coordinate of the event line
+
 
     # Set year ticks on y-axis
-    for y in range(bottom_date.year, top_date.year+1):
+    for y in range(options.bottom_date.year, options.top_date.year+1):
         dt = parse_date('%s-01-01' % y)
-        line(0, dt, left_grid, dt)
+        line(0, dt, options.left_grid, dt)
         text(0,dt, y, font_size=0.9)
 
     # Set ages on y-axis
     age = 0
-    for y in range(bottom_date.year, top_date.year):
+    for y in range(options.bottom_date.year, options.top_date.year):
         g = svgwrite.container.Group(class_='age')
         dwg.add(g)
-        dt = parse_date('%d-%d-%d' % (y, bottom_date.month, bottom_date.day))
-        endt = parse_date('%d-%d-%d' % (y+1, bottom_date.month, bottom_date.day))
+        dt = parse_date('%d-%d-%d' % (y, options.bottom_date.month, options.bottom_date.day))
+        endt = parse_date('%d-%d-%d' % (y+1, options.bottom_date.month, options.bottom_date.day))
         rectangle(age_left, dt, age_right, endt, parent=g)
         if age > 0:
-            text(age_left-3, dt, str(age), parent=g, font_size=0.8)
+            text_center(age_left, dt, age_right, endt, str(age), parent=g, font_size=0.8)
         age += 1
 
 
     # Set labels on horizontal axis
     # Coordinates
-    morning_start = weekday_hour(8)
+    if options.weekday_start_hour < 8:
+        morning_start = weekday_hour(options.weekday_start_hour)
+    else:
+        morning_start = weekday_hour(8)
     afternoon_start = weekday_hour(12)
     evening_start = weekday_hour(18)
     day_end = weekday_hour(24)
 
     # Drawing
     # Monday to Friday
-    text((left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
-    line(morning_start, top_label_y+30, morning_start-1, top_grid-50)
+    text((options.left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
+    line(morning_start, top_label_y, morning_start-1, top_grid-50)
     text((morning_start+afternoon_start)/2-30, top_grid, 'morning')
-    line(afternoon_start, top_label_y+30, afternoon_start-1, top_grid-30)
+    line(afternoon_start, top_label_y, afternoon_start-1, top_grid-30)
     text((afternoon_start+evening_start)/2-30, top_grid, 'afternoon')
-    line(evening_start, top_label_y+30, evening_start-1, top_grid-30)
+    line(evening_start, top_label_y, evening_start-1, top_grid-30)
     text((evening_start+day_end)/2-30, top_grid, 'evening')
 
     # Saturday to Sunday
-    line(day_end, top_label_y+30, day_end, top_grid-50)
+    line(day_end, top_label_y, day_end, top_grid-50)
     text((day_end+weekend_right_grid)/2-30,top_grid-45, 'Sat-Sun')
-    line(weekend_right_grid-1, top_label_y+30, weekend_right_grid-1, top_grid-30)
+    line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-30)
 
     # ZzzzzzZZZ
-    line(right_grid, top_label_y+30, right_grid, top_grid-30)
-    text((weekend_right_grid+right_grid)/2-15, top_grid, 'zzz')
+    line(options.right_grid, top_label_y, options.right_grid, top_grid-30)
+    text((weekend_right_grid+options.right_grid)/2-15, top_grid, 'zzz')
 
    # Draw the event line
-    line(event_line_x, top_grid, event_line_x, bottom_grid)
-    text(right_grid, top_label_y, 'Events')
+    line(event_line_x, top_grid, event_line_x, options.bottom_grid)
+    text(age_right, top_label_y, 'Events')
+
 
 
 def main(func, fnout):
@@ -297,7 +390,7 @@ def run_tests():
     #test_time_per_pixel_consistency
     assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
 
-    print("Tests pass")
+    print('Tests pass')
 
 if __name__ == '__main__':
     run_tests()
