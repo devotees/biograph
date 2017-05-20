@@ -91,3 +91,11 @@ a polygon:hover { fill: #ffffff }
 .age:nth-child(even) polygon { fill: pink; }
 .age:nth-child(odd) polygon { fill: cyan; }
 
+.vert {
+    glyph-orientation-vertical: 270;
+    writing-mode: tb-rl;
+}
+
+.left {text-anchor: start;}
+.middle {text-anchor: middle;}
+.right {text-anchor: end;}

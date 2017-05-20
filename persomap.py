@@ -28,6 +28,14 @@ def wrap_link(svg_obj, href):
 
     return svg_obj
 
+def add_class(kwargs, cls):
+    '''Adds a css styling cls to kwargs.'''
+
+    if 'class_' in kwargs:
+        kwargs['class_'] = kwargs.get('class_') + ' ' + cls
+    else:
+        kwargs['class_'] = cls
+
 def add_obj(parent, svg_obj):
     ''' Add svg_obj as a subelement to parent'''
 
@@ -35,10 +43,11 @@ def add_obj(parent, svg_obj):
         parent = dwg
     parent.add(svg_obj)
 
-def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
+def text(x, y, label, font_size=1.0,  align = None, parent=None, href=None, **kwargs):
     '''
     Draws label at (x,y).
     font_size is in ems.
+    align can be set to left, middle or right and controls the alignment of the string relative to (x, y).
     Optionally, label can link to href.
     '''
 
@@ -48,10 +57,36 @@ def text(x, y, label, font_size=1.0, color='black', parent=None, href=None):
     # This will scale with different web page sizes
 
     # Drawing
-    p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, color))
+    if align is not None:
+        add_class(kwargs, align)
+        p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'), **kwargs)
+    else:
+        p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'))
     t = dwg.text(str(label), x=[x+3], y=[y-5])
-    p.add(wraplink(t, href))
-    addobj(parent, p)
+    p.add(wrap_link(t, href))
+    add_obj(parent, p)
+
+def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kwargs):
+    '''
+    Draws label at coordinate x1, in between coordinats y1 to y2.
+    font_size is in ems.
+    Optionally, label can link to href.
+    '''
+
+    text(x1, (y1+y2+underhang_offset)/2, label, font_size, None, parent, href)
+
+def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **kwargs):
+    '''
+    Draws label in the center of coordinates (x1, y1) to (x2, y2).
+    font_size is in ems.
+    Optionally, label can link to href.
+    '''
+
+    # TODO: detect whether it should be vertical
+    if abs(y2-y1) > abs(x2-x1):
+        text((x1+x2-underhang_offset)/2, ((y1+y2)/2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
+    else:
+        text((x1+x2-underhang_offset)/2, ((y1+y2)/2)+(underhang_offset+5), label, font_size, 'middle', parent, href)
 
 def line(x1, y1, x2, y2, color='grey'):
     '''Draws a colored line from (x1, y1) to (x2, y2).'''
@@ -95,10 +130,11 @@ def weekday_hour(hr):
     x_scale = (weekday_right_grid - options.left_grid)/(options.weekday_end_hour-options.weekday_start_hour)
     return options.left_grid + (hr-options.weekday_start_hour)*x_scale
 
-def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, **kwargs):
+def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify = 'middle', **kwargs):
     '''
     Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     css_color receives a css coloring class as defined in timeline.css.
+    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.
     '''
 
@@ -112,36 +148,46 @@ def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, 
     x2 = weekday_hour(end_hour)
 
     # Drawing
-    kwargs['class_'] = css_color
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, label)
+    if justify == 'middle':
+        text_center(x1, y1, x2, y2, label, **kwargs)
+    elif justify == 'left':
+        text_left(x1, y1, x2, y2, label, **kwargs)
 
-def sleepmate(css_color, start_isodate, end_isodate, name_label, **kwargs):
+def sleepmate(css_color, start_isodate, end_isodate, label,  start_point = 0, justify = 'middle',**kwargs):
     '''
     Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     css_color receives a css coloring class as defined in timeline.css.
+    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.
     '''
 
     # Input Quality
     assert start_isodate < end_isodate
 
+    offset = (options.right_grid - weekend_right_grid)/4
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_right_grid
-    x2 = options.right_grid
+    x1 = weekend_right_grid + (offset * start_point)
+    x2 = options.right_grid - (offset*(3-start_point))
 
     # Drawing
-    kwargs['class_'] = css_color
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, name_label)
+    if justify == 'middle':
+        text_center(x1, y1, x2, y2, label)
+    elif justify == 'left':
+        text_left(x1, y1, x2, y2, label)
 
-def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, start_point = 0, **kwargs):
+
+def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', start_point = 0, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
     css_color receives a css coloring class as defined in timeline.css.
+    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.
     '''
 
@@ -165,9 +211,12 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, start_
     x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
-    kwargs['class_'] = css_color
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    text(x1, y1, label)
+    if justify == 'middle':
+        text_center(x1, y1, x2, y2, label)
+    elif justify == 'left':
+        text_left(x1, y1, x2, y2, label)
 
 def event(start_isodate, end_isodate, label, href=None, line_length=20):
     '''
@@ -220,10 +269,10 @@ def residence(css_color, start_isodate, end_isodate, label, **kwargs):
     y2 = end_date
 
     # Drawing
-    kwargs['class_'] = css_color
+    add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text(weekday_hour(19), start_date, label, font_size=0.7)
+        text_center(x1, y1, x2, y2, label, font_size=0.7)
 
 class AttrDict(dict):
     '''
@@ -259,8 +308,9 @@ def timespan(start_isodate, end_isodate, **kwargs):
     dwg.viewbox(width=options.right_grid+100, height=options.bottom_grid+50)
 
     # Set grid variables
-    global weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
+    global underhang_offset, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
+    underhang_offset = 5        # ensures text does sit below drawn lines
     top_grid = 100              # y coordinate of the top grid border
     top_label_y = top_grid+5    # y coordinate of where the top labels are placed
 
@@ -287,7 +337,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
         endt = parse_date('%d-%d-%d' % (y+1, options.bottom_date.month, options.bottom_date.day))
         rectangle(age_left, dt, age_right, endt, parent=g)
         if age > 0:
-            text(age_left-3, dt, str(age), parent=g, font_size=0.8)
+            text_center(age_left, dt, age_right, endt, str(age), parent=g, font_size=0.8)
         age += 1
 
 
