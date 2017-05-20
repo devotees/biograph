@@ -155,7 +155,7 @@ def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, 
     elif justify == 'left':
         text_left(x1, y1, x2, y2, label, **kwargs)
 
-def sleepmate(css_color, start_isodate, end_isodate, label,  start_point = 0, justify = 'middle',**kwargs):
+def sleepmate(css_color, start_isodate, end_isodate, label,  slot = 0, justify = 'middle',**kwargs):
     '''
     Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     css_color receives a css coloring class as defined in timeline.css.
@@ -170,8 +170,8 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  start_point = 0, ju
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_right_grid + (offset * start_point)
-    x2 = options.right_grid - (offset*(3-start_point))
+    x1 = weekend_right_grid + (offset * slot)
+    x2 = options.right_grid - (offset*(3-slot))
 
     # Drawing
     add_class(kwargs, css_color)
@@ -182,7 +182,7 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  start_point = 0, ju
         text_left(x1, y1, x2, y2, label)
 
 
-def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', start_point = 0, **kwargs):
+def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', slot = 0, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
@@ -194,10 +194,10 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justif
     # Input Quality
     assert start_isodate < end_isodate
 
-    if start_point < 0:
-        start_point = 0
-    elif start_point > 4:
-        start_point = 4
+    if slot < 0:
+        slot = 0
+    elif slot > 4:
+        slot = 4
 
     # Coordinates
     start_date = dateutil.parser.parse(start_isodate)
@@ -207,7 +207,7 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justif
 
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekday_right_grid+1+width_from_hours(2, start_point*2)
+    x1 = weekday_right_grid+1+width_from_hours(2, slot*2)
     x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
