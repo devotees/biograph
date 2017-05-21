@@ -7,8 +7,6 @@ import dateutil.parser
 
 # Grid Options
 timeline_options = dict(
-                        bottom_date = None,      # First recorded day
-                        top_date = None,         # Final recorded day
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 800,        # x coordinate of the right grid border
                         bottom_grid = 1200,      # y coordinate of the bottom grid border
@@ -17,6 +15,11 @@ timeline_options = dict(
                         weekday_hour_width = 30, # Number of x pixels per hour in a weekday
                         year_height = None       # Number of y pixels per year
                         )
+
+def mid(p1, p2):
+    '''Returns the midpoint between p1 and p2.'''
+
+    return (p1+p2)/2
 
 def wrap_link(svg_obj, href):
     '''Makes an svg_obj clickable with a link to href.'''
@@ -73,7 +76,7 @@ def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kw
     Optionally, label can link to href.
     '''
 
-    text(x1, (y1+y2+underhang_offset)/2, label, font_size, None, parent, href)
+    text(x1, mid(y1, y2+underhang_offset), label, font_size, None, parent, href)
 
 def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **kwargs):
     '''
@@ -84,9 +87,9 @@ def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **k
 
     # TODO: detect whether it should be vertical
     if abs(y2-y1) > abs(x2-x1):
-        text((x1+x2-underhang_offset)/2, ((y1+y2)/2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
+        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
     else:
-        text((x1+x2-underhang_offset)/2, ((y1+y2)/2)+(underhang_offset+5), label, font_size, 'middle', parent, href)
+        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset+5, label, font_size, 'middle', parent, href)
 
 def line(x1, y1, x2, y2, color='grey'):
     '''Draws a colored line from (x1, y1) to (x2, y2).'''
@@ -231,7 +234,7 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
     # Coordinates
     start_date = parse_date(start_isodate)
     end_date = parse_date(end_isodate)
-    event_midpoint = (start_date+end_date)/2
+    event_midpoint = mid(start_date, end_date)
     event_radius = start_date-end_date+5
 
     # Drawing
@@ -245,8 +248,8 @@ def parse_date(isodate):
     '''Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'''
 
     parsed_date = dateutil.parser.parse(isodate)
-    days_alive = (options.top_date - options.bottom_date).days # Total days alive
-    day_count = (options.top_date - parsed_date).days # Number of days into life at which event occurred
+    days_alive = (top_date - bottom_date).days # Total days alive
+    day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
     scale = (options.bottom_grid - top_grid) / days_alive
     return options.bottom_grid - scale * (days_alive - day_count)
 
@@ -296,12 +299,13 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Set dates
     assert start_isodate < end_isodate
-    options.top_date = dateutil.parser.parse(end_isodate)
-    options.bottom_date = dateutil.parser.parse(start_isodate)
+    global bottom_date,top_date
+    top_date = dateutil.parser.parse(end_isodate)        # Final recorded day
+    bottom_date = dateutil.parser.parse(start_isodate)   # First recorded day
 
     # If year_height is set, it takes priority over bottom_grid
     if options.year_height is not None:
-        num_years = options.top_date.year - options.bottom_date.year
+        num_years = top_date.year - bottom_date.year
         options.bottom_grid = num_years * options.year_height
 
     # Set the bounds of the viewport such that the entire map can be viewed.
@@ -323,18 +327,18 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
 
     # Set year ticks on y-axis
-    for y in range(options.bottom_date.year, options.top_date.year+1):
+    for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         line(0, dt, options.left_grid, dt)
         text(0,dt, y, font_size=0.9)
 
     # Set ages on y-axis
     age = 0
-    for y in range(options.bottom_date.year, options.top_date.year):
+    for y in range(bottom_date.year, top_date.year):
         g = svgwrite.container.Group(class_='age')
         dwg.add(g)
-        dt = parse_date('%d-%d-%d' % (y, options.bottom_date.month, options.bottom_date.day))
-        endt = parse_date('%d-%d-%d' % (y+1, options.bottom_date.month, options.bottom_date.day))
+        dt = parse_date('%d-%d-%d' % (y, bottom_date.month, bottom_date.day))
+        endt = parse_date('%d-%d-%d' % (y+1, bottom_date.month, bottom_date.day))
         rectangle(age_left, dt, age_right, endt, parent=g)
         if age > 0:
             text_center(age_left, dt, age_right, endt, str(age), parent=g, font_size=0.8)
@@ -343,32 +347,29 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Set labels on horizontal axis
     # Coordinates
-    if options.weekday_start_hour < 8:
-        morning_start = weekday_hour(options.weekday_start_hour)
-    else:
-        morning_start = weekday_hour(8)
+    morning_start = weekday_hour(options.weekday_start_hour)
     afternoon_start = weekday_hour(12)
     evening_start = weekday_hour(18)
-    day_end = weekday_hour(24)
+    day_end = weekday_hour(options.weekday_end_hour)
 
     # Drawing
     # Monday to Friday
-    text((options.left_grid+weekday_right_grid)/2,top_grid-45, 'Mon-Fri')
+    text(mid(options.left_grid, weekday_right_grid),top_grid-45, 'Mon-Fri')
     line(morning_start, top_label_y, morning_start-1, top_grid-50)
-    text((morning_start+afternoon_start)/2-30, top_grid, 'morning')
+    text(mid(morning_start, afternoon_start)-30, top_grid, 'morning')
     line(afternoon_start, top_label_y, afternoon_start-1, top_grid-30)
-    text((afternoon_start+evening_start)/2-30, top_grid, 'afternoon')
+    text(mid(afternoon_start, evening_start)-30, top_grid, 'afternoon')
     line(evening_start, top_label_y, evening_start-1, top_grid-30)
-    text((evening_start+day_end)/2-30, top_grid, 'evening')
+    text(mid(evening_start, day_end)-30, top_grid, 'evening')
 
     # Saturday to Sunday
     line(day_end, top_label_y, day_end, top_grid-50)
-    text((day_end+weekend_right_grid)/2-30,top_grid-45, 'Sat-Sun')
+    text(mid(day_end, weekend_right_grid)-30,top_grid-45, 'Sat-Sun')
     line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-30)
 
     # ZzzzzzZZZ
     line(options.right_grid, top_label_y, options.right_grid, top_grid-30)
-    text((weekend_right_grid+options.right_grid)/2-15, top_grid, 'zzz')
+    text(mid(weekend_right_grid, options.right_grid)-15, top_grid, 'zzz')
 
    # Draw the event line
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
