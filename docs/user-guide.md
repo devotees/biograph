@@ -38,7 +38,6 @@ Used to represent short duration events.
 
 Draws a circle on the event line which is centered between `start_isodate` (YYYY-MM-DD) and `end_isodate`. Size of the circle is proportional to the duration of the event.
 
-v
 Set `line_length` to the amount you want the `label` offset.
 
 ---
