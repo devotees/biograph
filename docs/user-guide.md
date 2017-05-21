@@ -25,7 +25,7 @@ main(alex, 'alex.svg')
 ## Elements of the picograph
 
 ```
-persomap.timespan(start_isodate, end_isodate, **kwargs)
+picography.timespan(start_isodate, end_isodate, **kwargs)
 ```
 Initialises the histomap grid from `start_isodate` (YYYY-MM-DD) to `end_isodate` (YYYY-MM-DD).
 
@@ -41,7 +41,7 @@ Optional arguments:
 ---
 
 ```
-residence(css_color, start_isodate, end_isodate, label, **kwargs)
+picography.residence(css_color, start_isodate, end_isodate, label, **kwargs)
 ```
 Used to add where you have lived throughout your life.
 
@@ -54,18 +54,22 @@ Draws a box in the grid background of y-axis length which is equal to the durati
 ---
 
 ```
-event(start_isodate, end_isodate, label, href=None, line_length=20)
+picography.weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify='middle', **kwargs)
 ```
-Used to represent short duration events.
+Add scheduled weekday time commitments. 
 
-Draws a circle on the event line which is centered between `start_isodate` (YYYY-MM-DD) and `end_isodate`. Size of the circle is proportional to the duration of the event.
+Draws the shape from (`start_hour`, `start_isodate`(YYYY-MM-DD)) to (`end_hour`, `end_isodate` (YYYY-MM-DD)).
 
-Set `line_length` to the amount you want the `label` offset.
+`css_color` receives a css coloring class as defined in `timeline.css`.
+
+`justify` can be set to 'left' or 'middle'. It left justifies or centers the `label` respectively.
+
+`**kwargs` is for optional css styling.
 
 ---
 
 ```
-weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', slot = 0, **kwargs)
+picography.weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', slot = 0, **kwargs)
 ```
 Allows you to document how you spent your time on weekends. Also can be used for adding weekly commitments that do not fit neatly into a weekday timeslot.
 
@@ -80,7 +84,7 @@ Draws a weekday event from `start_isodate` (YYYY-MM-DD) to `end_isodate` (YYYY-M
 ---
 
 ```
-sleepmates(css_color, start_isodate, end_isodate, label, slot=0, justify='middle', **kwargs)
+picography.sleepmates(css_color, start_isodate, end_isodate, label, slot=0, justify='middle', **kwargs)
 ```
 "Where I lay my head is home." For adding pillow cuddle-friends and roommates.
 
@@ -97,14 +101,11 @@ There are four available `slots` for 4 home-mates. You can indicate which one yo
 ---
 
 ```
-weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify='middle', **kwargs)
+picography.event(start_isodate, end_isodate, label, href=None, line_length=20)
 ```
-Add scheduled weekday time commitments. 
+Used to represent short duration events.
 
-Draws the shape from (`start_hour`, `start_isodate`(YYYY-MM-DD)) to (`end_hour`, `end_isodate` (YYYY-MM-DD)).
+Draws a circle on the event line which is centered between `start_isodate` (YYYY-MM-DD) and `end_isodate`. Size of the circle is proportional to the duration of the event.
 
-`css_color` receives a css coloring class as defined in `timeline.css`.
+Set `line_length` to the amount you want the `label` offset.
 
-`justify` can be set to 'left' or 'middle'. It left justifies or centers the `label` respectively.
-
-`**kwargs` is for optional css styling.
