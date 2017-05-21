@@ -1,5 +1,27 @@
 # Drawing your picograph
 
+## Minimal Example
+
+```
+from picography import *
+
+def alex():
+    # Initialise Grid
+
+    timespan('2017-02-24','2018-01-01')
+    event('2017-02-04', 'conceived')
+    event('2017-06-13', 'miscarried')
+
+    residence('pastel1','2017-02-04', '2017-06-13', 'womb', href='')
+
+    roommate('u2','2017-02-04', '2017-06-13', 'mom')
+
+    weekday('g3','2017-04-14', '2017-06-13', 15, 17, 'Prenatal appointments')
+    weekend('u2','2017-03-22', '2017-06-02', 10, 'Baby Einstein')
+
+main(alex, 'alex.svg')
+```
+
 ## Elements of the picograph
 
 ```
