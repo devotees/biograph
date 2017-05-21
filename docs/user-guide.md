@@ -1,4 +1,4 @@
-# Drawing your persomap
+# Drawing your picograph
 
 ## Elements of the picograph
 
