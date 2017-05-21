@@ -19,7 +19,7 @@ timeline_options = dict(
 def mid(p1, p2):
     '''Returns the midpoint between p1 and p2.'''
 
-    return (p1+p2)/2
+    return (p1+p2) / 2
 
 def wrap_link(svg_obj, href):
     '''Makes an svg_obj clickable with a link to href.'''
@@ -46,7 +46,7 @@ def add_obj(parent, svg_obj):
         parent = dwg
     parent.add(svg_obj)
 
-def text(x, y, label, font_size=1.0,  align = None, parent=None, href=None, **kwargs):
+def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwargs):
     '''
     Draws label at (x,y).
     font_size is in ems.
@@ -65,7 +65,7 @@ def text(x, y, label, font_size=1.0,  align = None, parent=None, href=None, **kw
         p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'), **kwargs)
     else:
         p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'))
-    t = dwg.text(str(label), x=[x+3], y=[y-5])
+    t = dwg.text(str(label), x = [x+3], y = [y-5])
     p.add(wrap_link(t, href))
     add_obj(parent, p)
 
@@ -119,7 +119,7 @@ def width_from_hours(num_days, num_hours):
     '''Given total num_hours spent over num_days, returns the width in pixels'''
 
     # Input Quality
-    assert num_hours <= (num_days * 16)
+    assert num_hours <= (num_days*16)
 
     options.weekday_hour_width = weekday_hour(10) - weekday_hour(9)
     return  (num_hours/260) * options.weekday_hour_width / (num_days/365)
@@ -130,10 +130,10 @@ def weekday_hour(hr):
     hr must be an int between 8 and 24.
     '''
 
-    x_scale = (weekday_right_grid - options.left_grid)/(options.weekday_end_hour-options.weekday_start_hour)
-    return options.left_grid + (hr-options.weekday_start_hour)*x_scale
+    x_scale = (weekday_right_grid-options.left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
+    return options.left_grid + (hr-options.weekday_start_hour) * x_scale
 
-def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify = 'middle', **kwargs):
+def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify='middle', **kwargs):
     '''
     Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     css_color receives a css coloring class as defined in timeline.css.
@@ -158,10 +158,11 @@ def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, 
     elif justify == 'left':
         text_left(x1, y1, x2, y2, label, **kwargs)
 
-def sleepmate(css_color, start_isodate, end_isodate, label,  slot = 0, justify = 'middle',**kwargs):
+def sleepmate(css_color, start_isodate, end_isodate, label,  slot=0, justify='middle',**kwargs):
     '''
     Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     css_color receives a css coloring class as defined in timeline.css.
+    There are four available slots for 4 home-mates. You can indicate which one you want occupied by setting slot to 0-3.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.
     '''
@@ -169,11 +170,11 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  slot = 0, justify =
     # Input Quality
     assert start_isodate < end_isodate
 
-    offset = (options.right_grid - weekend_right_grid)/4
+    offset = (options.right_grid-weekend_right_grid) / 4
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_right_grid + (offset * slot)
+    x1 = weekend_right_grid + (offset*slot)
     x2 = options.right_grid - (offset*(3-slot))
 
     # Drawing
@@ -185,7 +186,7 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  slot = 0, justify =
         text_left(x1, y1, x2, y2, label)
 
 
-def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', slot = 0, **kwargs):
+def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify='middle', slot=0, **kwargs):
     '''
     Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
@@ -210,7 +211,7 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justif
 
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekday_right_grid+1+width_from_hours(2, slot*2)
+    x1 = weekday_right_grid + 1 + width_from_hours(2, slot*2)
     x2 = x1 + width_from_hours(num_days, num_hours)
 
     # Drawing
@@ -235,13 +236,13 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
     start_date = parse_date(start_isodate)
     end_date = parse_date(end_isodate)
     event_midpoint = mid(start_date, end_date)
-    event_radius = start_date-end_date+5
+    event_radius = start_date-end_date + 5
 
     # Drawing
-    p = dwg.circle((event_line_x, event_midpoint), (end_date-start_date+5), fill='white', stroke='grey')
+    p = dwg.circle((event_line_x, event_midpoint), (end_date - start_date + 5), fill='white', stroke='grey')
     dwg.add(wrap_link(p, href))
-    line(event_line_x+event_radius-3, event_midpoint, event_line_x+event_radius+line_length, event_midpoint)
-    text(event_line_x+event_radius+line_length-4, event_midpoint+8, label, font_size=0.6, href=href)
+    line(event_line_x + event_radius - 3, event_midpoint, event_line_x + event_radius + line_length, event_midpoint)
+    text(event_line_x + event_radius + line_length - 4, event_midpoint + 8, label, font_size=0.6, href=href)
 
 
 def parse_date(isodate):
@@ -250,8 +251,8 @@ def parse_date(isodate):
     parsed_date = dateutil.parser.parse(isodate)
     days_alive = (top_date - bottom_date).days # Total days alive
     day_count = (top_date - parsed_date).days # Number of days into life at which event occurred
-    scale = (options.bottom_grid - top_grid) / days_alive
-    return options.bottom_grid - scale * (days_alive - day_count)
+    scale = (options.bottom_grid-top_grid) / days_alive
+    return options.bottom_grid - scale*(days_alive-day_count)
 
 def residence(css_color, start_isodate, end_isodate, label, **kwargs):
     '''
@@ -314,16 +315,16 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Set grid variables
     global underhang_offset, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
-    underhang_offset = 5        # ensures text does sit below drawn lines
-    top_grid = 100              # y coordinate of the top grid border
-    top_label_y = top_grid+5    # y coordinate of where the top labels are placed
+    underhang_offset = 5          # ensures text does sit below drawn lines
+    top_grid = 100                # y coordinate of the top grid border
+    top_label_y = top_grid + 5    # y coordinate of where the top labels are placed
 
     weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
     weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
 
-    age_left = options.right_grid        # x coordinate of where the placement of the ages starts
-    age_right = options.right_grid+35    # x coordinate of the right border for ages
-    event_line_x = options.right_grid+50 # x coordinate of the event line
+    age_left = options.right_grid          # x coordinate of where the placement of the ages starts
+    age_right = options.right_grid + 35    # x coordinate of the right border for ages
+    event_line_x = options.right_grid + 50 # x coordinate of the event line
 
 
     # Set year ticks on y-axis
@@ -354,22 +355,22 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Drawing
     # Monday to Friday
-    text(mid(options.left_grid, weekday_right_grid),top_grid-45, 'Mon-Fri')
-    line(morning_start, top_label_y, morning_start-1, top_grid-50)
-    text(mid(morning_start, afternoon_start)-30, top_grid, 'morning')
-    line(afternoon_start, top_label_y, afternoon_start-1, top_grid-30)
-    text(mid(afternoon_start, evening_start)-30, top_grid, 'afternoon')
-    line(evening_start, top_label_y, evening_start-1, top_grid-30)
-    text(mid(evening_start, day_end)-30, top_grid, 'evening')
+    text(mid(options.left_grid, weekday_right_grid), top_grid - 45, 'Mon-Fri')
+    line(morning_start, top_label_y, morning_start - 1, top_grid - 50)
+    text(mid(morning_start, afternoon_start) - 30, top_grid, 'morning')
+    line(afternoon_start, top_label_y, afternoon_start - 1, top_grid - 30)
+    text(mid(afternoon_start, evening_start) - 30, top_grid, 'afternoon')
+    line(evening_start, top_label_y, evening_start - 1, top_grid - 30)
+    text(mid(evening_start, day_end) - 30, top_grid, 'evening')
 
     # Saturday to Sunday
-    line(day_end, top_label_y, day_end, top_grid-50)
-    text(mid(day_end, weekend_right_grid)-30,top_grid-45, 'Sat-Sun')
-    line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-30)
+    line(day_end, top_label_y, day_end, top_grid - 50)
+    text(mid(day_end, weekend_right_grid) - 30, top_grid - 45, 'Sat-Sun')
+    line(weekend_right_grid - 1, top_label_y, weekend_right_grid - 1, top_grid - 30)
 
     # ZzzzzzZZZ
     line(options.right_grid, top_label_y, options.right_grid, top_grid-30)
-    text(mid(weekend_right_grid, options.right_grid)-15, top_grid, 'zzz')
+    text(mid(weekend_right_grid, options.right_grid) - 15, top_grid, 'zzz')
 
    # Draw the event line
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
