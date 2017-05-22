@@ -241,7 +241,7 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
     # Drawing
     p = dwg.circle((event_line_x, event_midpoint), (end_date - start_date + 5), fill='white', stroke='grey')
     dwg.add(wrap_link(p, href))
-    line(event_line_x + event_radius - 3, event_midpoint, event_line_x + event_radius + line_length, event_midpoint)
+    line(event_line_x + event_radius, event_midpoint, event_line_x + event_radius + line_length, event_midpoint)
     text(event_line_x + event_radius + line_length - 4, event_midpoint + 8, label, font_size=0.6, href=href)
 
 
@@ -306,11 +306,12 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # If year_height is set, it takes priority over bottom_grid
     if options.year_height is not None:
-        num_years = top_date.year - bottom_date.year
+        days_alive = (top_date - bottom_date).days
+        num_years = days_alive/365
         options.bottom_grid = num_years * options.year_height
 
     # Set the bounds of the viewport such that the entire map can be viewed.
-    dwg.viewbox(width=options.right_grid+100, height=options.bottom_grid+50)
+    dwg.viewbox(width=options.right_grid+150, height=options.bottom_grid+50)
 
     # Set grid variables
     global underhang_offset, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
@@ -366,15 +367,15 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Saturday to Sunday
     line(day_end, top_label_y, day_end, top_grid - 50)
     text(mid(day_end, weekend_right_grid) - 30, top_grid - 45, 'Sat-Sun')
-    line(weekend_right_grid - 1, top_label_y, weekend_right_grid - 1, top_grid - 30)
+    line(weekend_right_grid - 1, top_label_y, weekend_right_grid - 1, top_grid - 50)
 
     # ZzzzzzZZZ
-    line(options.right_grid, top_label_y, options.right_grid, top_grid-30)
+    line(options.right_grid, top_label_y, options.right_grid, top_grid-50)
     text(mid(weekend_right_grid, options.right_grid) - 15, top_grid, 'zzz')
 
    # Draw the event line
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
-    text(age_right, top_label_y, 'Events')
+    text(age_right, top_label_y-30, 'Events')
 
 
 
