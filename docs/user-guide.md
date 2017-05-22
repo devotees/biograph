@@ -23,7 +23,32 @@ def alex():
 
 main(alex, 'alex.svg')
 ```
-![alex](../alex.svg)
+
+<html>
+<head>
+<link href="timeline.css" rel="stylesheet" type="text/css">
+<style>
+.mainwrap {
+    height 0;
+    padding-top: 100%;
+    position: relative;
+}
+
+.mainsvg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+</style>
+</head>
+<body>
+<div class="mainwrap">
+<object class="mainsvg" type="image/svg+xml" data="alex.svg">Your browser does not support SVG</object>
+</div>
+</body>
+</html>
 
 ## Elements of the picograph
 
