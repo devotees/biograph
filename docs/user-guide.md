@@ -26,7 +26,7 @@ main(alex, 'alex.svg')
 
 <html>
 <head>
-<link href="timeline.css" rel="stylesheet" type="text/css">
+<link href="../timeline.css" rel="stylesheet" type="text/css">
 <style>
 .mainwrap {height 0;padding-top: 100%;position: relative;}
 .mainsvg {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}
