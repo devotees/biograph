@@ -23,7 +23,7 @@ def alex():
 
 main(alex, 'alex.svg')
 ```
-[](alex.png)
+![](alex.png)
 
 ## Elements of the picograph
 
