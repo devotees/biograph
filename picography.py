@@ -17,12 +17,12 @@ timeline_options = dict(
                         )
 
 def mid(p1, p2):
-    '''Returns the midpoint between p1 and p2.'''
+    'Returns the midpoint between p1 and p2.'
 
     return (p1+p2) / 2
 
 def wrap_link(svg_obj, href):
-    '''Makes an svg_obj clickable with a link to href.'''
+    'Makes an svg_obj clickable with a link to href.'
 
     if href:
         outer = svgwrite.container.Hyperlink(href, target='_blank')
@@ -32,7 +32,7 @@ def wrap_link(svg_obj, href):
     return svg_obj
 
 def add_class(kwargs, cls):
-    '''Adds a css styling cls to kwargs.'''
+    'Adds a css styling cls to kwargs.'
 
     if 'class_' in kwargs:
         kwargs['class_'] = kwargs.get('class_') + ' ' + cls
@@ -40,19 +40,17 @@ def add_class(kwargs, cls):
         kwargs['class_'] = cls
 
 def add_obj(parent, svg_obj):
-    ''' Add svg_obj as a subelement to parent'''
+    ' Add svg_obj as a subelement to parent'
 
     if not parent:
         parent = dwg
     parent.add(svg_obj)
 
 def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwargs):
-    '''
-    Draws label at (x,y).
+    '''Draws label at (x,y).
     font_size is in ems.
     align can be set to left, middle or right and controls the alignment of the string relative to (x, y).
-    Optionally, label can link to href.
-    '''
+    Optionally, label can link to href.'''
 
     # Coordinates
     x,y = int(x),int(y)
@@ -70,20 +68,16 @@ def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwar
     add_obj(parent, p)
 
 def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kwargs):
-    '''
-    Draws label at coordinate x1, in between coordinats y1 to y2.
+    '''Draws label at coordinate x1, in between coordinats y1 to y2.
     font_size is in ems.
-    Optionally, label can link to href.
-    '''
+    Optionally, label can link to href.'''
 
     text(x1, mid(y1, y2+underhang_offset), label, font_size, None, parent, href)
 
 def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **kwargs):
-    '''
-    Draws label in the center of coordinates (x1, y1) to (x2, y2).
+    '''Draws label in the center of coordinates (x1, y1) to (x2, y2).
     font_size is in ems.
-    Optionally, label can link to href.
-    '''
+    Optionally, label can link to href.'''
 
     # TODO: detect whether it should be vertical
     if abs(y2-y1) > abs(x2-x1) and len(label) > 4:
@@ -92,7 +86,7 @@ def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **k
         text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset+5, label, font_size, 'middle', parent, href)
 
 def line(x1, y1, x2, y2, color='grey'):
-    '''Draws a colored line from (x1, y1) to (x2, y2).'''
+    'Draws a colored line from (x1, y1) to (x2, y2).'
 
     # Coordinates
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
@@ -101,10 +95,8 @@ def line(x1, y1, x2, y2, color='grey'):
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
 def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
-    '''
-    Draws a rectangle from coordinates (x1, y1) to (x2, y2).
-    **kwargs: css styling.
-    '''
+    '''Draws a rectangle from coordinates (x1, y1) to (x2, y2).
+    **kwargs: css styling.'''
 
     # Coordinates
     x1,y1,x2,y2 = int(x1),int(y1),int(x2),int(y2)
@@ -116,7 +108,7 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
     return p
 
 def width_from_hours(num_days, num_hours):
-    '''Given total num_hours spent over num_days, returns the width in pixels'''
+    'Given total num_hours spent over num_days, returns the width in pixels'
 
     # Input Quality
     assert num_hours <= (num_days*16)
@@ -125,21 +117,17 @@ def width_from_hours(num_days, num_hours):
     return  (num_hours/260) * options.weekday_hour_width / (num_days/365)
 
 def weekday_hour(hr):
-    '''
-    Returns the x-axis coordinate for a weekday time.
-    hr must be an int between 8 and 24.
-    '''
+    '''Returns the x-axis coordinate for a weekday time.
+    hr must be an int between 8 and 24.'''
 
     x_scale = (weekday_right_grid-options.left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
     return options.left_grid + (hr-options.weekday_start_hour) * x_scale
 
 def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify='middle', **kwargs):
-    '''
-    Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
+    '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     css_color receives a css coloring class as defined in timeline.css.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
-    **kwargs: optional css styling.
-    '''
+    **kwargs: optional css styling.'''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -159,13 +147,11 @@ def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, 
         text_left(x1, y1, x2, y2, label, **kwargs)
 
 def sleepmate(css_color, start_isodate, end_isodate, label,  slot=0, justify='middle',**kwargs):
-    '''
-    Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
+    '''Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     css_color receives a css coloring class as defined in timeline.css.
     There are four available slots for 4 home-mates. You can indicate which one you want occupied by setting slot to 0-3.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
-    **kwargs: optional css styling.
-    '''
+    **kwargs: optional css styling.'''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -187,13 +173,11 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  slot=0, justify='mi
 
 
 def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify='middle', slot=0, **kwargs):
-    '''
-    Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
+    '''Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
     css_color receives a css coloring class as defined in timeline.css.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
-    **kwargs: optional css styling.
-    '''
+    **kwargs: optional css styling.'''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -223,11 +207,9 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justif
         text_left(x1, y1, x2, y2, label)
 
 def event(start_isodate, end_isodate, label, href=None, line_length=20):
-    '''
-    Draws a circle representing short duration events on the event line.
+    '''Draws a circle representing short duration events on the event line.
     Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.
-    Set line_length to the amount you want the label offset.
-    '''
+    Set line_length to the amount you want the label offset.'''
 
     # Input Quality
     assert start_isodate <= end_isodate
@@ -246,7 +228,7 @@ def event(start_isodate, end_isodate, label, href=None, line_length=20):
 
 
 def parse_date(isodate):
-    '''Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'''
+    'Returns the y-axis coordinate for an isodate (YYYY-MM-DD).'
 
     parsed_date = dateutil.parser.parse(isodate)
     days_alive = (top_date - bottom_date).days # Total days alive
@@ -255,11 +237,9 @@ def parse_date(isodate):
     return options.bottom_grid - scale*(days_alive-day_count)
 
 def residence(css_color, start_isodate, end_isodate, label, **kwargs):
-    '''
-    Draws a box of y-axis length = duration of stay at a residence.
+    '''Draws a box of y-axis length = duration of stay at a residence.
     css_color receives a css coloring class as defined in timeline.css.
-    **kwargs: optional css styling.
-    '''
+    **kwargs: optional css styling.'''
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -279,10 +259,8 @@ def residence(css_color, start_isodate, end_isodate, label, **kwargs):
         text_center(x1, y1, x2, y2, label, font_size=0.7)
 
 class AttrDict(dict):
-    '''
-    A recipe which allows you to treat dict keys like attributions.
-    dict.key
-    '''
+    '''A recipe which allows you to treat dict keys like attributions.
+    dict.key'''
 
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
@@ -290,7 +268,7 @@ class AttrDict(dict):
 
 
 def timespan(start_isodate, end_isodate, **kwargs):
-    '''Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'''
+    'Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'
 
     timeline_options.update(**kwargs)
 
@@ -388,7 +366,7 @@ def main(func, fnout):
     dwg.save()
 
 def run_tests():
-    '''Tests'''
+    'Tests'
 
     #test_time_per_pixel_consistency
     assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
