@@ -94,7 +94,7 @@ def line(x1, y1, x2, y2, color='grey'):
     # Drawing
     dwg.add(dwg.line((x1, y1), (x2, y2), stroke=color))
 
-def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
+def rectangle(x1, y1, x2, y2, href=None, parent=None, color='rectangle', **kwargs):
     '''Draws a rectangle from coordinates (x1, y1) to (x2, y2).
     **kwargs: css styling.'''
 
@@ -103,6 +103,7 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, **kwargs):
     points = [(x1,y1), (x2,y1), (x2,y2), (x1,y2)]
 
     # Drawing
+    add_class(kwargs, color)
     p = dwg.polygon(points, **kwargs)
     add_obj(parent, wrap_link(p, href))
     return p
