@@ -95,7 +95,7 @@ a polygon:hover { fill: #ffffff }
     glyph-orientation-vertical: 270;
     writing-mode: tb-rl;
 }
-
+.rectangle { fill: white; }
 .left {text-anchor: start;}
 .middle {text-anchor: middle;}
 .right {text-anchor: end;}
