@@ -88,8 +88,8 @@
 
 a polygon:hover { fill: #ffffff }
 
-.age:nth-child(even) polygon { fill: pink; }
-.age:nth-child(odd) polygon { fill: cyan; }
+.age:nth-child(even) polygon { fill: mintcream; }
+.age:nth-child(odd) polygon { fill: lavender; }
 
 .vert {
     glyph-orientation-vertical: 270;
