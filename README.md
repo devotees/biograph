@@ -1,6 +1,6 @@
 # Picography
 
-Inspired by [Rand McNally's histomap](www.slate.com/features/2013/08/histomapwider.jpg), picography allows you to visualise and share a personal history.
+Inspired by [Rand McNally's histomap](http://www.slate.com/features/2013/08/histomapwider.jpg), picography allows you to visualise and share a personal history.
 
 What it does:
 * Helps you craft narrative and meaning out of your past.
