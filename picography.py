@@ -104,7 +104,7 @@ def rectangle(x1, y1, x2, y2, href=None, parent=None, color='rectangle', **kwarg
 
     # Drawing
     add_class(kwargs, color)
-    p = dwg.polygon(points, **kwargs)
+    p = dwg.polygon(points, stroke='grey', **kwargs)
     add_obj(parent, wrap_link(p, href))
     return p
 
