@@ -168,9 +168,9 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  slot=0, justify='mi
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if justify == 'middle':
-        text_center(x1, y1, x2, y2, label)
+        text_center(x1, y1, x2, y2, label, **kwargs)
     elif justify == 'left':
-        text_left(x1, y1, x2, y2, label)
+        text_left(x1, y1, x2, y2, label, **kwargs)
 
 
 def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify='middle', slot=0, **kwargs):
@@ -203,9 +203,9 @@ def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justif
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if justify == 'middle':
-        text_center(x1, y1, x2, y2, label)
+        text_center(x1, y1, x2, y2, label, **kwargs)
     elif justify == 'left':
-        text_left(x1, y1, x2, y2, label)
+        text_left(x1, y1, x2, y2, label, **kwargs)
 
 def event(start_isodate, end_isodate, label, href=None, line_length=20):
     '''Draws a circle representing short duration events on the event line.
