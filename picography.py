@@ -311,7 +311,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         line(0, dt, options.left_grid, dt)
-        text(0,dt, y, font_size=0.9)
+        text(0, dt, y, font_size=0.9)
 
     # Set ages on y-axis
     age = 0
@@ -352,7 +352,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     line(options.right_grid, top_label_y, options.right_grid, top_grid-50)
     text(mid(weekend_right_grid, options.right_grid) - 15, top_grid, 'zzz')
 
-   # Draw the event line
+    # Draw the event line
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
     text(age_right, top_label_y-30, 'Events')
 
