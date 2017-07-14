@@ -80,7 +80,7 @@ def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **k
     Optionally, label can link to href.'''
 
     # TODO: detect whether it should be vertical
-    if abs(y2-y1) > abs(x2-x1) and len(label) > 4:
+    if abs(y2-y1) > abs(x2-x1) and len(label)*10 > abs(x2-x1):
         text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
     else:
         text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset+5, label, font_size, 'middle', parent, href)
