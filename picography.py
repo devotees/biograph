@@ -207,13 +207,13 @@ def weekend(css_color, label, start_isodate, end_isodate, hours_per_week, justif
     elif justify == 'left':
         text_left(x1, y1, x2, y2, label, **kwargs)
 
-def event(start_isodate, end_isodate, label, href=None, line_length=20):
+def event(label, start_isodate, end_isodate, href=None, line_length=20):
     '''Draws a circle representing short duration events on the event line.
     Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.
     Set line_length to the amount you want the label offset.'''
 
     # Input Quality
-    assert start_isodate <= end_isodate
+    assert start_isodate <= end_isodate, (start_isodate, end_isodate)
 
     # Coordinates
     start_date = parse_date(start_isodate)
@@ -280,6 +280,9 @@ def work(intensity, name, start, end, *args, **kwargs):
     return generic('g%s'%intensity, name, start, end, *args, **kwargs)
 
 def project(intensity, name, start, end, *args, **kwargs):
+    return generic('p%s'%intensity, name, start, end, *args, **kwargs)
+
+def play(intensity, name, start, end, *args, **kwargs):
     return generic('p%s'%intensity, name, start, end, *args, **kwargs)
 
 residence_colors = {}
