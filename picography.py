@@ -124,7 +124,7 @@ def weekday_hour(hr):
     x_scale = (weekday_right_grid-options.left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
     return options.left_grid + (hr-options.weekday_start_hour) * x_scale
 
-def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify='middle', **kwargs):
+def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, justify='middle', **kwargs):
     '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     css_color receives a css coloring class as defined in timeline.css.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
@@ -147,7 +147,7 @@ def weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, 
     elif justify == 'left':
         text_left(x1, y1, x2, y2, label, **kwargs)
 
-def sleepmate(css_color, start_isodate, end_isodate, label,  slot=0, justify='middle',**kwargs):
+def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, justify='middle', **kwargs):
     '''Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     css_color receives a css coloring class as defined in timeline.css.
     There are four available slots for 4 home-mates. You can indicate which one you want occupied by setting slot to 0-3.
@@ -173,7 +173,7 @@ def sleepmate(css_color, start_isodate, end_isodate, label,  slot=0, justify='mi
         text_left(x1, y1, x2, y2, label, **kwargs)
 
 
-def weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify='middle', slot=0, **kwargs):
+def weekend(css_color, label, start_isodate, end_isodate, hours_per_week, justify='middle', slot=0, **kwargs):
     '''Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
     css_color receives a css coloring class as defined in timeline.css.
@@ -237,13 +237,15 @@ def parse_date(isodate):
     scale = (options.bottom_grid-top_grid) / days_alive
     return options.bottom_grid - scale*(days_alive-day_count)
 
-def residence(css_color, start_isodate, end_isodate, label, **kwargs):
+def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     '''Draws a box of y-axis length = duration of stay at a residence.
     css_color receives a css coloring class as defined in timeline.css.
     **kwargs: optional css styling.'''
 
+    end_isodate = end_isodate or top_isodate
+
     # Input Quality
-    assert start_isodate < end_isodate
+    assert start_isodate < end_isodate, (start_isodate, end_isodate)
 
     # Coordinates
     start_date = parse_date(start_isodate)
@@ -258,6 +260,40 @@ def residence(css_color, start_isodate, end_isodate, label, **kwargs):
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
         text_center(x1, y1, x2, y2, label, font_size=0.7)
+
+def generic(color, label, start_isodate, end_isodate, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
+    if hours is None:
+        return weekday(color, label, start_isodate, end_isodate or top_isodate, weekday_start_hour, weekday_end_hour, **kwargs)
+    else:
+        return weekend(color, label, start_isodate, end_isodate or top_isodate, hours, **kwargs)
+
+def friend(intensity, name, start, end, *args, **kwargs):
+    return generic('u%s'%intensity, name, start, end, *args, **kwargs)
+
+def love(intensity, name, start, end, *args, **kwargs):
+    return generic('r%s'%intensity, name, start, end, *args, **kwargs)
+
+def school(intensity, name, start, end, *args, **kwargs):
+    return generic('yo%s'%intensity, name, start, end, *args, **kwargs)
+
+def work(intensity, name, start, end, *args, **kwargs):
+    return generic('g%s'%intensity, name, start, end, *args, **kwargs)
+
+def project(intensity, name, start, end, *args, **kwargs):
+    return generic('p%s'%intensity, name, start, end, *args, **kwargs)
+
+residence_colors = {}
+def home(label, start_isodate, end_isodate, **kwargs):
+    if label not in residence_colors:
+        residence_colors[label] = 'pastel%s'%(len(residence_colors)+1)
+        color = residence_colors[label]
+    else:
+        color = residence_colors[label]
+        label = ''
+    return residence(color, label, start_isodate, end_isodate)
+
+def roommate(intensity, label, start_isodate, end_isodate, **kwargs):
+    return sleepmate('u%s'%intensity, label, start_isodate, end_isodate, **kwargs)
 
 class AttrDict(dict):
     '''A recipe which allows you to treat dict keys like attributions.
@@ -280,6 +316,8 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Set dates
     assert start_isodate < end_isodate
     global bottom_date,top_date
+    global bottom_isodate,top_isodate
+    top_isodate = end_isodate
     top_date = dateutil.parser.parse(end_isodate)        # Final recorded day
     bottom_date = dateutil.parser.parse(start_isodate)   # First recorded day
 

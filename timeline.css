@@ -24,6 +24,13 @@
 .u6 { fill: #2171b5 }
 .u7 { fill: #084594 }
 
+/* yellow-to-orange */
+.yo1 { fill: #ffffd4; }
+.yo2 { fill: #fed98e; }
+.yo3 { fill: #fe9929; }
+.yo4 { fill: #d95f0e; }
+.yo5 { fill: #993404; }
+
 /* reds */
 .r1 { fill: #fcbba1 }
 .r2 { fill: #fc9272 }
@@ -95,7 +102,6 @@ a polygon:hover { fill: #ffffff }
     glyph-orientation-vertical: 270;
     writing-mode: tb-rl;
 }
-.rectangle { fill: white; }
 .left {text-anchor: start;}
 .middle {text-anchor: middle;}
 .right {text-anchor: end;}
