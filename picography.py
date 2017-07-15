@@ -133,7 +133,7 @@ def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, 
     **kwargs: optional css styling.'''
 
     # Input Quality
-    assert start_isodate < end_isodate
+    assert start_isodate < end_isodate, (start_isodate, end_isodate)
 
     # Coordinates
     y1 = parse_date(start_isodate)
