@@ -129,6 +129,7 @@ def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, 
     css_color receives a css coloring class as defined in timeline.css.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.'''
+    end_isodate = end_isodate or top_isodate
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -153,6 +154,8 @@ def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, justify='mid
     There are four available slots for 4 home-mates. You can indicate which one you want occupied by setting slot to 0-3.
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.'''
+
+    end_isodate = end_isodate or top_isodate
 
     # Input Quality
     assert start_isodate < end_isodate
@@ -180,6 +183,7 @@ def weekend(css_color, label, start_isodate, end_isodate, hours_per_week, justif
     justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.'''
 
+    end_isodate = end_isodate or top_isodate
     # Input Quality
     assert start_isodate < end_isodate
 
