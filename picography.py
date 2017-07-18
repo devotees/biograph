@@ -68,7 +68,7 @@ def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwar
     p.add(wrap_link(t, href))
     add_obj(parent, p)
 
-def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kwargs):
+def text_left(x1, y1, x2, y2, label, font_size=1.0, align=None, parent=None, href=None, **kwargs):
     ''' CURRENTLY NOT CALLED
     Draws label at coordinate x1, in between coordinats y1 to y2.
     font_size is in ems.
@@ -76,15 +76,15 @@ def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kw
 
     text(x1, mid(y1, y2+underhang_offset), label, font_size, None, parent, href)
 
-def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **kwargs):
+def text_center(x1, y1, x2, y2, label,font_size=1.0, align='middle', parent=None, href=None, **kwargs):
     '''Draws label in the center of coordinates (x1, y1) to (x2, y2).
     font_size is in ems.
     Optionally, label can link to href.'''
 
     if abs(y2-y1) > abs(x2-x1) and len(label)*10 > abs(x2-x1):
-        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
+        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset, label, font_size, align, parent, href, class_='vert')
     else:
-        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset+5, label, font_size, 'middle', parent, href)
+        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset+5, label, font_size, align, parent, href)
 
 def line(x1, y1, x2, y2, color='grey'):
     'Draws a colored line from (x1, y1) to (x2, y2).'
@@ -253,7 +253,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text_center(weekend_right_grid, y1, x2, y2, label, font_size=0.7)
+        text_center(weekend_right_grid, y1, x2, y2, label, font_size=0.7, align='middle')
 
 colormap = {
     'friend': 'u',
@@ -267,17 +267,26 @@ colormap = {
 
 headers = "type    intensity   label start_date  end_date    weekday_start   weekday_end     weekend_hours   href    title slot rest".split()
 
-def print_generic(type, intensity, label, start_isodate, end_isodate=None, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
+outputLines = []
+residence_colors = {}
+def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
     href = kwargs.pop('href', '')
     title = kwargs.pop('title', '')
     slot = kwargs.pop('slot', '')
     rest = json.dumps(kwargs) if kwargs else ''
 
-    print('\t'.join(str(x or '') for x in [type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest]))
+    outputLines.append(list(str(x or '') for x in [type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest]))
 
-def generic(type, intensity, label, start_isodate, end_isodate, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
     if type in ['timespan', 'option']:
         return
+    if type in ['home']:
+        if label not in residence_colors:
+            residence_colors[label] = 'pastel%s'%(len(residence_colors)+1)
+            color = residence_colors[label]
+        else:
+            color = residence_colors[label]
+            label = ''
+        return residence(color, label, start_isodate, end_isodate)
     color = colormap[type] + str(intensity)
     if type in ['roommate']:
         return sleepmate(color, label, start_isodate, end_isodate or top_isodate, **kwargs)
@@ -286,11 +295,11 @@ def generic(type, intensity, label, start_isodate, end_isodate, weekday_start_ho
     else:
         return weekend(color, label, start_isodate, end_isodate or top_isodate, hours, **kwargs)
 
-def enable_printing():
-    global generic, _home
-    print('\t'.join(headers))
-    generic = print_generic
-    _home = print_home
+def print_to_tsv(fn):
+    with open(fn, 'w', encoding='utf-8') as fp:
+        fp.write('\t'.join(headers) + '\n')
+        for x in outputLines:
+            fp.write('\t'.join(x) + '\n')
 
 def friend(intensity, name, start, end, *args, **kwargs):
     return generic('friend', intensity, name, start, end, *args, **kwargs)
@@ -313,18 +322,8 @@ def play(intensity, name, start, end, *args, **kwargs):
 def home(*args, **kwargs):
     return _home(*args, **kwargs)
 
-residence_colors = {}
 def _home(label, start_isodate, end_isodate, **kwargs):
-    if label not in residence_colors:
-        residence_colors[label] = 'pastel%s'%(len(residence_colors)+1)
-        color = residence_colors[label]
-    else:
-        color = residence_colors[label]
-        label = ''
-    return residence(color, label, start_isodate, end_isodate)
-
-def print_home(label, start_isodate, end_isodate, **kwargs):
-    print_generic('home', 0, label, start_isodate, end_isodate, **kwargs)
+    return generic('home', 0, label, start_isodate, end_isodate, **kwargs)
 
 def roommate(intensity, label, start_isodate, end_isodate, *args, **kwargs):
     return generic('roommate', intensity, label, start_isodate, end_isodate, *args, **kwargs)
@@ -459,32 +458,45 @@ def tsv_to_svg(fntsv):
         else:
             generic(type, int(intensity), label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, **kwargs)
 
-def main(func, fnout):
+
+
+def setup_dwg(fn):
     global dwg
-    dwg = svgwrite.Drawing(fnout, preserveAspectRatio='xMidYMid meet')
+    dwg = svgwrite.Drawing(fn, preserveAspectRatio='xMidYMid meet')
     dwg.add_stylesheet('timeline.css', title='some title')
-    func()
+
+def collect_args(argv):
+    '''picography.py -i <input.tsv> -o <output.svg>
+    OR someone.py -t -o <output.tsv>
+    OR someone.py -o <output.svg>'''
+    import argparse
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('-i', dest='input', default='', help='input file')
+    parser.add_argument('-t', dest='tsv', default=False, action='store_true', help='save to tsv')
+    parser.add_argument('-o', dest='output', default='', help='output file')
+    return parser.parse_args()
+
+def make_pico(func, argv):
+    'If passed -t writes a blueprint.tsv. Otherwise, can be invoked to draw a picograph.svg.'
+
+    args = collect_args(argv)
+
+    if args.tsv:
+        setup_dwg('')
+        func()
+        print_to_tsv(args.output or (args.input + '.tsv'))
+    else:
+        setup_dwg(args.output or (args.input + '.svg'))
+        func()
+        dwg.save()
+
+def main():
+    'Draws a picograph.svg based on a blueprint.tsv'
+
+    args = collect_args(sys.argv)
+    setup_dwg(args.output or (args.input + '.svg'))
+    tsv_to_svg(args.input)
     dwg.save()
-
-def main2():
-    '''
-picography.py -o <output.svg> <input.tsv>
-OR someone.py -t -o <output.tsv>
-OR someone.py -o <output.svg>
-'''
-    global dwg
-    dwg = svgwrite.Drawing(sys.argv[2], preserveAspectRatio='xMidYMid meet')
-    dwg.add_stylesheet('timeline.css', title='some title')
-    tsv_to_svg(sys.argv[1])
-    dwg.save()
-
-def run_tests():
-    'Tests'
-
-    #test_time_per_pixel_consistency
-    assert weekday_hour(10) - weekday_hour(9) == width_from_hours(365, 260)
-
-    print('Tests pass')
 
 if __name__ == '__main__':
-    main2()
+    main()
