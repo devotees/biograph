@@ -255,30 +255,66 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     if label:
         text_center(weekend_right_grid, y1, x2, y2, label, font_size=0.7)
 
+colormap = {
+    'friend': 'u',
+    'love': 'r',
+    'school': 'yo',
+    'work': 'g',
+    'play': 'p',
+    'project': 'p',
+    'roommate': 'u'
+}
+
+headers = "type    intensity   label start_date  end_date    weekday_start   weekday_end     weekend_hours   href    title slot rest".split()
+
+def print_generic(type, intensity, label, start_isodate, end_isodate=None, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
+    href = kwargs.pop('href', '')
+    title = kwargs.pop('title', '')
+    slot = kwargs.pop('slot', '')
+    rest = json.dumps(kwargs) if kwargs else ''
+
+    print('\t'.join(str(x or '') for x in [type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest]))
+
+def generic(type, intensity, label, start_isodate, end_isodate, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
+    if type in ['timespan', 'option']:
+        return
+    color = colormap[type] + str(intensity)
+    if type in ['roommate']:
+        return sleepmate(color, label, start_isodate, end_isodate or top_isodate, **kwargs)
+    if not hours:
         return weekday(color, label, start_isodate, end_isodate or top_isodate, weekday_start_hour, weekday_end_hour, **kwargs)
     else:
         return weekend(color, label, start_isodate, end_isodate or top_isodate, hours, **kwargs)
 
+def enable_printing():
+    global generic, _home
+    print('\t'.join(headers))
+    generic = print_generic
+    _home = print_home
+
 def friend(intensity, name, start, end, *args, **kwargs):
-    return generic('u%s'%intensity, name, start, end, *args, **kwargs)
+    return generic('friend', intensity, name, start, end, *args, **kwargs)
 
 def love(intensity, name, start, end, *args, **kwargs):
-    return generic('r%s'%intensity, name, start, end, *args, **kwargs)
+    return generic('love', intensity, name, start, end, *args, **kwargs)
 
 def school(intensity, name, start, end, *args, **kwargs):
-    return generic('yo%s'%intensity, name, start, end, *args, **kwargs)
+    return generic('school', intensity, name, start, end, *args, **kwargs)
 
 def work(intensity, name, start, end, *args, **kwargs):
-    return generic('g%s'%intensity, name, start, end, *args, **kwargs)
+    return generic('work', intensity, name, start, end, *args, **kwargs)
 
 def project(intensity, name, start, end, *args, **kwargs):
-    return generic('p%s'%intensity, name, start, end, *args, **kwargs)
+    return generic('project', intensity, name, start, end, *args, **kwargs)
 
 def play(intensity, name, start, end, *args, **kwargs):
-    return generic('p%s'%intensity, name, start, end, *args, **kwargs)
+    return generic('play', intensity, name, start, end, *args, **kwargs)
+
+def home(*args, **kwargs):
+    return _home(*args, **kwargs)
 
 residence_colors = {}
-def home(label, start_isodate, end_isodate, **kwargs):
+def _home(label, start_isodate, end_isodate, **kwargs):
     if label not in residence_colors:
         residence_colors[label] = 'pastel%s'%(len(residence_colors)+1)
         color = residence_colors[label]
@@ -287,8 +323,11 @@ def home(label, start_isodate, end_isodate, **kwargs):
         label = ''
     return residence(color, label, start_isodate, end_isodate)
 
-def roommate(intensity, label, start_isodate, end_isodate, **kwargs):
-    return sleepmate('u%s'%intensity, label, start_isodate, end_isodate, **kwargs)
+def print_home(label, start_isodate, end_isodate, **kwargs):
+    print_generic('home', 0, label, start_isodate, end_isodate, **kwargs)
+
+def roommate(intensity, label, start_isodate, end_isodate, *args, **kwargs):
+    return generic('roommate', intensity, label, start_isodate, end_isodate, *args, **kwargs)
 
 class AttrDict(dict):
     '''A recipe which allows you to treat dict keys like attributions.
@@ -303,6 +342,10 @@ def timespan(start_isodate, end_isodate, **kwargs):
     'Draws the histomap grid from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).'
 
     timeline_options.update(**kwargs)
+    for k, v in kwargs.items():
+        generic('option', 0, k, v)
+
+    generic('timespan', 0, '', start_isodate, end_isodate)
 
     # Allow convenient access of dictionary values (dict.key)
     global options
@@ -392,11 +435,22 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
 
 def main(func, fnout):
-
     global dwg
     dwg = svgwrite.Drawing(fnout, preserveAspectRatio='xMidYMid meet')
     dwg.add_stylesheet('timeline.css', title='some title')
     func()
+    dwg.save()
+
+def main2():
+    '''
+picography.py -o <output.svg> <input.tsv>
+OR someone.py -t -o <output.tsv>
+OR someone.py -o <output.svg>
+'''
+    global dwg
+    dwg = svgwrite.Drawing(sys.argv[2], preserveAspectRatio='xMidYMid meet')
+    dwg.add_stylesheet('timeline.css', title='some title')
+    tsv_to_svg(sys.argv[1])
     dwg.save()
 
 def run_tests():
@@ -408,4 +462,4 @@ def run_tests():
     print('Tests pass')
 
 if __name__ == '__main__':
-    run_tests()
+    main2()
