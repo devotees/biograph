@@ -69,7 +69,8 @@ def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwar
     add_obj(parent, p)
 
 def text_left(x1, y1, x2, y2, label, font_size=1.0, parent=None, href=None, **kwargs):
-    '''Draws label at coordinate x1, in between coordinats y1 to y2.
+    ''' CURRENTLY NOT CALLED
+    Draws label at coordinate x1, in between coordinats y1 to y2.
     font_size is in ems.
     Optionally, label can link to href.'''
 
@@ -80,7 +81,6 @@ def text_center(x1, y1, x2, y2, label,font_size=1.0, parent=None, href=None, **k
     font_size is in ems.
     Optionally, label can link to href.'''
 
-    # TODO: detect whether it should be vertical
     if abs(y2-y1) > abs(x2-x1) and len(label)*10 > abs(x2-x1):
         text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset, label, font_size, 'middle', parent, href, class_='vert')
     else:
@@ -127,10 +127,9 @@ def weekday_hour(hr):
     x_scale = (weekday_right_grid-options.left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
     return options.left_grid + (hr-options.weekday_start_hour) * x_scale
 
-def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, justify='middle', **kwargs):
+def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, **kwargs):
     '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     css_color receives a css coloring class as defined in timeline.css.
-    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.'''
     end_isodate = end_isodate or top_isodate
 
@@ -146,16 +145,12 @@ def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, 
     # Drawing
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    if justify == 'middle':
-        text_center(x1, y1, x2, y2, label, **kwargs)
-    elif justify == 'left':
-        text_left(x1, y1, x2, y2, label, **kwargs)
+    text_center(x1, y1, x2, y2, label, **kwargs)
 
-def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, justify='middle', **kwargs):
+def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, **kwargs):
     '''Draws pillow cuddle-friends you had from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     css_color receives a css coloring class as defined in timeline.css.
     There are four available slots for 4 home-mates. You can indicate which one you want occupied by setting slot to 0-3.
-    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.'''
 
     end_isodate = end_isodate or top_isodate
@@ -172,17 +167,13 @@ def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, justify='mid
     # Drawing
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    if justify == 'middle':
-        text_center(x1, y1, x2, y2, label, **kwargs)
-    elif justify == 'left':
-        text_left(x1, y1, x2, y2, label, **kwargs)
+    text_center(x1, y1, x2, y2, label, **kwargs)
 
 
-def weekend(css_color, label, start_isodate, end_isodate, hours_per_week, justify='middle', slot=0, **kwargs):
+def weekend(css_color, label, start_isodate, end_isodate, hours_per_week, slot=0, **kwargs):
     '''Draws a weekend event from start_isodate (YYYY-MM-DD) to end_isodate (YYYY-MM-DD).
     Width of the drawing is proportional to the hours_per_week invested.
     css_color receives a css coloring class as defined in timeline.css.
-    justify --> "left" ^ "middle" in order to left justify or center the label, respectively.
     **kwargs: optional css styling.'''
 
     end_isodate = end_isodate or top_isodate
@@ -208,10 +199,7 @@ def weekend(css_color, label, start_isodate, end_isodate, hours_per_week, justif
     # Drawing
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
-    if justify == 'middle':
-        text_center(x1, y1, x2, y2, label, **kwargs)
-    elif justify == 'left':
-        text_left(x1, y1, x2, y2, label, **kwargs)
+    text_center(x1, y1, x2, y2, label, **kwargs)
 
 def event(label, start_isodate, end_isodate, href=None, line_length=20):
     '''Draws a circle representing short duration events on the event line.
@@ -265,10 +253,8 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text_center(x1, y1, x2, y2, label, font_size=0.7)
+        text_center(weekend_right_grid, y1, x2, y2, label, font_size=0.7)
 
-def generic(color, label, start_isodate, end_isodate, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
-    if hours is None:
         return weekday(color, label, start_isodate, end_isodate or top_isodate, weekday_start_hour, weekday_end_hour, **kwargs)
     else:
         return weekend(color, label, start_isodate, end_isodate or top_isodate, hours, **kwargs)
