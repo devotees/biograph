@@ -2,13 +2,14 @@
 
 import sys
 import svgwrite
+import json
 import datetime
 import dateutil.parser
 
 # Grid Options
 timeline_options = dict(
                         left_grid = 50,          # x coordinate of the left grid border
-                        right_grid = 800,        # x coordinate of the right grid border
+                        right_grid = 960,        # x coordinate of the right grid border
                         bottom_grid = 1200,      # y coordinate of the bottom grid border
                         weekday_start_hour = 7,  # Time the day starts
                         weekday_end_hour = 24,   # Time the day ends
@@ -161,13 +162,12 @@ def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, justify='mid
 
     # Input Quality
     assert start_isodate < end_isodate
-
-    offset = (options.right_grid-weekend_right_grid) / 4
+    roommate_width = width_from_hours(7, 2)
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_right_grid + (offset*slot)
-    x2 = options.right_grid - (offset*(3-slot))
+    x1 = weekend_right_grid + (roommate_width*slot)
+    x2 = x1 + roommate_width
 
     # Drawing
     add_class(kwargs, css_color)
