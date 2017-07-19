@@ -433,6 +433,31 @@ def timespan(start_isodate, end_isodate, **kwargs):
     text(age_right, top_label_y-30, 'Events')
 
 
+def tsv_to_svg(fntsv):
+    lines = open(fntsv).readlines()
+    stored_hdrs = lines[0][:-1].split('\t')
+    assert stored_hdrs == headers, stored_hdrs
+    for L in lines[1:]:
+        L = L[:-1]
+        print(L)
+        type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest = L.split('\t')
+        kwargs = {}
+        if href: kwargs['href'] = href
+        if title: kwargs['title'] = title
+        if slot: kwargs['slot'] = float(slot)
+        if weekday_start_hour: weekday_start_hour = float(weekday_start_hour)
+        if weekday_end_hour: weekday_end_hour = float(weekday_end_hour)
+        if rest: kwargs.update(json.loads(rest))
+        if hours: hours = float(hours)
+        if type == 'timespan':
+            timespan(start_isodate, end_isodate)
+        elif type == 'option':
+            assert label in timeline_options, label
+            timeline_options[label] = int(start_isodate) # hack it up
+        elif type == 'home':
+            home(label, start_isodate, end_isodate)
+        else:
+            generic(type, int(intensity), label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, **kwargs)
 
 def main(func, fnout):
     global dwg
