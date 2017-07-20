@@ -23,13 +23,13 @@ timeline_options = dict(
 
 ## Of Global Importance
 color_palette = {
-    'friend': 'u',
+    'friend': 'friend',
     'love': 'r',
     'school': 'yo',
     'work': 'g',
-    'play': 'p',
+    'play': 'u',
     'project': 'p',
-    'roommate': 'u'
+    'roommate': 'o'
 }
 headers = "type   intensity   label   start_date   end_date   weekday_start   weekday_end   weekend_hours   href   title   slot   rest".split()
 residence_colors = {}
