@@ -176,8 +176,7 @@ def event(label, start_isodate, end_isodate, href=None, line_length=20):
     # Drawing
     p = dwg.circle((event_line_x, event_midpoint), (end_date - start_date + 5), fill='white', stroke='grey')
     dwg.add(wrap_link(p, href))
-    line(event_line_x + event_radius, event_midpoint, event_line_x + event_radius + line_length, event_midpoint)
-    text(event_line_x + event_radius + line_length - 4, event_midpoint + 8, label, font_size=0.6, href=href)
+    text(event_line_x + event_radius, event_midpoint + 8, label, font_size=0.6, href=href)
 
 def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, **kwargs):
     '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
@@ -398,6 +397,9 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
             label = ''
         return residence(color, label, start_isodate, end_isodate)
 
+    if type in ['occurrence']:
+        return event(label, start_isodate, end_isodate)
+
     # Weekly
     color = color_palette[type] + str(intensity)
     if type in ['roommate']:
@@ -409,6 +411,10 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
 
 
 ## The nature of memories
+def occurrence(name, start, end, *args, **kwargs):
+    'Any key events or landmarks in your life?'
+    return generic('occurrence', 0, name, start, end, *args, **kwargs)
+
 def school(intensity, name, start, end, *args, **kwargs):
     'Where did you enter a course of study?'
     return generic('school', intensity, name, start, end, *args, **kwargs)
@@ -482,8 +488,8 @@ def tsv_to_svg(fn_tsv):
         elif type == 'timespan':
             timespan(start_isodate, end_isodate)
 
-        elif type == 'home':
-            home(label, start_isodate, end_isodate)
+        elif type in ['home', 'occurrence']:
+            generic(type, 0, label, start_isodate, end_isodate)
 
         # ... then process the rest
         else:
