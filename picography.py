@@ -126,10 +126,13 @@ def text_center(x1, y1, x2, y2, label,font_size=1.0, align='middle', parent=None
     font_size is in ems.
     Optionally, label can link to href.'''
 
+    x = mid(x1, x2-underhang_offset)
+    y = mid(y1, y2)+underhang_offset
     if abs(y2-y1) > abs(x2-x1) and len(label)*10 > abs(x2-x1):
-        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset, label, font_size, align, parent, href, class_='vert')
+        add_class(kwargs, 'vert')
     else:
-        text(mid(x1, x2-underhang_offset), mid(y1, y2)+underhang_offset+5, label, font_size, align, parent, href)
+        y += 5
+    text(x, y, label, font_size, align, parent, href, **kwargs)
 
 def line(x1, y1, x2, y2, color='grey'):
     'Draws a colored line from (x1, y1) to (x2, y2).'
@@ -462,13 +465,14 @@ def tsv_to_svg(fn_tsv):
         type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest = memory.split('\t')
         kwargs = {}
 
-        if href:                kwargs['href'] = href
-        if title:               kwargs['title'] = title
-        if slot:                kwargs['slot'] = float(slot)
+        if href:  kwargs['href'] = href
+        if title: kwargs['title'] = title
+        if slot:  kwargs['slot'] = float(slot)
+        if rest:  kwargs.update(json.loads(rest))
+
+        if hours:               hours = float(hours)
         if weekday_start_hour:  weekday_start_hour = float(weekday_start_hour)
         if weekday_end_hour:    weekday_end_hour = float(weekday_end_hour)
-        if rest:                kwargs.update(json.loads(rest))
-        if hours:               hours = float(hours)
 
         # First handle the special cases ...
         if type == 'option':
