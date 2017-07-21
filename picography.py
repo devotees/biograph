@@ -24,12 +24,12 @@ timeline_options = dict(
 ## Of Global Importance
 color_palette = {
     'friend': 'friend',
-    'love': 'r',
-    'school': 'yo',
-    'work': 'g',
-    'play': 'u',
-    'project': 'p',
-    'roommate': 'o'
+    'love': 'love',
+    'school': 'school',
+    'work': 'work',
+    'play': 'play',
+    'project': 'project',
+    'roommate': 'friend'
 }
 headers = "type   intensity   label   start_date   end_date   weekday_start   weekday_end   weekend_hours   href   title   slot   rest".split()
 residence_colors = {}
@@ -150,7 +150,7 @@ def rectangle(x1, y1, x2, y2, href=None, title=None, parent=None, color='rectang
 
     # Drawing
     add_class(kwargs, color)
-    p = dwg.polygon(points, stroke='grey', **kwargs)
+    p = dwg.polygon(points, **kwargs)
     add_obj(parent, wrap_link(p, href))
     return p
 
@@ -379,6 +379,8 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
 
     saved_memories.append(list(str(x or '') for x in [type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest]))
 
+    kwargs.pop('title', None)
+
     # Do nuffin
     if type in ['timespan', 'option']:
         return
@@ -386,7 +388,7 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
     # Homes we keep returning to are going to be assigned the same colour
     if type in ['home']:
         if label not in residence_colors:
-            residence_colors[label] = 'pastel%s'%(len(residence_colors)+1)
+            residence_colors[label] = 'wh%s'%(len(residence_colors)+1)
             color = residence_colors[label]
         else:
             color = residence_colors[label]
