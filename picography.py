@@ -102,7 +102,7 @@ def weekday_hour(hr):
 
 
 ## Pencil strokes
-def text(x, y, label, font_size=0.7,  align=None, parent=None, href=None, **kwargs):
+def text(x, y, label, align=None, parent=None, href=None, **kwargs):
     '''Draws label at (x,y).
     font_size is in ems.
     align can be set to left, middle or right and controls the alignment of the string relative to (x, y).
@@ -114,14 +114,12 @@ def text(x, y, label, font_size=0.7,  align=None, parent=None, href=None, **kwar
     # Drawing
     if align is not None:
         add_class(kwargs, align)
-        p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'), **kwargs)
-    else:
-        p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'))
+    p = dwg.g(**kwargs)
     t = dwg.text(str(label), x = [x+3], y = [y-5])
     p.add(wrap_link(t, href))
     add_obj(parent, p)
 
-def text_center(x1, y1, x2, y2, label,font_size=0.7, align='middle', parent=None, href=None, **kwargs):
+def text_center(x1, y1, x2, y2, label, align='middle', parent=None, href=None, **kwargs):
     '''Draws label in the center of coordinates (x1, y1) to (x2, y2).
     font_size is in ems.
     Optionally, label can link to href.'''
@@ -132,7 +130,7 @@ def text_center(x1, y1, x2, y2, label,font_size=0.7, align='middle', parent=None
         add_class(kwargs, 'vert')
     else:
         y += 5
-    text(x, y, label, font_size, align, parent, href, **kwargs)
+    text(x, y, label, align, parent, href, **kwargs)
 
 def line(x1, y1, x2, y2, color='grey'):
     'Draws a colored line from (x1, y1) to (x2, y2).'
@@ -176,7 +174,7 @@ def event(label, start_isodate, end_isodate, href=None, line_length=20):
     # Drawing
     p = dwg.circle((event_line_x, event_midpoint), (end_date - start_date + 5), fill='white', stroke='grey')
     dwg.add(wrap_link(p, href))
-    text(event_line_x + event_radius, event_midpoint + 8, label, font_size=0.6, href=href)
+    text(event_line_x + event_radius, event_midpoint + 8, label, class_='event', href=href)
 
 def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, **kwargs):
     '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
@@ -270,7 +268,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text_center(weekend_right_grid, y1, x2, y2, label, font_size=0.7, align='middle')
+        text_center(weekend_right_grid, y1, x2, y2, label, align='middle', class_='residence')
 
 
 ## Canvas
@@ -324,7 +322,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         line(0, dt, options.left_grid, dt)
-        text(0, dt, y, font_size=0.9)
+        text(0, dt, y, class_='yeartick')
 
     # Set ages on y-axis
     age = 0
@@ -335,7 +333,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
         endt = parse_date('%d-%d-%d' % (y+1, bottom_date.month, bottom_date.day))
         rectangle(age_left, dt, age_right, endt, parent=g)
         if age > 0:
-            text_center(age_left, dt, age_right, endt, str(age), parent=g, font_size=0.8)
+            text_center(age_left, dt, age_right, endt, str(age), parent=g, class_='age')
         age += 1
 
 
@@ -398,7 +396,7 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
     # Homes we keep returning to are going to be assigned the same colour
     if type in ['home']:
         if label not in residence_colors:
-            residence_colors[label] = 'wh%s'%(len(residence_colors)+1)
+            residence_colors[label] = 'residence%s'%(len(residence_colors)+1)
             color = residence_colors[label]
         else:
             color = residence_colors[label]
@@ -532,11 +530,15 @@ def make_pico(func, argv):
     if args.tsv:
         setup_dwg('')
         func()
-        print_to_tsv(args.output or (args.input + '.tsv') or 'blueprint.tsv')
+        fnout = args.output or (args.input + '.tsv')
+        print_to_tsv(fnout)
     else:
-        setup_dwg(args.output or (args.input + '.svg') or 'picograph.svg')
+        fnout = args.output or (args.input + '.svg')
+        setup_dwg(fnout)
         func()
         dwg.save()
+
+    print('output to %s' % fnout)
 
 def main():
     'Draws a (-o) picograph.svg based on a (-i) blueprint.tsv'
