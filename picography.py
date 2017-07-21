@@ -365,6 +365,14 @@ def timespan(start_isodate, end_isodate, **kwargs):
     text(mid(weekend_right_grid, options.right_grid)-15, top_grid-45, 'zzz')
     line(options.right_grid, top_label_y, options.right_grid, top_grid-50)
 
+    # Legend
+    legend_x1 = weekend_right_grid
+    legend_x2 = legend_x1 + width_from_hours(150,100)
+    legend_y1 = parse_date('%d-%d-%d' % (top_date.year+1, 12, top_date.day))
+    legend_y2 = parse_date('%d-%d-%d' % (top_date.year+2,  5, top_date.day))
+    rectangle(legend_x1, legend_y1, legend_x2, legend_y2)
+    text(legend_x2-1, legend_y1, '100 hours (5 hours/week for 5 months)')
+
     # Draw the event line
     text(age_right, top_label_y-30, 'Events')
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
