@@ -69,7 +69,7 @@ def add_class(kwargs, cls):
         kwargs['class_'] = cls
 
 def add_obj(parent, svg_obj):
-    ' Add svg_obj as a subelement to parent'
+    'Add svg_obj as a subelement to parent'
 
     if not parent:
         parent = dwg
@@ -102,7 +102,7 @@ def weekday_hour(hr):
 
 
 ## Pencil strokes
-def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwargs):
+def text(x, y, label, font_size=0.7,  align=None, parent=None, href=None, **kwargs):
     '''Draws label at (x,y).
     font_size is in ems.
     align can be set to left, middle or right and controls the alignment of the string relative to (x, y).
@@ -121,7 +121,7 @@ def text(x, y, label, font_size=1.0,  align=None, parent=None, href=None, **kwar
     p.add(wrap_link(t, href))
     add_obj(parent, p)
 
-def text_center(x1, y1, x2, y2, label,font_size=1.0, align='middle', parent=None, href=None, **kwargs):
+def text_center(x1, y1, x2, y2, label,font_size=0.7, align='middle', parent=None, href=None, **kwargs):
     '''Draws label in the center of coordinates (x1, y1) to (x2, y2).
     font_size is in ems.
     Optionally, label can link to href.'''
