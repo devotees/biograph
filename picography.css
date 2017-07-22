@@ -74,6 +74,10 @@ polygon.friend1 { fill: #e38a48; }
 polygon.friend2 { fill: #d46a1c; }
 polygon.friend3 { fill: #af510b; }
 
+polygon.love0 {
+   fill-opacity: 0.1;
+   fill: red;
+}
 /* reds */
 polygon.love1 { fill: #dd4651 }
 polygon.love2 { fill: #ce1b28 }
