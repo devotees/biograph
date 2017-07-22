@@ -17,15 +17,27 @@ text {
     font-size: 0.6em;
 }
 
+polygon.residence { stroke: grey }
+.residence text { fill: black; }
 /* whites */
-polygon.residence1 { fill: #ffffff }
-polygon.residence2 { fill: #fffafa }
-polygon.residence3 { fill: #f0fff0 }
-polygon.residence4 { fill: #f5fffa }
-polygon.residence5 { fill: #f0ffff }
-polygon.residence6 { fill: #f0f8ff }
-polygon.residence7 { fill: #f8f8ff }
-polygon.residence8 { fill: #f5f5f5 }
+
+#pattern1 rect { stroke: none; fill: #eeeeee }
+#pattern1 { stroke: #bbbbbb; }
+#pattern2 { fill: #dddddd; }
+#pattern3 { stroke: #bbbbbb; }
+#pattern4 { stroke: #bbbbbb; }
+#pattern5 { stroke: #bbbbbb; }
+
+.axis_label { font-size: 2.0em }
+
+polygon.residence1 { fill: url(#pattern1) }
+polygon.residence2 { fill: url(#pattern2) }
+polygon.residence3 { fill: url(#pattern3) }
+polygon.residence4 { fill: url(#pattern4) }
+polygon.residence5 { fill: url(#pattern5) }
+polygon.residence6 { fill: #bbbbbb }
+polygon.residence7 { fill: #cccccc }
+polygon.residence8 { fill: #dddddd }
 polygon.residence9 { fill: #f5f5ee }
 polygon.residence10 { fill: #f5f5dc }
 polygon.residence11 { fill: #fdf5f6 }
@@ -35,8 +47,9 @@ polygon.residence14 { fill: #faebd7 }
 polygon.residence15 { fill: #faf0e6 }
 polygon.residence16 { fill: #fff0f5 }
 polygon.residence17 { fill: #ffe4e1 }
+*/
 
-polygon { fill: #fff; stroke: grey;}
+polygon { stroke: grey; }
 
 /* oranges */
 polygon.friend1 { fill: #e38a48; }
