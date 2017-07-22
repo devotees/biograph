@@ -172,7 +172,7 @@ def rectangle(x1, y1, x2, y2, href=None, title=None, parent=None, color='rectang
 
 
 ## Where the magic happens
-def event(label, start_isodate, end_isodate, href=None, line_length=20):
+def occurrence(label, start_isodate, end_isodate, href=None, line_length=20):
     '''Draws a circle representing short duration events on the event line.
     Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.
     Set line_length to the amount you want the label offset.'''
@@ -427,8 +427,8 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
 
         return residence(color, label, start_isodate, end_isodate, **kwargs)
 
-    if type in ['occurrence']:
-        return event(label, start_isodate, end_isodate)
+    if type in ['event']:
+        return occurrence(label, start_isodate, end_isodate)
 
     # Weekly
     color = color_palette[type] + str(intensity)
@@ -441,9 +441,9 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
 
 
 ## The nature of memories
-def occurrence(name, start, end, *args, **kwargs):
+def event(name, start, end, *args, **kwargs):
     'Any key events or landmarks in your life?'
-    return generic('occurrence', 0, name, start, end, *args, **kwargs)
+    return generic('event', 0, name, start, end, *args, **kwargs)
 
 def school(intensity, name, start, end, *args, **kwargs):
     'Where did you enter a course of study?'
@@ -518,7 +518,7 @@ def tsv_to_svg(fn_tsv):
         elif type == 'timespan':
             timespan(start_isodate, end_isodate)
 
-        elif type in ['home', 'occurrence']:
+        elif type in ['home', 'event']:
             generic(type, 0, label, start_isodate, end_isodate, **kwargs)
 
         # ... then process the rest
