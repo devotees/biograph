@@ -275,6 +275,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
 
     # Drawing
     add_class(kwargs, css_color)
+    add_class(kwargs, 'residence')
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
         text_left(options.left_grid, y1, weekday_left_grid, y2, label, font_size=0.7, align='middle')
@@ -356,21 +357,21 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Drawing
     # Monday to Friday
-    text(mid(weekday_left_grid, weekday_right_grid)-60, top_grid-45, 'Weekdays')
-    text(mid(morning_start, afternoon_start)-30, top_grid, 'morning')
-    text(mid(afternoon_start, evening_start)-30, top_grid, 'afternoon')
-    text(mid(evening_start, day_end)-30, top_grid, 'evening')
+    text(mid(weekday_left_grid, weekday_right_grid)-60, top_grid-45, 'Weekdays', class_="axis_label")
+    text(mid(morning_start, afternoon_start)-30, top_grid, 'morning', class_="axis_label")
+    text(mid(afternoon_start, evening_start)-30, top_grid, 'afternoon', class_="axis_label")
+    text(mid(evening_start, day_end)-30, top_grid, 'evening', class_="axis_label")
     line(morning_start, top_label_y, morning_start-1, top_grid-50)
     line(afternoon_start, top_label_y, afternoon_start - 1, top_grid-30)
     line(evening_start, top_label_y, evening_start-1, top_grid-30)
 
     # Saturday to Sunday
-    text(mid(day_end, weekend_right_grid)-40, top_grid-45, 'Weekends')
+    text(mid(day_end, weekend_right_grid)-40, top_grid-45, 'Weekends', class_="axis_label")
     line(day_end, top_label_y, day_end, top_grid-50)
     line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-50)
 
     # ZzzzzzZZZ
-    text(mid(options.left_grid, weekday_left_grid)-15, top_grid-45, 'zzz')
+    text(mid(options.left_grid, weekday_left_grid)-15, top_grid-45, 'zzz', class_="axis_label")
     line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
@@ -518,6 +519,24 @@ def setup_dwg(fn):
 
     dwg = svgwrite.Drawing(fn, preserveAspectRatio='xMidYMid meet')
     dwg.add_stylesheet('timeline.css', title='some title')
+
+    pattern1 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern1", patternUnits="userSpaceOnUse"))
+    pattern1.add(dwg.rect((0, 0), (20, 20)))
+    pattern1.add(dwg.line((0, 20), (20, 0)))
+
+    pattern2 = dwg.defs.add(dwg.pattern(size=(8, 8), id="pattern2", patternUnits="userSpaceOnUse"))
+    pattern2.add(dwg.circle((4, 4), 1))
+
+    pattern3 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern3", patternUnits="userSpaceOnUse"))
+    pattern3.add(dwg.line((0, 20), (20, 0)))
+    pattern3.add(dwg.line((0, 0), (20, 20)))
+
+    pattern4 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern4", patternUnits="userSpaceOnUse"))
+    pattern4.add(dwg.line((10, 0), (10, 20)))
+
+    pattern5 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern5", patternUnits="userSpaceOnUse"))
+    pattern5.add(dwg.line((0, 20), (20, 20)))
+
 
 def collect_args(argv):
     '''picography.py -i <input.tsv> -o <output.svg>
