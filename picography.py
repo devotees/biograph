@@ -12,7 +12,7 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         private=False,           # if False, censors private information
-                        residence_color='purple', # color pallette to allocate from
+                        residence_color='gray', # color pallette to allocate from
                         top_grid= 50,           # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
