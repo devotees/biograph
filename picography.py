@@ -119,16 +119,16 @@ def text(x, y, label, align=None, parent=None, href=None, **kwargs):
     p.add(wrap_link(t, href))
     add_obj(parent, p)
 
-def text_left(x1, y1, x2, y2, label, font_size=0.7, parent=None, href=None, **kwargs):
+def text_left(x1, y1, x2, y2, label, font_size=0.7, align='middle', parent=None, href=None, **kwargs):
     '''Draws label at coordinate x1, in between coordinates y1 to y2.
     font_size is in ems.
     Optionally, label can link to href.'''
 
     x = x1
     y = mid(y1, y2) + 10 
-    text(x, y, label, font_size, None, parent, href)
+    text(x, y, label, None, parent, href, **kwargs)
 
-def text_center(x1, y1, x2, y2, label,font_size=0.7, align='middle', parent=None, href=None, **kwargs):
+def text_center(x1, y1, x2, y2, label, align='middle', parent=None, href=None, **kwargs):
     '''Draws label in the center of coordinates (x1, y1) to (x2, y2).
     font_size is in ems.
     Optionally, label can link to href.'''
