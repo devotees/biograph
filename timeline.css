@@ -6,15 +6,20 @@ text {
 }
 
 .yeartick {
-    font-size: 0.9em;
+    font-size: 1.0em;
 }
 
 .age {
-    font-size: 0.8em;
+    font-size: 1.0em;
 }
 
 .event {
-    font-size: 0.6em;
+    font-size: 1.0em;
+}
+
+.metadata {
+   font-size: 1.5em;
+   fill: black;
 }
 
 polygon.residence { stroke: grey }
@@ -22,32 +27,41 @@ polygon.residence { stroke: grey }
 /* whites */
 
 #pattern1 rect { stroke: none; fill: #eeeeee }
+#pattern2 rect { stroke: none; fill: #eeeeee }
+#pattern3 rect { stroke: none; fill: #eeeeee }
+#pattern4 rect { stroke: none; fill: #eeeeee }
+#pattern5 rect { stroke: none; fill: #eeeeee }
+
 #pattern1 { stroke: #bbbbbb; }
 #pattern2 { fill: #dddddd; }
 #pattern3 { stroke: #bbbbbb; }
 #pattern4 { stroke: #bbbbbb; }
 #pattern5 { stroke: #bbbbbb; }
 
-.axis_label { font-size: 2.0em }
+.axis_label { font-size: 1.5em }
 
-polygon.residence1 { fill: url(#pattern1) }
-polygon.residence2 { fill: url(#pattern2) }
-polygon.residence3 { fill: url(#pattern3) }
-polygon.residence4 { fill: url(#pattern4) }
-polygon.residence5 { fill: url(#pattern5) }
-polygon.residence6 { fill: #bbbbbb }
-polygon.residence7 { fill: #cccccc }
-polygon.residence8 { fill: #dddddd }
-polygon.residence9 { fill: #f5f5ee }
-polygon.residence10 { fill: #f5f5dc }
-polygon.residence11 { fill: #fdf5f6 }
-polygon.residence12 { fill: #fffaf0 }
-polygon.residence13 { fill: #fffff9 }
-polygon.residence14 { fill: #faebd7 }
-polygon.residence15 { fill: #faf0e6 }
-polygon.residence16 { fill: #fff0f5 }
-polygon.residence17 { fill: #ffe4e1 }
-*/
+.pattern1 { fill: url(#pattern1) }
+.pattern2 { fill: url(#pattern2) }
+.pattern3 { fill: url(#pattern3) }
+.pattern4 { fill: url(#pattern4) }
+.pattern5 { fill: url(#pattern5) }
+.gray1 { fill: #dddddd }
+.gray2 { fill: #cccccc }
+.gray3 { fill: #bbbbbb }
+.gray4 { fill: #aaaaaa }
+.gray5 { fill: #999999 }
+.gray6 { fill: #888888 }
+.gray7 { fill: #777777 }
+.gray8 { fill: #666666 }
+
+.purple1 { fill: #bf94de }
+.purple2 { fill: #cba0ea }
+.purple3 { fill: #bd98df }
+.purple4 { fill: #cb91de }
+.purple5 { fill: #d0a7dd }
+.purple6 { fill: #c8a9de }
+.purple7 { fill: #c1abdf }
+.purple8 { fill: #c1a2eb }
 
 polygon { stroke: grey; }
 
@@ -81,6 +95,9 @@ polygon.work3 { fill: #0c5900 }
 polygon.project1 { fill: #118377 }
 polygon.project2 { fill: #118377 }
 polygon.project3 { fill: #118377 }
+
+polygon.misc1 { fill: #46005a }
+.misc1 text { fill: white }
 
 
 polygon.love3,

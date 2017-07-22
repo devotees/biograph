@@ -11,9 +11,12 @@ import argparse
 
 ## Grid Options
 timeline_options = dict(
+                        private=False,           # if False, censors private information
+                        residence_color='purple', # color pallette to allocate from
+                        top_grid= 50,           # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
-                        right_grid = 1260,       # x coordinate of the right grid border
-                        bottom_grid = 1200,      # y coordinate of the bottom grid border
+                        right_grid = 1000,       # x coordinate of the right grid border
+                        bottom_grid = 1300,      # y coordinate of the bottom grid border
                         weekday_start_hour = 7,  # Time the day starts
                         weekday_end_hour = 24,   # Time the day ends
                         weekday_hour_width = 30, # Number of x pixels per hour in a weekday
@@ -44,6 +47,9 @@ class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
+
+def private(s, censored=''):
+    return s if options.private else censored
 
 def mid(p1, p2):
     'Returns the midpoint between p1 and p2.'
@@ -278,7 +284,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     add_class(kwargs, 'residence')
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text_left(options.left_grid, y1, weekday_left_grid, y2, label, font_size=0.7, align='middle')
+        text_left(options.left_grid, y1, weekday_left_grid, y1-15, label,  align='middle')
 
 
 ## Canvas
@@ -317,8 +323,8 @@ def timespan(start_isodate, end_isodate, **kwargs):
     global underhang_offset, weekday_left_grid, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
     underhang_offset = 5               # ensures text does sit below drawn lines
-    top_grid         = 100             # y coordinate of the top grid border
-    top_label_y      = top_grid + 5    # y coordinate of where the top labels are placed
+    top_grid = options.top_grid
+    top_label_y = top_grid + 5    # y coordinate of where the top labels are placed
 
     weekday_left_grid = options.left_grid + 250    
     weekday_right_grid = weekday_left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
@@ -357,35 +363,38 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Drawing
     # Monday to Friday
-    text(mid(weekday_left_grid, weekday_right_grid)-60, top_grid-45, 'Weekdays', class_="axis_label")
-    text(mid(morning_start, afternoon_start)-30, top_grid, 'morning', class_="axis_label")
-    text(mid(afternoon_start, evening_start)-30, top_grid, 'afternoon', class_="axis_label")
-    text(mid(evening_start, day_end)-30, top_grid, 'evening', class_="axis_label")
+    text(mid(morning_start, afternoon_start)-50, top_grid-20, 'weekday', class_="axis_label")
+    text(mid(morning_start, afternoon_start)-50, top_grid, 'mornings', class_="axis_label")
+    text(mid(afternoon_start, evening_start)-50, top_grid, 'afternoons', class_="axis_label")
+    text(mid(afternoon_start, evening_start)-50, top_grid-20, 'weekday', class_="axis_label")
+    text(mid(evening_start, day_end)-50, top_grid, 'evenings', class_="axis_label")
+    text(mid(evening_start, day_end)-50, top_grid-20, 'weekday', class_="axis_label")
     line(morning_start, top_label_y, morning_start-1, top_grid-50)
     line(afternoon_start, top_label_y, afternoon_start - 1, top_grid-30)
     line(evening_start, top_label_y, evening_start-1, top_grid-30)
 
     # Saturday to Sunday
-    text(mid(day_end, weekend_right_grid)-40, top_grid-45, 'Weekends', class_="axis_label")
+    text(mid(day_end, weekend_right_grid)-50, top_grid-20, 'weekends', class_="axis_label")
     line(day_end, top_label_y, day_end, top_grid-50)
     line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-50)
 
     # ZzzzzzZZZ
-    text(mid(options.left_grid, weekday_left_grid)-15, top_grid-45, 'zzz', class_="axis_label")
+    #text(mid(options.left_grid, weekday_left_grid)-125, top_grid-20, 'updated: ' + top_isodate, class_="axis_label")
     line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
-    legend_x1 = event_line_x + 50
+    legend_x1 = weekday_right_grid
     legend_x2 = legend_x1 + width_from_hours(150,100)
-    legend_y1 = parse_date('%d-%d-%d' % (top_date.year+1, 12, top_date.day))
-    legend_y2 = parse_date('%d-%d-%d' % (top_date.year+2,  5, top_date.day))
+    legend_y1 = parse_date('%d-%d-%d' % (top_date.year+2, 12, 28))
+    legend_y2 = parse_date('%d-%d-%d' % (top_date.year+3, 5, 30))
     rectangle(legend_x1, legend_y1, legend_x2, legend_y2)
     text(legend_x2-1, legend_y1, '100 hours (5 hours/week for 5 months)')
 
     # Draw the event line
-    text(age_right, top_label_y-30, 'Events')
+    text(age_right, top_label_y-30, 'events', class_="axis_label")
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
-
+    
+    text(0, 15, 'Generated on ' + end_isodate)
 
 ## No matter the nature of memories, they all end up here.
 def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
@@ -407,12 +416,16 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
     # Homes we keep returning to are going to be assigned the same colour
     if type in ['home']:
         if label not in residence_colors:
-            residence_colors[label] = 'residence%s'%(len(residence_colors)+1)
+            residence_colors[label] = options.residence_color+str(len(residence_colors)+1)
             color = residence_colors[label]
         else:
             color = residence_colors[label]
             label = ''
-        return residence(color, label, start_isodate, end_isodate)
+
+        if 'class_' in kwargs:
+            color = 'blerg'
+
+        return residence(color, label, start_isodate, end_isodate, **kwargs)
 
     if type in ['occurrence']:
         return event(label, start_isodate, end_isodate)
@@ -506,7 +519,7 @@ def tsv_to_svg(fn_tsv):
             timespan(start_isodate, end_isodate)
 
         elif type in ['home', 'occurrence']:
-            generic(type, 0, label, start_isodate, end_isodate)
+            generic(type, 0, label, start_isodate, end_isodate, **kwargs)
 
         # ... then process the rest
         else:
@@ -525,16 +538,20 @@ def setup_dwg(fn):
     pattern1.add(dwg.line((0, 20), (20, 0)))
 
     pattern2 = dwg.defs.add(dwg.pattern(size=(8, 8), id="pattern2", patternUnits="userSpaceOnUse"))
+    pattern2.add(dwg.rect((0, 0), (8, 8)))
     pattern2.add(dwg.circle((4, 4), 1))
 
     pattern3 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern3", patternUnits="userSpaceOnUse"))
+    pattern3.add(dwg.rect((0, 0), (20, 20)))
     pattern3.add(dwg.line((0, 20), (20, 0)))
     pattern3.add(dwg.line((0, 0), (20, 20)))
 
     pattern4 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern4", patternUnits="userSpaceOnUse"))
+    pattern4.add(dwg.rect((0, 0), (20, 20)))
     pattern4.add(dwg.line((10, 0), (10, 20)))
 
     pattern5 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern5", patternUnits="userSpaceOnUse"))
+    pattern5.add(dwg.rect((0, 0), (20, 20)))
     pattern5.add(dwg.line((0, 20), (20, 20)))
 
 
