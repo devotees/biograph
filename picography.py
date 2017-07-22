@@ -12,7 +12,7 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         left_grid = 50,          # x coordinate of the left grid border
-                        right_grid = 960,        # x coordinate of the right grid border
+                        right_grid = 1260,       # x coordinate of the right grid border
                         bottom_grid = 1200,      # y coordinate of the bottom grid border
                         weekday_start_hour = 7,  # Time the day starts
                         weekday_end_hour = 24,   # Time the day ends
@@ -97,8 +97,8 @@ def weekday_hour(hr):
     '''Returns the x-axis coordinate for a weekday time.
     hr must be an int between 8 and 24.'''
 
-    x_scale = (weekday_right_grid-options.left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
-    return options.left_grid + (hr-options.weekday_start_hour) * x_scale
+    x_scale = (weekday_right_grid-weekday_left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
+    return weekday_left_grid + (hr-options.weekday_start_hour) * x_scale
 
 
 ## Pencil strokes
@@ -210,7 +210,7 @@ def sleepmate(css_color, label, start_isodate, end_isodate, slot=0, **kwargs):
     # Coordinates
     y1 = parse_date(start_isodate)
     y2 = parse_date(end_isodate)
-    x1 = weekend_right_grid + (roommate_width*slot)
+    x1 = weekday_left_grid - (roommate_width*(slot)+15)
     x2 = x1 + roommate_width
 
     # Drawing
@@ -263,7 +263,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     end_date = parse_date(end_isodate)
     x1 = options.left_grid
     y1 = start_date
-    x2 = options.right_grid
+    x2 = weekend_right_grid
     y2 = end_date
 
     # Drawing
@@ -306,18 +306,19 @@ def timespan(start_isodate, end_isodate, **kwargs):
     dwg.viewbox(width=options.right_grid+150, height=options.bottom_grid+50)
 
     # Set grid variables
-    global underhang_offset, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
+    global underhang_offset, weekday_left_grid, weekday_right_grid, weekend_right_grid, age_left, age_right, event_line_x, top_grid, top_label_y
 
     underhang_offset = 5               # ensures text does sit below drawn lines
     top_grid         = 100             # y coordinate of the top grid border
     top_label_y      = top_grid + 5    # y coordinate of where the top labels are placed
 
-    weekday_right_grid = options.left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
+    weekday_left_grid = options.left_grid + 250    
+    weekday_right_grid = weekday_left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
     weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
 
-    age_left     = options.right_grid         # x coordinate of where the placement of the ages starts
-    age_right    = options.right_grid + 35    # x coordinate of the right border for ages
-    event_line_x = options.right_grid + 50    # x coordinate of the event line
+    age_left     = weekend_right_grid         # x coordinate of where the placement of the ages starts
+    age_right    = weekend_right_grid + 35    # x coordinate of the right border for ages
+    event_line_x = weekend_right_grid + 50    # x coordinate of the event line
 
 
     # Set year ticks on y-axis
@@ -348,7 +349,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Drawing
     # Monday to Friday
-    text(mid(options.left_grid, weekday_right_grid)-60, top_grid-45, 'Weekdays')
+    text(mid(weekday_left_grid, weekday_right_grid)-60, top_grid-45, 'Weekdays')
     text(mid(morning_start, afternoon_start)-30, top_grid, 'morning')
     text(mid(afternoon_start, evening_start)-30, top_grid, 'afternoon')
     text(mid(evening_start, day_end)-30, top_grid, 'evening')
@@ -362,11 +363,11 @@ def timespan(start_isodate, end_isodate, **kwargs):
     line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-50)
 
     # ZzzzzzZZZ
-    text(mid(weekend_right_grid, options.right_grid)-15, top_grid-45, 'zzz')
-    line(options.right_grid, top_label_y, options.right_grid, top_grid-50)
+    text(mid(options.left_grid, weekday_left_grid)-15, top_grid-45, 'zzz')
+    line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
-    legend_x1 = weekend_right_grid
+    legend_x1 = event_line_x + 50
     legend_x2 = legend_x1 + width_from_hours(150,100)
     legend_y1 = parse_date('%d-%d-%d' % (top_date.year+1, 12, top_date.day))
     legend_y2 = parse_date('%d-%d-%d' % (top_date.year+2,  5, top_date.day))
