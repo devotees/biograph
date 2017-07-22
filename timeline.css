@@ -1,103 +1,99 @@
 /* greens */
 
-polygon { fill: #fff; stroke: grey;}
+text {
+    font-size: 0.7em;
+    fill: black;
+}
 
-.work1 polygon {fill: #98ee90; }
-.work2 polygon {fill: #3cb371; }
-.work3 polygon {fill: #008000; }
+.yeartick {
+    font-size: 0.9em;
+}
+
+.age {
+    font-size: 0.8em;
+}
+
+.event {
+    font-size: 0.6em;
+}
+
+polygon.residence { stroke: grey }
+.residence text { fill: black; }
+/* whites */
+
+#pattern1 rect { stroke: none; fill: #eeeeee }
+#pattern1 { stroke: #bbbbbb; }
+#pattern2 { fill: #dddddd; }
+#pattern3 { stroke: #bbbbbb; }
+#pattern4 { stroke: #bbbbbb; }
+#pattern5 { stroke: #bbbbbb; }
+
+.axis_label { font-size: 2.0em }
+
+polygon.residence1 { fill: url(#pattern1) }
+polygon.residence2 { fill: url(#pattern2) }
+polygon.residence3 { fill: url(#pattern3) }
+polygon.residence4 { fill: url(#pattern4) }
+polygon.residence5 { fill: url(#pattern5) }
+polygon.residence6 { fill: #bbbbbb }
+polygon.residence7 { fill: #cccccc }
+polygon.residence8 { fill: #dddddd }
+polygon.residence9 { fill: #f5f5ee }
+polygon.residence10 { fill: #f5f5dc }
+polygon.residence11 { fill: #fdf5f6 }
+polygon.residence12 { fill: #fffaf0 }
+polygon.residence13 { fill: #fffff9 }
+polygon.residence14 { fill: #faebd7 }
+polygon.residence15 { fill: #faf0e6 }
+polygon.residence16 { fill: #fff0f5 }
+polygon.residence17 { fill: #ffe4e1 }
+*/
+
+polygon { stroke: grey; }
 
 /* oranges */
-.friend1 polygon { fill: #f50; }
-.friend2 polygon { fill: #f50; } /* 20/100/65 */
-.friend3 polygon { fill: #f50; }
-.friend3 polygon { stroke-width: 15; }
-.friend1 text { stroke-opacity: 0.5; }
-
-/* blues */
-.play1 polygon { fill: #87cefa }
-.play2 polygon { fill: #1e90ff }
-.play3 polygon { fill: #4169e1 }
-
-/* yellow-to-orange */
-.school1 polygon { fill: #ffffd4; }
-.school2 polygon { fill: #fed98e; }
-.school3 polygon { fill: #fe9929; }
-.school4 polygon { fill: #d95f0e; }
-.school5 polygon { fill: #993404; }
+polygon.friend1 { fill: #e38a48; }
+polygon.friend2 { fill: #d46a1c; }
+polygon.friend3 { fill: #af510b; }
 
 /* reds */
-.love1 polygon { fill: #ff80db } /* 317/100/75 */
-.love2 polygon { fill: #d22d53} /* 346/65/50*/
-.love3 polygon { fill: #f00 }  /* 0/100/50 */
+polygon.love1 { fill: #dd4651 }
+polygon.love2 { fill: #ce1b28 }
+polygon.love3 { fill: #8d000a }
+.love3 text { fill: white }
 
-/* blacks/grays */
-.k1 { fill: #f7f7f7 }
-.k2 { fill: #d9d9d9 }
-.k3 { fill: #bdbdbd }
-.k4 { fill: #969696 }
-.k5 { fill: #636363 }
-.k6 { fill: #252525 }
+/* blues */
+polygon.play1 { fill: #2d8d83 }
+polygon.play2 { fill: #076d62 }
+polygon.play3 { fill: #00433c }
 
-/* yellow-to-blue */
-.yb1 { fill: #ffffcc }
-.yb2 { fill: #c7e9b4 }
-.yb3 { fill: #7fcdbb }
-.yb4 { fill: #41b6c4 }
-.yb5 { fill: #1d91c0 }
-.yb6 { fill: #225ea8 }
-.yb7 { fill: #0c2c84 }
+/* yellow-to-brown */
+polygon.school1 { fill: #e3e348; }
+polygon.school2 { fill: #d4d41c; }
+polygon.school3 { fill: #afaf0b; }
+polygon.school4 { fill: #919100; }
+polygon.school5 { fill: #6b6b00; }
 
-/* yellow-green */
-.yg1 { fill: #ffffcc }
-.yg2 { fill: #d9f0a3 }
-.yg3 { fill: #addd8e }
-.yg4 { fill: #78c679 }
-.yg5 { fill: #41ab5d }
-.yg6 { fill: #238443 }
-.yg7 { fill: #005a32 }
+polygon.work1 { fill: #4dbc3c }
+polygon.work2 { fill: #1c9109 }
+polygon.work3 { fill: #0c5900 }
 
-.gb1 { fill: #f0f9e8 }
-.gb2 { fill: #ccebc5 }
-.gb3 { fill: #a8ddb5 }
-.gb4 { fill: #7bccc4 }
-.gb5 { fill: #4eb3d3 }
-.gb6 { fill: #2b8cbe }
-.gb7 { fill: #08589e }
+polygon.project1 { fill: #118377 }
+polygon.project2 { fill: #118377 }
+polygon.project3 { fill: #118377 }
 
-/* purples */
-.project1 polygon { fill: #e6e6fa; }
-.project2 polygon { fill: #9370db; }
-.project3 polygon { fill: #800080; }
 
-/* pastels */
-.pastel1 { fill: #fbb4ae }
-.pastel2 { fill: #b3cde3 }
-.pastel3 { fill: #ccebc5 }
-.pastel4 { fill: #decbe4 }
-.pastel5 { fill: #fed9a6 }
-.pastel6 { fill: #ffffcc }
-.pastel7 { fill: #e5d8bd }
-.pastel8 { fill: #fddaec }
-.pastel9 { fill: #f2f2f2 }
+polygon.love3,
+polygon.play3,
+polygon.friend3,
+polygon.work3,
+polygon.project3 { stroke-width: 2px; stroke: black; }
 
-/* whites */
-.wh1 { fill: #ffffff }
-.wh2 { fill: #fffafa }
-.wh3 { fill: #f0fff0 }
-.wh4 { fill: #f5fffa }
-.wh5 { fill: #f0ffff }
-.wh6 { fill: #f0f8ff }
-.wh7 { fill: #f8f8ff }
-.wh8 { fill: #f5f5f5 }
-.wh9 { fill: #f5f5ee }
-.wh10 { fill: #f5f5dc }
-.wh11 { fill: #fdf5f6 }
-.wh12 { fill: #fffaf0 }
-.wh13 { fill: #fffff9 }
-.wh14 { fill: #faebd7 }
-.wh15 { fill: #faf0e6 }
-.wh16 { fill: #fff0f5 }
-.wh17 { fill: #ffe4e1 }
+polygon.love1,
+polygon.play1,
+polygon.friend1,
+polygon.work1,
+polygon.project1 { fill-opacity: 1.0; }
 
 a polygon:hover { fill: #ffffff }
 
@@ -108,6 +104,7 @@ a polygon:hover { fill: #ffffff }
     glyph-orientation-vertical: 270;
     writing-mode: tb-rl;
 }
+
 .left {text-anchor: start;}
 .middle {text-anchor: middle;}
 .right {text-anchor: end;}
