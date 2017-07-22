@@ -117,9 +117,18 @@ def text(x, y, label, font_size=0.7,  align=None, parent=None, href=None, **kwar
         p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'), **kwargs)
     else:
         p = dwg.g(style='font-size:%.1fem;color:%s'%(font_size, 'black'))
-    t = dwg.text(str(label), x = [x+3], y = [y-5])
+    t = dwg.text(str(label), x = [x+3], y = [y-6])
     p.add(wrap_link(t, href))
     add_obj(parent, p)
+
+def text_left(x1, y1, x2, y2, label, font_size=0.7, parent=None, href=None, **kwargs):
+    '''Draws label at coordinate x1, in between coordinates y1 to y2.
+    font_size is in ems.
+    Optionally, label can link to href.'''
+
+    x = x1
+    y = mid(y1, y2) + 10 
+    text(x, y, label, font_size, None, parent, href)
 
 def text_center(x1, y1, x2, y2, label,font_size=0.7, align='middle', parent=None, href=None, **kwargs):
     '''Draws label in the center of coordinates (x1, y1) to (x2, y2).
@@ -270,7 +279,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     add_class(kwargs, css_color)
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text_center(weekend_right_grid, y1, x2, y2, label, font_size=0.7, align='middle')
+        text_left(options.left_grid, y1, weekday_left_grid, y2, label, font_size=0.7, align='middle')
 
 
 ## Canvas
