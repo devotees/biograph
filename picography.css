@@ -46,13 +46,17 @@ polygon.residence { stroke: grey }
 .pattern4 { fill: url(#pattern4) }
 .pattern5 { fill: url(#pattern5) }
 .gray1 { fill: #dddddd }
-.gray2 { fill: #cccccc }
-.gray3 { fill: #bbbbbb }
-.gray4 { fill: #aaaaaa }
-.gray5 { fill: #999999 }
-.gray6 { fill: #888888 }
-.gray7 { fill: #777777 }
-.gray8 { fill: #666666 }
+.gray2 { fill: #d8d8d8 }
+.gray3 { fill: #d0d0d0 }
+.gray4 { fill: #c8c8c8 }
+.gray5 { fill: #c0c0c0 }
+.gray6 { fill: #b8b8b8 }
+.gray7 { fill: #b0b0b0 }
+.gray8 { fill: #a8a8a8 }
+.gray9 { fill: #a0a0a0 }
+.gray10 { fill: #989898 }
+.gray11 { fill: #909090 }
+.gray12 { fill: #666666 }
 
 .purple1 { fill: #bf94de }
 .purple2 { fill: #cba0ea }
@@ -77,9 +81,9 @@ polygon.love3 { fill: #8d000a }
 .love3 text { fill: white }
 
 /* blues */
-polygon.play1 { fill: #2d8d83 }
-polygon.play2 { fill: #076d62 }
-polygon.play3 { fill: #00433c }
+polygon.play1 { fill: #50ada3 }
+polygon.play2 { fill: #2d8d83 }
+polygon.play3 { fill: #076d62 }
 
 /* yellow-to-brown */
 polygon.school1 { fill: #e3e348; }

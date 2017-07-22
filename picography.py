@@ -531,7 +531,8 @@ def setup_dwg(fn):
     global dwg
 
     dwg = svgwrite.Drawing(fn, preserveAspectRatio='xMidYMid meet')
-    dwg.add_stylesheet('timeline.css', title='some title')
+    dwg.add_stylesheet('picography.css', title='base devotees css')
+    dwg.add_stylesheet('personal.css', title='user custom css')
 
     pattern1 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern1", patternUnits="userSpaceOnUse"))
     pattern1.add(dwg.rect((0, 0), (20, 20)))
