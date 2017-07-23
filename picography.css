@@ -65,17 +65,17 @@ text {
 .pattern5 { fill: url(#pattern5) }
 
 /* Grays */
-.gray1 { fill: #f5f5f5 }
-.gray2 { fill: #e8e8e8 }
-.gray3 { fill: #dcdcdc }
-.gray4 { fill: #d3d3d3 }
-.gray5 { fill: #c8c8c8 }
-.gray6 { fill: #c0c0c0 }
-.gray7 { fill: #bebebe }
-.gray8 { fill: #b0b0b0 }
-.gray9 { fill: #a9a9a9 }
-.gray10 { fill: #a0a0a0 }
-.gray11 { fill: #989898 }
+.gray1  { fill: #f5f5f5 }
+.gray2  { fill: #eaeaea }
+.gray3  { fill: #dfdfdf }
+.gray4  { fill: #d5d5d5 }
+.gray5  { fill: #cacaca }
+.gray6  { fill: #bfbfbf }
+.gray7  { fill: #b5b5b5 }
+.gray8  { fill: #aaaaaa }
+.gray9  { fill: #9f9f9f }
+.gray10 { fill: #959595 }
+.gray11 { fill: #8a8a8a }
 .gray12 { fill: #808080 }
 
 /* Purples */
