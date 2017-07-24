@@ -187,7 +187,7 @@ def occurrence(label, start_isodate, end_isodate, href=None, line_length=20):
     event_radius = start_date-end_date + 5
 
     # Drawing
-    p = dwg.circle((event_line_x, event_midpoint), (end_date - start_date + 5), fill='white', stroke='grey')
+    p = dwg.circle((event_line_x, event_midpoint), (event_radius), fill='white', stroke='grey')
     dwg.add(wrap_link(p, href))
     text(event_line_x + event_radius, event_midpoint + 8, label, class_='event', href=href)
 
