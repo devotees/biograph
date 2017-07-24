@@ -12,7 +12,6 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         private=False,           # if False, censors private information
-                        residence_color='gray', # color pallette to allocate from
                         top_grid= 50,           # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
@@ -25,6 +24,7 @@ timeline_options = dict(
 
 
 ## Of Global Importance
+# Color palette to allocate from
 color_palette = {
     'friend': 'friend',
     'love': 'love',
@@ -33,7 +33,8 @@ color_palette = {
     'play': 'play',
     'project': 'project',
     'roommate': 'friend',
-    'event': 'event'
+    'event': 'event',
+    'home': 'gray'
 }
 headers = "type   intensity   label   start_date   end_date   weekday_start   weekday_end   weekend_hours   href   title   slot   rest".split()
 residence_colors = {}
@@ -416,7 +417,7 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
     # Homes we keep returning to are going to be assigned the same colour
     if type in ['home']:
         if label not in residence_colors:
-            residence_colors[label] = options.residence_color+str(len(residence_colors)+1)
+            residence_colors[label] = color_palette[type] + str(len(residence_colors)+1)
             color = residence_colors[label]
         else:
             color = residence_colors[label]
