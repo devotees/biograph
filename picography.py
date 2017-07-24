@@ -183,7 +183,7 @@ def occurrence(css_color, label, start_isodate, end_isodate, parent=None, href=N
     start_date = parse_date(start_isodate)
     end_date = parse_date(end_isodate)
     event_midpoint = mid(start_date, end_date)
-    event_radius = start_date-end_date + 5
+    event_radius = start_date-end_date + 1
 
     # Drawing
     add_class(kwargs, css_color)
