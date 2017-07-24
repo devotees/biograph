@@ -122,7 +122,7 @@ def text(x, y, label, align=None, parent=None, href=None, **kwargs):
     if align is not None:
         add_class(kwargs, align)
     p = dwg.g(**kwargs)
-    t = dwg.text(str(label), x = [x+3], y = [y-5])
+    t = dwg.text(str(label), x = [x+3], y = [y])
     p.add(wrap_link(t, href))
     add_obj(parent, p)
 
@@ -144,8 +144,6 @@ def text_center(x1, y1, x2, y2, label, align='middle', parent=None, href=None, *
     y = mid(y1, y2)+underhang_offset
     if abs(y2-y1) > abs(x2-x1) and len(label)*10 > abs(x2-x1):
         add_class(kwargs, 'vert')
-    else:
-        y += 5
     text(x, y, label, align, parent, href, **kwargs)
 
 def line(x1, y1, x2, y2, color='grey'):
