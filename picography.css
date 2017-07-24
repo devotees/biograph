@@ -5,7 +5,7 @@ polygon { stroke: grey; }
 
 /* Age */
 .age:nth-child(even) polygon { fill: mintcream; }
-.age:nth-child(odd) polygon { fill: lavender; }
+.age:nth-child(odd) polygon { fill: lightgray; }
 
 
 /* Text Play */
