@@ -32,12 +32,13 @@ color_palette = {
     'work': 'work',
     'play': 'play',
     'project': 'project',
-    'roommate': 'friend'
+    'roommate': 'friend',
+    'event': 'event'
 }
 headers = "type   intensity   label   start_date   end_date   weekday_start   weekday_end   weekend_hours   href   title   slot   rest".split()
 residence_colors = {}
 saved_memories = []
-
+event_colors = {}
 
 ## Helpers
 class AttrDict(dict):
@@ -172,7 +173,7 @@ def rectangle(x1, y1, x2, y2, href=None, title=None, parent=None, color='rectang
 
 
 ## Where the magic happens
-def occurrence(label, start_isodate, end_isodate, href=None, line_length=20):
+def occurrence(css_color, label, start_isodate, end_isodate, parent=None, href=None, **kwargs):
     '''Draws a circle representing short duration events on the event line.
     Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.
     Set line_length to the amount you want the label offset.'''
@@ -187,8 +188,9 @@ def occurrence(label, start_isodate, end_isodate, href=None, line_length=20):
     event_radius = start_date-end_date + 5
 
     # Drawing
-    p = dwg.circle((event_line_x, event_midpoint), (event_radius), fill='white', stroke='grey')
-    dwg.add(wrap_link(p, href))
+    add_class(kwargs, css_color)
+    p = dwg.circle((event_line_x, event_midpoint), (event_radius), **kwargs)
+    add_obj(parent, wrap_link(p, href))
     text(event_line_x + event_radius, event_midpoint + 8, label, class_='event', href=href)
 
 def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, **kwargs):
@@ -428,7 +430,18 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
         return residence(color, label, start_isodate, end_isodate, **kwargs)
 
     if type in ['event']:
-        return occurrence(label, start_isodate, end_isodate)
+        if label not in event_colors:
+            event_colors[label] = color_palette[type] + str(len(event_colors)+1)
+            color = event_colors[label]
+
+        else:
+            color = event_colors[label]
+            label = ''
+
+        if 'class_' in kwargs:
+            color = 'blerg'
+
+        return occurrence(color, label, start_isodate, end_isodate, **kwargs)
 
     # Weekly
     color = color_palette[type] + str(intensity)

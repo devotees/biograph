@@ -78,17 +78,6 @@ text {
 .gray11 { fill: #8a8a8a }
 .gray12 { fill: #808080 }
 
-/* Purples */
-.purple1 { fill: #cd00cd }
-.purple2 { fill: #b300b3 }
-.purple3 { fill: #9a009a }
-.purple4 { fill: #800080 }
-.purple5 { fill: #670067 }
-.purple6 { fill: #4d004d }
-.purple7 { fill: #46005a }
-.purple8 { fill: #340034 }
-
-
 /* Colour Classes*/
 polygon.love1,
 polygon.play1,
@@ -131,10 +120,20 @@ polygon.school5 { fill: #6b6b00; }
 
 /* work: greens */
 polygon.work1 { fill: #4dbc3c }
-polygon.work2 { fill: #1c9109 }
+polygon.work2 { fill: #55a868 }
 polygon.work3 { fill: #0c5900 }
 
 /* project: aquamarines */
 polygon.project1 { fill: #118377 }
 polygon.project2 { fill: #118377 }
 polygon.project3 { fill: #118377 }
+
+/* event: purples */
+.event1 { fill: #a9aac8 }
+.event2 { fill: #b9aac8 }
+.event3 { fill: #c9aac8 }
+.event4 { fill: #d9aac8 }
+.event5 { fill: #e9aac8 }
+.event6 { fill: #d3c3d8 }
+.event7 { fill: #d3b3d8 }
+.event8 { fill: #d3a3d8 } 
