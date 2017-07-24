@@ -189,7 +189,7 @@ def occurrence(css_color, label, start_isodate, end_isodate, parent=None, href=N
     add_class(kwargs, css_color)
     p = dwg.circle((event_line_x, event_midpoint), (event_radius), **kwargs)
     add_obj(parent, wrap_link(p, href))
-    text(event_line_x + event_radius, event_midpoint + 8, label, class_='event', href=href)
+    text(event_line_x + event_radius, event_midpoint+5, label, class_='event', href=href)
 
 def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, **kwargs):
     '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
