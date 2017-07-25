@@ -12,20 +12,19 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         private=False,           # if False, censors private information
-                        top_grid= 50,           # y coordinate of the top grid border
+                        top_grid= 50,            # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
                         bottom_grid = 1300,      # y coordinate of the bottom grid border
                         weekday_start_hour = 7,  # Time the day starts
                         weekday_end_hour = 24,   # Time the day ends
                         weekday_hour_width = 30, # Number of x pixels per hour in a weekday
-                        year_height = 50       # Number of y pixels per year
+                        year_height = 50         # Number of y pixels per year
                         )
 
 
 ## Of Global Importance
-# Color palette to allocate from
-color_palette = {
+color_palette = {           # Color palette to allocate from
     'friend': 'friend',
     'love': 'love',
     'school': 'school',
@@ -102,8 +101,7 @@ def width_from_hours(num_days, num_hours):
     return  (num_hours/260) * options.weekday_hour_width / (num_days/365)
 
 def weekday_hour(hr):
-    '''Returns the x-axis coordinate for a weekday time.
-    hr must be an int between 8 and 24.'''
+    'Returns the x-axis coordinate for a weekday time.'
 
     x_scale = (weekday_right_grid-weekday_left_grid) / (options.weekday_end_hour-options.weekday_start_hour)
     return weekday_left_grid + (hr-options.weekday_start_hour) * x_scale
@@ -113,7 +111,6 @@ def weekday_hour(hr):
 def text(x, y, label, align=None, parent=None, href=None, **kwargs):
     '''Draws label at (x,y).
     font_size is in ems.
-    align can be set to left, middle or right and controls the alignment of the string relative to (x, y).
     Optionally, label can link to href.'''
 
     # Coordinates
@@ -174,8 +171,7 @@ def rectangle(x1, y1, x2, y2, href=None, title=None, parent=None, color='rectang
 ## Where the magic happens
 def occurrence(css_color, label, start_isodate, end_isodate, parent=None, href=None, **kwargs):
     '''Draws a circle representing short duration events on the event line.
-    Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.
-    Set line_length to the amount you want the label offset.'''
+    Event is centered between start_isodate (YYYY-MM-DD) and end_isodate (YYYY-MM-DD). Size of the circle is proportional to the event duration.'''
 
     # Input Quality
     assert start_isodate <= end_isodate, (start_isodate, end_isodate)
@@ -195,6 +191,7 @@ def occurrence(css_color, label, start_isodate, end_isodate, parent=None, href=N
 def weekday(css_color, label, start_isodate, end_isodate, start_hour, end_hour, **kwargs):
     '''Draws a weekday event from (start_hour, start_isodate (YYYY-MM-DD)) to (end_hour, end_isodate (YYYY-MM-DD)).
     **kwargs: optional css styling.'''
+
     end_isodate = end_isodate or top_isodate
 
     # Input Quality
@@ -325,15 +322,15 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     underhang_offset = 5               # ensures text does sit below drawn lines
     top_grid = options.top_grid
-    top_label_y = top_grid + 5    # y coordinate of where the top labels are placed
+    top_label_y = top_grid + 5         # y coordinate of where the top labels are placed
 
     weekday_left_grid = options.left_grid + 250    
     weekday_right_grid = weekday_left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
     weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
 
-    age_left     = weekend_right_grid         # x coordinate of where the placement of the ages starts
-    age_right    = weekend_right_grid + 35    # x coordinate of the right border for ages
-    event_line_x = weekend_right_grid + 50    # x coordinate of the event line
+    age_left = weekend_right_grid          # x coordinate of where the placement of the ages starts
+    age_right = weekend_right_grid + 35    # x coordinate of the right border for ages
+    event_line_x = weekend_right_grid + 50 # x coordinate of the event line
 
 
     # Set year ticks on y-axis
@@ -422,24 +419,19 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
         else:
             color = residence_colors[label]
             label = ''
-
         if 'class_' in kwargs:
             color = 'blerg'
-
         return residence(color, label, start_isodate, end_isodate, **kwargs)
 
     if type in ['event']:
         if label not in event_colors:
             event_colors[label] = color_palette[type] + str(len(event_colors)+1)
             color = event_colors[label]
-
         else:
             color = event_colors[label]
             label = ''
-
         if 'class_' in kwargs:
             color = 'blerg'
-
         return occurrence(color, label, start_isodate, end_isodate, **kwargs)
 
     # Weekly
