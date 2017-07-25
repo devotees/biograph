@@ -184,7 +184,7 @@ def occurrence(css_color, label, start_isodate, end_isodate, parent=None, href=N
     start_date = parse_date(start_isodate)
     end_date = parse_date(end_isodate)
     event_midpoint = mid(start_date, end_date)
-    event_radius = start_date-end_date + 1
+    event_radius = 3
 
     # Drawing
     add_class(kwargs, css_color)
@@ -285,7 +285,7 @@ def residence(css_color, label, start_isodate, end_isodate, **kwargs):
     add_class(kwargs, 'residence')
     rectangle(x1, y1, x2, y2, **kwargs)
     if label:
-        text_left(options.left_grid, y1, weekday_left_grid, y1-15, label,  align='middle')
+        text_left(options.left_grid, y1-8, weekday_left_grid, y1-15, label,  align='middle')
 
 
 ## Canvas
@@ -365,11 +365,11 @@ def timespan(start_isodate, end_isodate, **kwargs):
     # Drawing
     # Monday to Friday
     text(mid(morning_start, afternoon_start)-50, top_grid-20, 'weekday', class_="axis_label")
-    text(mid(morning_start, afternoon_start)-50, top_grid, 'mornings', class_="axis_label")
-    text(mid(afternoon_start, evening_start)-50, top_grid, 'afternoons', class_="axis_label")
+    text(mid(morning_start, afternoon_start)-50, top_grid-4, 'mornings', class_="axis_label")
     text(mid(afternoon_start, evening_start)-50, top_grid-20, 'weekday', class_="axis_label")
-    text(mid(evening_start, day_end)-50, top_grid, 'evenings', class_="axis_label")
+    text(mid(afternoon_start, evening_start)-50, top_grid-4, 'afternoons', class_="axis_label")
     text(mid(evening_start, day_end)-50, top_grid-20, 'weekday', class_="axis_label")
+    text(mid(evening_start, day_end)-50, top_grid-4, 'evenings', class_="axis_label")
     line(morning_start, top_label_y, morning_start-1, top_grid-50)
     line(afternoon_start, top_label_y, afternoon_start - 1, top_grid-30)
     line(evening_start, top_label_y, evening_start-1, top_grid-30)
@@ -392,9 +392,9 @@ def timespan(start_isodate, end_isodate, **kwargs):
     text(legend_x2-1, legend_y1, '100 hours (5 hours/week for 5 months)')
 
     # Draw the event line
-    text(age_right, top_label_y-30, 'events', class_="axis_label")
+    text(age_right, top_grid-20, 'events', class_="axis_label")
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
-    
+
     text(0, 15, 'Generated on ' + end_isodate)
 
 ## No matter the nature of memories, they all end up here.
