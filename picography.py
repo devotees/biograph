@@ -12,7 +12,7 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         private=False,           # if False, censors private information
-                        top_grid= 100,            # y coordinate of the top grid border
+                        top_grid = 100,            # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
                         bottom_grid = 1600,      # y coordinate of the bottom grid border
@@ -337,7 +337,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     for y in range(bottom_date.year, top_date.year+1):
         dt = parse_date('%s-01-01' % y)
         line(0, dt, options.left_grid, dt)
-        text(0, dt, y, class_='yeartick')
+        text(0, dt-2, y, class_='yeartick')
 
     # Set ages on y-axis
     age = 0
@@ -385,9 +385,9 @@ def timespan(start_isodate, end_isodate, **kwargs):
     line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
-    legend_x1 = afternoon_start + 40
+    legend_x1 = 50
     legend_x2 = legend_x1 + width_from_hours(150,100)
-    legend_y1 = options.top_grid - 50
+    legend_y1 = options.top_grid - 55
     legend_y2 = legend_y1 + (parse_date('%d-%d-%d' % (top_date.year+1, 5, 30)) - parse_date('%d-%d-%d' % (top_date.year, 12, 28)))
     rectangle(legend_x1-20, legend_y1+10, legend_x2+55, legend_y2-14, class_='legend')
     rectangle(legend_x1, legend_y1+3, legend_x2, legend_y2+3, class_="scale")
@@ -400,7 +400,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     text(age_right, label_y, 'events', class_="axis_label")
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
 
-    text(0, 15, 'Generated on ' + end_isodate)
+    text(weekend_right_grid+20, 15, 'Generated on ' + end_isodate)
 
 ## No matter the nature of memories, they all end up here.
 def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_start_hour=None, weekday_end_hour=None, hours=None, **kwargs):
