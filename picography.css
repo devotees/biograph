@@ -5,7 +5,7 @@ polygon { stroke: grey; }
 
 /* Age */
 .age:nth-child(even) polygon { fill: mintcream; }
-.age:nth-child(odd) polygon { fill: lightgray; }
+.age:nth-child(odd) polygon { fill: lavender; }
 
 
 /* Text Play */
@@ -36,11 +36,11 @@ text {
 }
 
 .yeartick {
-    font-size: 1.0em;
+    font-size: 1.2em;
 }
 
 .age {
-    font-size: 1.0em;
+    font-size: 1.2em;
 }
 
 .event {
