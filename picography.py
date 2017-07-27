@@ -12,7 +12,7 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         private=False,           # if False, censors private information
-                        top_grid= 80,            # y coordinate of the top grid border
+                        top_grid= 100,            # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
                         bottom_grid = 1600,      # y coordinate of the bottom grid border
@@ -361,23 +361,27 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Drawing
     # Monday to Friday
-    text(mid(morning_start, afternoon_start)-50, top_grid-20, 'weekday', class_="axis_label")
-    text(mid(morning_start, afternoon_start)-50, top_grid-4, 'mornings', class_="axis_label")
-    text(mid(afternoon_start, evening_start)-50, top_grid-20, 'weekday', class_="axis_label")
-    text(mid(afternoon_start, evening_start)-50, top_grid-4, 'afternoons', class_="axis_label")
-    text(mid(evening_start, day_end)-50, top_grid-20, 'weekday', class_="axis_label")
-    text(mid(evening_start, day_end)-50, top_grid-4, 'evenings', class_="axis_label")
+    label1_y = top_grid-20
+    label2_y = top_grid-4
+    label_y = mid(label1_y, label2_y)
+    text(mid(morning_start, afternoon_start)-50, label1_y, 'weekday', class_="axis_label")
+    text(mid(morning_start, afternoon_start)-50, label2_y, 'mornings', class_="axis_label")
+    text(mid(afternoon_start, evening_start)-50, label1_y, 'weekday', class_="axis_label")
+    text(mid(afternoon_start, evening_start)-50, label2_y, 'afternoons', class_="axis_label")
+    text(mid(evening_start, day_end)-50, label1_y, 'weekday', class_="axis_label")
+    text(mid(evening_start, day_end)-50, label2_y, 'evenings', class_="axis_label")
     line(morning_start, top_label_y, morning_start-1, top_grid-50)
     line(afternoon_start, top_label_y, afternoon_start - 1, top_grid-30)
     line(evening_start, top_label_y, evening_start-1, top_grid-30)
 
     # Saturday to Sunday
-    text(mid(day_end, weekend_right_grid)-50, top_grid-20, 'weekends', class_="axis_label")
+    text(mid(day_end, weekend_right_grid)-50, label_y, 'weekends', class_="axis_label")
     line(day_end, top_label_y, day_end, top_grid-50)
     line(weekend_right_grid-1, top_label_y, weekend_right_grid-1, top_grid-50)
 
     # ZzzzzzZZZ
-    #text(mid(options.left_grid, weekday_left_grid)-125, top_grid-20, 'updated: ' + top_isodate, class_="axis_label")
+    text(mid(options.left_grid, weekday_left_grid)-125, label_y, 'residences', class_="axis_label")
+    text(morning_start-70, label_y, 'flatmates', class_="axis_label")
     line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
@@ -385,12 +389,15 @@ def timespan(start_isodate, end_isodate, **kwargs):
     legend_x2 = legend_x1 + width_from_hours(150,100)
     legend_y1 = options.top_grid - 50
     legend_y2 = legend_y1 + (parse_date('%d-%d-%d' % (top_date.year+1, 5, 30)) - parse_date('%d-%d-%d' % (top_date.year, 12, 28)))
-    rectangle(legend_x1-10, legend_y1+5, mid(evening_start, day_end)+25, legend_y1-25, class_='legend') 
-    rectangle(legend_x1, legend_y1, legend_x2, legend_y2)
-    text(legend_x2-1, legend_y1, '100 hours (5 hours/week for 5 months)')
+    rectangle(legend_x1-20, legend_y1+10, legend_x2+55, legend_y2-14, class_='legend')
+    rectangle(legend_x1, legend_y1+3, legend_x2, legend_y2+3, class_="scale")
+    text(legend_x1-15, legend_y2-3, '5 hours/week')
+    text(legend_x2+3, legend_y2+18, '20 weeks')
+    text(legend_x1+3, legend_y1-8, '100')
+    text(legend_x1-1, legend_y1+1, 'hours')
 
     # Draw the event line
-    text(age_right, top_grid-20, 'events', class_="axis_label")
+    text(age_right, label_y, 'events', class_="axis_label")
     line(event_line_x, top_grid, event_line_x, options.bottom_grid)
 
     text(0, 15, 'Generated on ' + end_isodate)

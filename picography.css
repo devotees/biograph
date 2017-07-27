@@ -23,7 +23,12 @@ polygon { stroke: grey; }
 .legend {  border-style: solid;
            stroke: black ;
            border-width: 10px ;
-           fill: #ffffff;}
+           fill: white;
+       }
+
+.scale {
+    fill: lavender;
+}
 
 text {
     font-size: 0.7em;
