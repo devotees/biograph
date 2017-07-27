@@ -20,6 +20,11 @@ polygon { stroke: grey; }
 
 .axis_label { font-size: 1.5em }
 
+.legend {  border-style: solid;
+           stroke: black ;
+           border-width: 10px ;
+           fill: #ffffff;}
+
 text {
     font-size: 0.7em;
     fill: black;
@@ -129,11 +134,11 @@ polygon.project2 { fill: #118377 }
 polygon.project3 { fill: #118377 }
 
 /* event: purples */
-.event1 { fill: #a9aac8 }
-.event2 { fill: #b9aac8 }
-.event3 { fill: #c9aac8 }
-.event4 { fill: #d9aac8 }
-.event5 { fill: #e9aac8 }
-.event6 { fill: #d3c3d8 }
+.event1 { fill: #001c7f }
+.event2 { fill: #017517 }
+.event3 { fill: #8c0900 }
+.event4 { fill: #7600a1 }
+.event5 { fill: #b8860b }
+.event6 { fill: #006374 }
 .event7 { fill: #d3b3d8 }
 .event8 { fill: #d3a3d8 } 

@@ -12,10 +12,10 @@ import argparse
 ## Grid Options
 timeline_options = dict(
                         private=False,           # if False, censors private information
-                        top_grid= 50,            # y coordinate of the top grid border
+                        top_grid= 80,            # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
-                        bottom_grid = 1300,      # y coordinate of the bottom grid border
+                        bottom_grid = 1600,      # y coordinate of the bottom grid border
                         weekday_start_hour = 7,  # Time the day starts
                         weekday_end_hour = 24,   # Time the day ends
                         weekday_hour_width = 30, # Number of x pixels per hour in a weekday
@@ -381,10 +381,11 @@ def timespan(start_isodate, end_isodate, **kwargs):
     line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
-    legend_x1 = weekday_right_grid
+    legend_x1 = afternoon_start + 40
     legend_x2 = legend_x1 + width_from_hours(150,100)
-    legend_y1 = parse_date('%d-%d-%d' % (top_date.year+2, 12, 28))
-    legend_y2 = parse_date('%d-%d-%d' % (top_date.year+3, 5, 30))
+    legend_y1 = options.top_grid - 50
+    legend_y2 = legend_y1 + (parse_date('%d-%d-%d' % (top_date.year+1, 5, 30)) - parse_date('%d-%d-%d' % (top_date.year, 12, 28)))
+    rectangle(legend_x1-10, legend_y1+5, mid(evening_start, day_end)+25, legend_y1-25, class_='legend') 
     rectangle(legend_x1, legend_y1, legend_x2, legend_y2)
     text(legend_x2-1, legend_y1, '100 hours (5 hours/week for 5 months)')
 
