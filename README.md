@@ -2,7 +2,7 @@
 
 Inspired by [Rand McNally's histomap](http://www.slate.com/features/2013/08/histomapwider.jpg), picography allows you to visualise and share a personal history.
 
-Picographs are maps. Like other maps, they do not capture the full depth and story of the terrain. They are instead guides for a journey and an exercise in considering and documenting the most meaningful parts of that slice of the universe.
+Picographs are maps of a person's time and existence. Like other maps, they do not capture the full depth and story of the terrain. They are instead guides for a journey and an exercise in considering and documenting the most meaningful parts of that slice of the universe.
 
 ![](docs/alex.png)
 
