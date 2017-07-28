@@ -56,11 +56,14 @@ For all:
 * `end_isodate`: the ending date of the memory in isoformat (YYYY-MM-DD)
 * `href`: optional allows you to associate the memory with a link
 * `class_`: optional css class containers
+
 For weekday memories:
 * `start_hour`: the start time
 * `end_hour`: the end time
+
 For weekend and weekly memories:
 * `hours`: the number of hours per week
+
 For w+w and roommates:
 * `slot`: 0-3 ; indicate the starting position of the memory along the x-axis.
 

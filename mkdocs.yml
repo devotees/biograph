@@ -1,9 +1,0 @@
-site_name: Persomap
-site_author: Devotees
-
-repo_url: http://github.com/devotees/persomap
-
-pages:
-- Home: index.md
-- User Guide: user-guide.md
-- About: about.md
