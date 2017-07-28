@@ -22,7 +22,7 @@ def alex():
     project(2, 'Prenatal appointments', '2017-04-14', '2017-06-13', 15, 17)
     play(3,'Baby Einstein', '2017-03-22', '2017-06-02', hours=10)
 
-make_pico(alex, 'sys.argv[1:]')
+make_pico(alex, sys.argv[1:])
 ```
 ![](alex.png)
 
@@ -43,7 +43,7 @@ Optional arguments:
 * `weekday_start_hour` (int): Time the day starts. Defaults to 7.
 * `weekday_end_hour` (int): Time the day ends. Defaults to 24.
 * `weekday_hour_width`: Number of x pixels per hour in a weekday.
-* `year_height`: Number of y pixels per year.
+* `year_height`: Number of y pixels per year. Defaults to 52 (1 y pixel per week)
 
 ## Memories
 
@@ -64,7 +64,7 @@ For weekday memories:
 For weekend and weekly memories:
 * `hours`: the number of hours per week
 
-For w+w and roommates:
+For weekends+weeklies and roommates:
 * `slot`: 0-3 ; indicate the starting position of the memory along the x-axis.
 
 ### The nature of memories
@@ -73,6 +73,7 @@ For w+w and roommates:
 picography.home(name, start_isodate, end_isodate, **kwargs)
 ```
 Where have you lived?
+
 Draws a box in the grid background of y-axis length which is equal to the duration of stay at a residence.
 
 ---
@@ -129,5 +130,5 @@ Where did you study?
 ```
 picography.event(name, start_isodate, end_isodate, *args, **kwargs)
 ```
-Any keys events or landmarks in your life?
+What were the key events or landmarks in your life?
 

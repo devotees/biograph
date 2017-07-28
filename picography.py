@@ -20,7 +20,7 @@ timeline_options = dict(
                         weekday_start_hour = 7,  # Time the day starts
                         weekday_end_hour = 24,   # Time the day ends
                         weekday_hour_width = 30, # Number of x pixels per hour in a weekday
-                        year_height = 50         # Number of y pixels per year
+                        year_height = 52         # Number of y pixels per year
                         )
 
 
