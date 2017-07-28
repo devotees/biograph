@@ -463,7 +463,7 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
 
 ## The nature of memories
 def event(name, start_isodate, end_isodate, *args, **kwargs):
-    'Any key events or landmarks in your life?'
+    'What were the key events or landmarks in your life?'
     return generic('event', 0, name, start_isodate, end_isodate, *args, **kwargs)
 
 def school(intensity, name, start_isodate, end_isodate, *args, **kwargs):
