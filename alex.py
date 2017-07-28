@@ -5,17 +5,15 @@ from picography import *
 def alex():
     # Initialise Grid
 
-    timespan('2017-01-30', '2017-06-13', year_height=1000)
-    event('2017-02-04', '2017-02-04', 'conceived')
-    event('2017-06-13', '2017-06-13', 'miscarried')
+    timespan('2017-01-30', '2017-06-13', year_height=900, legend=False)
+    event('conceived', '2017-02-04', '2017-02-04')
+    event('miscarried', '2017-06-13', '2017-06-13')
 
-    residence('pastel1', '2017-02-04', '2017-06-13', 'womb', href='')
+    home('womb', '2017-02-04', '2017-06-13', href='')
 
-    sleepmate('u2', '2017-02-04', '2017-06-13', 'm', slot=0)
-    sleepmate('u2', '2017-02-04', '2017-06-13', 'o', slot=1)
-    sleepmate('u2', '2017-02-04', '2017-06-13', 'm', slot=2)
+    roommate(3, 'mom', '2017-02-04', '2017-06-13', class_='mom')
 
-    weekday('g3', '2017-04-14', '2017-06-13', 15, 17, 'Prenatal appointments', font_size=0.8)
-    weekend('u2', '2017-03-22', '2017-06-02', 10, 'Baby Einstein')
+    project(2, 'Prenatal appointments', '2017-04-14', '2017-06-13', 15, 17, class_='bonding')
+    play(3, 'Baby Einstein', '2017-03-22', '2017-06-02', hours=10, class_='bonding')
 
-main(alex, 'alex.svg')
+make_pico(alex, sys.argv[1:])

@@ -11,7 +11,6 @@ What it does:
 * Makes apparent just how much of your life has been empty space.
 * Reveals to you how small a blip you are in each others' lives.
 
-## Tutorial
 
 
 

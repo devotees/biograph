@@ -6,26 +6,27 @@
 from picography import *
 
 def alex():
-    # Initialise Grid
 
+    # Always begin by initialising the grid...
     timespan('2017-02-24','2017-06-13')
+    # ...and by adding your homes
+    home('womb', '2017-02-04', '2017-06-13', href='')
+
+    # Go wild with the structure and ordering of the rest
     event('2017-02-04', '2017-02-04', 'conceived')
     event('2017-06-13', '2017-06-13', 'miscarried')
 
-    residence('pastel1','2017-02-04', '2017-06-13', 'womb', href='')
 
-    sleepmate('u2','2017-02-04', '2017-06-13', 'm', slot=0)
-    sleepmate('u2','2017-02-04', '2017-06-13', 'o', slot=1)
-    sleepmate('u2','2017-02-04', '2017-06-13', 'm', slot=2)
+    roommate(3, 'mom', '2017-02-04', '2017-06-13') 
 
-    weekday('g3','2017-04-14', '2017-06-13', 15, 17, 'Prenatal appointments')
-    weekend('u2','2017-03-22', '2017-06-02', 10, 'Baby Einstein')
+    project(2, 'Prenatal appointments', '2017-04-14', '2017-06-13', 15, 17)
+    play(3,'Baby Einstein', '2017-03-22', '2017-06-02', hours=10)
 
-main(alex, 'alex.svg')
+make_pico(alex, 'sys.argv[1:]')
 ```
 ![](alex.png)
 
-## Elements of the picograph
+## The Canvas
 
 ```
 picography.timespan(start_isodate, end_isodate, **kwargs)
@@ -33,82 +34,97 @@ picography.timespan(start_isodate, end_isodate, **kwargs)
 Initialises the histomap grid from `start_isodate` (YYYY-MM-DD) to `end_isodate` (YYYY-MM-DD).
 
 Optional arguments:
+* `legend`: if False, removes the legend
+* `private`: if False, censors private information
+* `top_grid`: y coordinate of the top grid border
 * `left_grid`: x coordinate of the left grid border
 * `right_grid`: x coordinate of the right grid border
 * `bottom_grid`: y coordinate of the bottom grid border
 * `weekday_start_hour` (int): Time the day starts. Defaults to 7.
 * `weekday_end_hour` (int): Time the day ends. Defaults to 24.
 * `weekday_hour_width`: Number of x pixels per hour in a weekday.
-* `year_height`: Number of y pixels per year. If set, overrides the setting for `bottom_grid`.
+* `year_height`: Number of y pixels per year.
 
----
+## Memories
+
+### Core components of a memory
+
+For all:
+* `name`: the name given to the memory
+* `intensity`: 1-3 ; maps to a css colouring class
+* `start_isodate`: the starting date of the memory in isoformat (YYYY-MM-DD)
+* `end_isodate`: the ending date of the memory in isoformat (YYYY-MM-DD)
+* `href`: optional allows you to associate the memory with a link
+* `class_`: optional css class containers
+For weekday memories:
+* `start_hour`: the start time
+* `end_hour`: the end time
+For weekend and weekly memories:
+* `hours`: the number of hours per week
+For w+w and roommates:
+* `slot`: 0-3 ; indicate the starting position of the memory along the x-axis.
+
+### The nature of memories
 
 ```
-picography.residence(css_color, start_isodate, end_isodate, label, **kwargs)
+picography.home(name, start_isodate, end_isodate, **kwargs)
 ```
-Used to add where you have lived throughout your life.
-
+Where have you lived?
 Draws a box in the grid background of y-axis length which is equal to the duration of stay at a residence.
 
-`css_color` receives a css coloring class as defined in `timeline.css`.
+---
 
-`**kwargs` is for optional css styling.
+```
+picography.roommate(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+```
+With whom have you lived with?
 
 ---
 
 ```
-picography.weekday(css_color, start_isodate, end_isodate, start_hour, end_hour, label, justify='middle', **kwargs)
+picography.friend(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
-Add scheduled weekday time commitments. 
-
-Draws the shape from (`start_hour`, `start_isodate`(YYYY-MM-DD)) to (`end_hour`, `end_isodate` (YYYY-MM-DD)).
-
-`css_color` receives a css coloring class as defined in `timeline.css`.
-
-`justify` can be set to 'left' or 'middle'. It left justifies or centers the `label` respectively.
-
-`**kwargs` is for optional css styling.
+Who have you met along the way who has made the journey more pleasant?
 
 ---
 
 ```
-picography.weekend(css_color, start_isodate, end_isodate, hours_per_week, label, justify = 'middle', slot = 0, **kwargs)
+picography.love(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
-Allows you to document how you spent your time on weekends. Also can be used for adding weekly commitments that do not fit neatly into a weekday timeslot.
-
-Draws a weekday event from `start_isodate` (YYYY-MM-DD) to `end_isodate` (YYYY-MM-DD). Width of the drawing is proportional to the `hours_per_week` invested.
-
-`css_color` receives a css coloring class as defined in `timeline.css`.
-
-`justify` can be set to 'left' or 'middle'. It left justifies or centers the `label` respectively.
-
-`**kwargs` is for optional css styling.
+With whom have you written a shared story?
 
 ---
 
 ```
-picography.sleepmates(css_color, start_isodate, end_isodate, label, slot=0, justify='middle', **kwargs)
+picography.project(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
-"Where I lay my head is home." For adding pillow cuddle-friends and roommates.
-
-Draws the shape from `start_isodate` (YYYY-MM-DD) to `end_isodate` (YYYY-MM-DD).
-
-`css_color` recieves a css coloring class as defined in `timeline.css`.
-
-There are four available `slots` for 4 home-mates. You can indicate which one you want occupied by setting `slot` to 0-3.
-
-`justify` can be set to 'left' or 'middle'. It left justifies or centers the `label` respectively.
-
-`**kwargs` is for optional css styling.
+Which sort of endeavours did you undertake?
 
 ---
 
 ```
-picography.event(start_isodate, end_isodate, label, href=None, line_length=20)
+picography.play(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
-Used to represent short duration events.
+When were some moments you stepped back and did something without a goal in mind?
 
-Draws a circle on the event line which is centered between `start_isodate` (YYYY-MM-DD) and `end_isodate`. Size of the circle is proportional to the duration of the event.
+---
 
-Set `line_length` to the amount you want the `label` offset.
+```
+picography.work(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+```
+How have you made a living?
+
+---
+
+```
+picography.school(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+```
+Where did you study?
+
+---
+
+```
+picography.event(name, start_isodate, end_isodate, *args, **kwargs)
+```
+Any keys events or landmarks in your life?
 
