@@ -11,8 +11,9 @@ import argparse
 
 ## Grid Options
 timeline_options = dict(
+                        legend=True,             # if False, removes legend
                         private=False,           # if False, censors private information
-                        top_grid = 100,            # y coordinate of the top grid border
+                        top_grid = 100,          # y coordinate of the top grid border
                         left_grid = 50,          # x coordinate of the left grid border
                         right_grid = 1000,       # x coordinate of the right grid border
                         bottom_grid = 1600,      # y coordinate of the bottom grid border
@@ -41,13 +42,20 @@ saved_memories = []
 event_colors = {}
 
 ## Helpers
-class AttrDict(dict):
-    '''A recipe which allows you to treat dict keys like attributions.
-    dict.key'''
+class TypedAttrDict:
+    def __init__(self, d):
+        object.__setattr__(self, '_opts', d)
 
-    def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
-        self.__dict__ = self
+    def __getattr__(self, k):
+        return self._opts[k]
+
+    def __setattr__(self, k, v):
+        self.__setitem__(k, v)
+
+    def __setitem__(self, k, v):
+        if k not in self._opts:
+            raise Exception('no such option "%s"' % k)
+        self._opts[k] = type(self._opts[k])(v)
 
 def private(s, censored=''):
     return s if options.private else censored
@@ -298,7 +306,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     # Allow convenient access of dictionary values (dict.key)
     global options
-    options = AttrDict(timeline_options)
+    options = TypedAttrDict(timeline_options)
 
     # Set dates
     assert start_isodate < end_isodate
@@ -385,16 +393,17 @@ def timespan(start_isodate, end_isodate, **kwargs):
     line(weekday_left_grid, top_label_y, weekday_left_grid, top_grid-50)
 
     # Legend
-    legend_x1 = 50
-    legend_x2 = legend_x1 + width_from_hours(150,100)
-    legend_y1 = options.top_grid - 55
-    legend_y2 = legend_y1 + (parse_date('%d-%d-%d' % (top_date.year+1, 5, 30)) - parse_date('%d-%d-%d' % (top_date.year, 12, 28)))
-    rectangle(legend_x1-20, legend_y1+10, legend_x2+55, legend_y2-14, class_='legend')
-    rectangle(legend_x1, legend_y1+3, legend_x2, legend_y2+3, class_="scale")
-    text(legend_x1-15, legend_y2-3, '5 hours/week')
-    text(legend_x2+3, legend_y2+18, '20 weeks')
-    text(legend_x1+3, legend_y1-8, '100')
-    text(legend_x1-1, legend_y1+1, 'hours')
+    if options.legend:
+        legend_x1 = mid(options.left_grid, weekday_left_grid)-130
+        legend_x2 = legend_x1 + width_from_hours(150,100)
+        legend_y1 = options.top_grid - 55
+        legend_y2 = legend_y1 + (parse_date('%d-%d-%d' % (top_date.year+1, 5, 30)) - parse_date('%d-%d-%d' % (top_date.year, 12, 28)))
+        rectangle(legend_x1-20, legend_y1+10, legend_x2+55, legend_y2-14, class_='legend')
+        rectangle(legend_x1, legend_y1+3, legend_x2, legend_y2+3, class_="scale")
+        text(legend_x1-15, legend_y2-3, '5 hours/week')
+        text(legend_x2+3, legend_y2+18, '20 weeks')
+        text(legend_x1+3, legend_y1-8, '100')
+        text(legend_x1-1, legend_y1+1, 'hours')
 
     # Draw the event line
     text(age_right, label_y, 'events', class_="axis_label")
@@ -453,41 +462,41 @@ def generic(type, intensity, label, start_isodate, end_isodate=None, weekday_sta
 
 
 ## The nature of memories
-def event(name, start, end, *args, **kwargs):
+def event(name, start_isodate, end_isodate, *args, **kwargs):
     'Any key events or landmarks in your life?'
-    return generic('event', 0, name, start, end, *args, **kwargs)
+    return generic('event', 0, name, start_isodate, end_isodate, *args, **kwargs)
 
-def school(intensity, name, start, end, *args, **kwargs):
-    'Where did you enter a course of study?'
-    return generic('school', intensity, name, start, end, *args, **kwargs)
+def school(intensity, name, start_isodate, end_isodate, *args, **kwargs):
+    'Where did you study?'
+    return generic('school', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def work(intensity, name, start, end, *args, **kwargs):
+def work(intensity, name, start_isodate, end_isodate, *args, **kwargs):
     'How have you made a living?'
-    return generic('work', intensity, name, start, end, *args, **kwargs)
+    return generic('work', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def play(intensity, name, start, end, *args, **kwargs):
-    'When were some moments you stepped back and did something just for the simple joy of it?'
-    return generic('play', intensity, name, start, end, *args, **kwargs)
+def play(intensity, name, start_isodate, end_isodate, *args, **kwargs):
+    'When were some moments you stepped back and did something without a goal in mind?'
+    return generic('play', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def project(intensity, name, start, end, *args, **kwargs):
-    'Which sorts of visions were you trying to bring to life?'
-    return generic('project', intensity, name, start, end, *args, **kwargs)
+def project(intensity, name, start_isodate, end_isodate, *args, **kwargs):
+    'Which sort of endeavours did you undertake?'
+    return generic('project', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def love(intensity, name, start, end, *args, **kwargs):
+def love(intensity, name, start_isodate, end_isodate, *args, **kwargs):
     'With whom have you written a shared story?'
-    return generic('love', intensity, name, start, end, *args, **kwargs)
+    return generic('love', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def friend(intensity, name, start, end, *args, **kwargs):
-    'Who have you met along the way that made the journey more pleasant.'
-    return generic('friend', intensity, name, start, end, *args, **kwargs)
+def friend(intensity, name, start_isodate, end_isodate, *args, **kwargs):
+    'Who have you met along the way that has made the journey more pleasant.'
+    return generic('friend', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def roommate(intensity, label, start_isodate, end_isodate, *args, **kwargs):
+def roommate(intensity, name, start_isodate, end_isodate, *args, **kwargs):
     'With whom have you lived with?'
-    return generic('roommate', intensity, label, start_isodate, end_isodate, *args, **kwargs)
+    return generic('roommate', intensity, name, start_isodate, end_isodate, *args, **kwargs)
 
-def home(label, start_isodate, end_isodate, **kwargs):
+def home(name, start_isodate, end_isodate, **kwargs):
     'Where have you lived?'
-    return generic('home', 0, label, start_isodate, end_isodate, **kwargs)
+    return generic('home', 0, name, start_isodate, end_isodate, **kwargs)
 
 
 ## Where the magic begins
