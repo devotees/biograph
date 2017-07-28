@@ -18,10 +18,12 @@ A default `picography.css` and `index.html` are provided for formatting. `person
 
 `./alex.py -t -o alex.tsv` writes a blueprint.tsv from a blueprint.py.
 
-`picography.py -i blueprint.tsv -o picograph.svg` draws a picograph.svg based on a blueprint.tsv.
+`picography.py -i blueprint.tsv -o picograph.svg` draws `picograph.svg` based on `blueprint.tsv`.
 
-`picography.py -i blueprint.py-o picograph.svg` draws a picograph.svg based on a blueprint.py.
+`picography.py -i blueprint.py -o picograph.svg` draws `picograph.svg` based on `blueprint.py`.
+
+## Feedback
 
 We, [the creators](https://github.com/devotees), hope you get as much satisfaction from building and sharing your picographs as we did.
 
-If you would like help building yours, have some grand ideas for improving the general feel and design, or feed our longing hear the stories of friends and strangers, you can send a ping or file an issue to [anjakefala](https://github.com/anjakefala).
+If you would like help building yours, or have some grand ideas for improving the general feel and design, or want to feed our longing to hear the stories of friends and strangers, you can send a ping to [anjakefala](https://github.com/anjakefala) or [file an issue](https://github.com/devotees/picography/issues).
