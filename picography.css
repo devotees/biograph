@@ -101,6 +101,11 @@ polygon.friend3,
 polygon.work3,
 polygon.project3 { stroke-width: 2px; stroke: black; }
 
+polygon.project2 text { fill: floralwhite; }
+polygon.project3 text { fill: floralwhite; }
+polygon.play2 text { fill: floralwhite; }
+polygon.play3 text { fill: floralwhite; }
+
 /* friends: oranges */
 polygon.friend1 { fill: #e38a48; }
 polygon.friend2 { fill: #d46a1c; }
