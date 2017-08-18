@@ -11,6 +11,7 @@ import argparse
 
 ## Grid Options
 timeline_options = dict(
+                        debug=False,              # if True, prints additional debug output
                         legend=True,             # if False, removes legend
                         private=False,           # if False, censors private information
                         top_grid = 100,          # y coordinate of the top grid border
@@ -304,10 +305,6 @@ def timespan(start_isodate, end_isodate, **kwargs):
 
     generic('timespan', 0, '', start_isodate, end_isodate)
 
-    # Allow convenient access of dictionary values (dict.key)
-    global options
-    options = TypedAttrDict(timeline_options)
-
     # Set dates
     assert start_isodate < end_isodate
     global bottom_date,top_date
@@ -519,6 +516,8 @@ def tsv_to_svg(fn_tsv):
 
     for memory in memories[1:]:
         memory = memory[:-1]
+        if options.debug:
+            print(memory)
         type, intensity, label, start_isodate, end_isodate, weekday_start_hour, weekday_end_hour, hours, href, title, slot, rest = memory.split('\t')
         kwargs = {}
 
@@ -612,6 +611,10 @@ def main():
     'Draws a (-o) picograph.svg based on a (-i) blueprint.tsv'
 
     args = collect_args(sys.argv)
+
+    # Allow convenient access of dictionary values (dict.key)
+    global options
+    options = TypedAttrDict(timeline_options)
 
     setup_dwg(args.output or (args.input + '.svg'))
     tsv_to_svg(args.input)
