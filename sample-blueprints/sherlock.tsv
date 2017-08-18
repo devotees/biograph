@@ -1,0 +1,80 @@
+type	intensity	label	start_date	end_date	weekday_start	weekday_end	weekend_hours	href	title	slot	rest
+timespan			1854-01-06	1926							
+home	1	26 Montague St	1875	1881							
+home	1	221B Baker St.	1881	1903							
+home	1	Sussex Downs	1904								
+home	1	America	1912-08	1914-08-02					Chicago, Buffalo, Skibbereen		
+project	2	Bees	1907	1912			4		Practical Handbook of Bee Culture, with some observations upon the segregation of the queen		
+project	1	Blood Test	1880	1881-03-04	18	19					
+school	1	Oxford University	1871	1875	9	17					
+roommate	3	Watson	1881-03-04	1888							
+roommate	3	Watson	1894	1903							
+project	1	LION+RETI	1926-01	1926-12			4				
+event	1	STUD (Study in Scarlet)	1881-03-04	1881-03-07							
+event	1	VALL (Valley of Fear)	1888-01-07	1888-01-08							
+event	1	SIGN (Sign of Four)	1888-09-18	1888-09-21							
+event	1	BASK (Hound of the Baskervilles)	1888-09-25	1888-10-20							
+event	1	ASH/SCAN (Scandal in Bohemia)	1887-05-20	1887-05-22							
+event	1	ASH/REDH (Red-headed League)	1887-10-29	1887-10-30							
+event	1	ASH/IDEN (Case of Identity)	1887-10-18	1887-10-19							
+event	1	ASH/BOSC (Boscombe Valley Mystery)	1889-06-08	1889-06-09							
+event	1	ASH/FIVE (Five Orange Pips)	1887-09-29	1887-09-30							
+event	1	ASH/TWIS (Man with the Twisted Lip)	1887-06-18	1887-06-19							
+event	1	ASH/BLUE (Adventure of the Blue Carbuncle)	1887-12-27	1887-12-27					Others say 1889		
+event	1	ASH/SPEC (Adventure of the Speckled Band)	1883-04-06	1883-04-06							
+event	1	ASH/ENGR (Adventure of the Engineer's Thumb)	1889-09-07	1889-09-08							
+event	1	ASH/NOBL (Adventure of the Noble Bachelor)	1886-10-08	1886-10-08							
+event	1	ASH/BERY (Adventure of the Beryl Coronet)	1890-12-19	1890-12-20							
+event	1	ASH/COPP (Adventure of the Copper Beeches)	1889-04-05	1889-04-20							
+event	1	RSH/EMPT (Adventure of the Empty House)	1894-04-05	1894-04-05							
+event	1	RSH/NORW (Adventure of the Norwood Builder)	1894-08-20	1894-08-21							
+event	1	RSH/DANC (Adventure of the Dancing Men)	1898-07-27	1898-08-13							
+event	1	RSH/SOLI (Adventure of the Solitary Cyclist)	1895-04-13	1895-04-20							
+event	1	RSH/PRIO (Adventure of the Prior School)	1901-05-16	1901-05-18							
+event	1	RSH/BLAC (Adventure of Black Peter)	1895-07-03	1895-07-05							
+event	1	RSH/CHAS (Adventure of Charles Augustus Milverton)	1899-01-05	1899-01-14							
+event	1	RSH/SIXN (Adventure of the Six Napoleons)	1900-06-08	1900-06-10							
+event	1	RSH/3STU (Adventure of the Three Students)	1895-04-05	1895-04-06							
+event	1	RSH/GOLD (Adventure of the Golden Pince-nez)	1894-11-14	1894-11-15							
+event	1	RSH/MISS (Adventure of the Missing Three Quarter)	1896-12-08	1896-12-10							
+event	1	RSH/ABBE (Adventure of the Abbey Grange)	1897-01-23	1897-01-23							
+event	1	RSH/SECO (Adventure of the Second Stain)	1886-10-12	1886-10-15					Klinger says 1894		
+event	1	MEM/SILV (Silver Blaze)	1890-09-25	1890-09-30							
+event	1	MEM/CARD (Cardboard Box)	1889-08-31	1889-09-02							
+event	1	MEM/YELL (Yellow Face)	1888-04-07	1888-04-07							
+event	1	MEM/STOC (Stock-broker's Clerk)	1889-06-15	1889-06-15							
+event	1	MEM/GLOR (Gloria Scott)	1874-07-12	1874-09-22							
+event	1	MEM/MUSG (Musgrave Ritual)	1879-10-02	1879-10-02							
+event	1	MEM/REIG (Reigate Squires)	1887-04-14	1887-04-26							
+event	1	MEM/CROO (Crooked Man)	1889-09-11	1889-09-12							
+event	1	MEM/RESI (Resident Patient)	1886-10-06	1886-10-07							
+event	1	MEM/GREE (Greek Interpreter)	1888-09-12	1888-09-12							
+event	1	MEM/NAVA (Naval Treaty)	1889-07-30	1889-08-01							
+event	1	MEM/FINA (Final Problem)	1891-04-24	1891-05-04							
+event	1	HLB/WIST (Adventure of the Wisteria Lodge)	1890-03-24	1890-03-29							
+event	1	HLB/REDC (Adventure of the Red Circle)	1902-09-24	1902-09-25							
+event	1	HLB/BRUC (Adventure of the Bruce-Partington Plans)	1895-11-21	1895-11-23							
+event	1	HLB/DYIN (Adventure of the Dying Detective)	1887-11-19	1887-11-19							
+event	1	HLB/LADY (Disappearance of Lady Frances Carfax)	1902-07-01	1902-07-18							
+event	1	HLB/DEVI (Adventure of the Devil's Foot)	1897-03-16	1897-03-20							
+event	1	HLB/LAST (His Last Bow)	1914-08-02	1914-08-02							
+event	1	CSH/ILLU (Adventure of the Illustrious Client)	1902-09-03	1902-09-16							
+event	1	CSH/BLAN (Adventure of the Blanched Soldier)	1903-01-07	1903-01-12							
+event	1	CSH/MAZA (Adventure of the Mazarin Stone)	1903-06	1903-06							
+event	1	CSH/3GAB (Adventure of the Three Gables)	1903-05-26	1903-05-27							
+event	1	CSH/SUSS (Adventure of the Sussex Vampire)	1896-11-19	1896-11-21							
+event	1	CSH/THOR (Problem of Thorbridge)	1900-10-04	1900-10-05							
+event	1	CSH/CREE (Adventure of the Creeping Man)	1903-09-06	1903-09-22							
+event	1	CSH/LION (Adventure of the Lion's Mane)	1909-07-27	1909-08-03							
+event	1	CSH/VEIL (Adventure of the Veiled Lodger)	1896-10	1896-10							
+event	1	CSH/SHOS (Adventure of Shoscombe Oldplace)	1902-05-06	1902-05-07							
+event	1	CSH/RETI (Adventure of the Retired Colorman)	1898-07-28	1898-07-30							
+event	1	CSH/3GAR (Adventure of the Three Garridebs)	1902-06-26	1902-06-27							
+love	3	Irene Adler	1888				4			3	
+friend	1	Victor Trevor	1874	1875	16	17					
+friend	3	Watson	1881	1903	18	22					
+project	1	hiatus	1891	1894			10				
+play	1	retirement	1903	1907			10				
+play	1	retirement	1907	1911			10				
+play	1	retirement	1914				10				
+friend	3	moriarty	1891	1892	10	11					
