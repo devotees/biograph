@@ -16,11 +16,11 @@ A default `picography.css` and `index.html` are provided for formatting. `person
 
 ### Sample workflows
 
-`./alex.py -t -o alex.tsv` writes a blueprint.tsv from a blueprint.py.
+`./picography.py -i blueprint.tsv -o timeline.svg` draws `timeline.svg` based on `blueprint.tsv`.
 
-`picography.py -i blueprint.tsv -o picograph.svg` draws `picograph.svg` based on `blueprint.tsv`.
+`./picography.py -i blueprint.py -o timeline.svg` draws `timeline.svg` based on `blueprint.py`.
 
-`picography.py -i blueprint.py -o picograph.svg` draws `picograph.svg` based on `blueprint.py`.
+`./blueprint.py -t -o blueprint.tsv` writes a blueprint.tsv from a blueprint.py.
 
 ## Feedback
 

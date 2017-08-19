@@ -3,12 +3,15 @@
 ## Minimal Example
 
 ```
+#!/usr/bin/env python3
+
 from picography import *
 
 def alex():
 
     # Always begin by initialising the grid...
     timespan('2017-02-24','2017-06-13')
+
     # ...and by adding your homes
     home('womb', '2017-02-04', '2017-06-13', href='')
 
