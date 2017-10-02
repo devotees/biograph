@@ -594,6 +594,10 @@ def make_pico(func, argv):
 
     args = collect_args(argv)
 
+    # Allow convenient access of dictionary values (dict.key)
+    global options
+    options = TypedAttrDict(timeline_options)
+
     if args.tsv:
         setup_dwg('')
         func()
