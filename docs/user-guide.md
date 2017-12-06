@@ -1,11 +1,11 @@
-# Drawing your picograph
+# Drawing your biograph
 
 ## Minimal Example
 
 ```
 #!/usr/bin/env python3
 
-from picography import *
+from biograph import *
 
 def alex():
 
@@ -25,14 +25,14 @@ def alex():
     project(2, 'Prenatal appointments', '2017-04-14', '2017-06-13', 15, 17)
     play(3,'Baby Einstein', '2017-03-22', '2017-06-02', hours=10)
 
-make_pico(alex, sys.argv[1:])
+make_bio(alex, sys.argv[1:])
 ```
 ![](alex.png)
 
 ## The Canvas
 
 ```
-picography.timespan(start_isodate, end_isodate, **kwargs)
+biograph.timespan(start_isodate, end_isodate, **kwargs)
 ```
 Initialises the histomap grid from `start_isodate` (YYYY-MM-DD) to `end_isodate` (YYYY-MM-DD).
 
@@ -73,7 +73,7 @@ For weekends+weeklies and roommates:
 ### The nature of memories
 
 ```
-picography.home(name, start_isodate, end_isodate, **kwargs)
+biograph.home(name, start_isodate, end_isodate, **kwargs)
 ```
 Where have you lived?
 
@@ -82,56 +82,56 @@ Draws a box in the grid background of y-axis length which is equal to the durati
 ---
 
 ```
-picography.roommate(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.roommate(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 With whom have you lived with?
 
 ---
 
 ```
-picography.friend(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.friend(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 Who have you met along the way who has made the journey more pleasant?
 
 ---
 
 ```
-picography.love(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.love(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 With whom have you written a shared story?
 
 ---
 
 ```
-picography.project(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.project(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 Which sort of endeavours did you undertake?
 
 ---
 
 ```
-picography.play(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.play(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 When were some moments you stepped back and did something without a goal in mind?
 
 ---
 
 ```
-picography.work(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.work(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 How have you made a living?
 
 ---
 
 ```
-picography.school(intensity, name, start_isodate, end_isodate, *args, **kwargs)
+biograph.school(intensity, name, start_isodate, end_isodate, *args, **kwargs)
 ```
 Where did you study?
 
 ---
 
 ```
-picography.event(name, start_isodate, end_isodate, *args, **kwargs)
+biograph.event(name, start_isodate, end_isodate, *args, **kwargs)
 ```
 What were the key events or landmarks in your life?
 

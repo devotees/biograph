@@ -498,7 +498,7 @@ def home(name, start_isodate, end_isodate, **kwargs):
 
 ## Where the magic begins
 def print_to_tsv(fn):
-    'Constructs a blueprint.tsv file out of picography function calls.'
+    'Constructs a blueprint.tsv file out of biograph function calls.'
 
     with open(fn, 'w', encoding='utf-8') as fp:
         fp.write('\t'.join(headers) + '\n')
@@ -506,7 +506,7 @@ def print_to_tsv(fn):
             fp.write('\t'.join(memory) + '\n')
 
 def tsv_to_svg(fn_tsv):
-    'Draws a picograph.svg based off of a blueprint.tsv.'
+    'Draws a biograph.svg based off of a blueprint.tsv.'
 
     memories = open(fn_tsv).readlines()
 
@@ -551,7 +551,7 @@ def setup_dwg(fn):
     global dwg
 
     dwg = svgwrite.Drawing(fn, preserveAspectRatio='xMidYMid meet')
-    dwg.add_stylesheet('picography.css', title='base devotees css')
+    dwg.add_stylesheet('biograph.css', title='base devotees css')
     dwg.add_stylesheet('personal.css', title='user custom css')
 
     pattern1 = dwg.defs.add(dwg.pattern(size=(20, 20), id="pattern1", patternUnits="userSpaceOnUse"))
@@ -577,7 +577,7 @@ def setup_dwg(fn):
 
 
 def collect_args(argv):
-    '''picography.py -i <input.tsv> -o <output.svg>
+    '''biograph.py -i <input.tsv> -o <output.svg>
     OR someone.py -t -o <output.tsv>
     OR someone.py -o <output.svg>'''
 
@@ -589,8 +589,8 @@ def collect_args(argv):
 
     return parser.parse_args()
 
-def make_pico(func, argv):
-    'If passed -t writes a blueprint.tsv. Otherwise, can be invoked to draw a picograph.svg.'
+def make_bio(func, argv):
+    'If passed -t writes a blueprint.tsv. Otherwise, can be invoked to draw a biograph.svg.'
 
     args = collect_args(argv)
 
@@ -612,7 +612,7 @@ def make_pico(func, argv):
     print('output to %s' % fnout)
 
 def main():
-    'Draws a (-o) picograph.svg based on a (-i) blueprint.tsv'
+    'Draws a (-o) biograph.svg based on a (-i) blueprint.tsv'
 
     args = collect_args(sys.argv)
 

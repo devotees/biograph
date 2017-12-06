@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from picography import *
+from biograph import *
 
 def alex():
     # Initialise Grid
@@ -16,4 +16,4 @@ def alex():
     project(2, 'Prenatal appointments', '2017-04-14', '2017-06-13', 15, 17, class_='bonding')
     play(3, 'Baby Einstein', '2017-03-22', '2017-06-02', hours=10, class_='bonding')
 
-make_pico(alex, sys.argv[1:])
+make_bio(alex, sys.argv[1:])
