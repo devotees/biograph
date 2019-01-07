@@ -151,4 +151,6 @@ polygon.project3 { fill: #118377 }
 .event5 { fill: #34495e }
 .event6 { fill: #2ecc71 }
 .event7 { fill: #cb416b }
-.event8 { fill: #ffb07c } 
+.event8 { fill: #ffb07c }
+
+.injury { fill: red; }
