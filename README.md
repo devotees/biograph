@@ -1,6 +1,6 @@
 # Biograph
 
-Inspired by [Rand McNally's histomap](http://www.slate.com/features/2013/08/histomapwider.jpg), biograph allows you to visualise and share a personal history.
+Inspired by [Rand McNally's histomap](https://www.slate.com/features/2013/08/histomapwider.jpg), biograph allows you to visualise and share a personal history.
 
 Biographs are maps of a person's time and existence. Like other maps, they do not capture the full depth and story of the terrain. They are instead guides for a journey and an exercise in considering and documenting the most meaningful parts of that slice of the universe.
 
