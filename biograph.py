@@ -139,7 +139,7 @@ def text_left(x1, y1, x2, y2, label, font_size=0.7, align='middle', parent=None,
     Optionally, label can link to href.'''
 
     x = x1
-    y = mid(y1, y2) + 10 
+    y = mid(y1, y2) + 10
     text(x, y, label, None, parent, href, **kwargs)
 
 def text_center(x1, y1, x2, y2, label, align='middle', parent=None, href=None, **kwargs):
@@ -329,7 +329,7 @@ def timespan(start_isodate, end_isodate, **kwargs):
     top_grid = options.top_grid
     top_label_y = top_grid + 5         # y coordinate of where the top labels are placed
 
-    weekday_left_grid = options.left_grid + 250    
+    weekday_left_grid = options.left_grid + 250
     weekday_right_grid = weekday_left_grid + options.weekday_hour_width*(options.weekday_end_hour-options.weekday_start_hour) # Where the weekdays end
     weekend_right_grid = weekday_right_grid + (32/260 * options.weekday_hour_width / (7/365))                                 # Where the weekends end
 
@@ -533,7 +533,7 @@ def tsv_to_svg(fn_tsv):
         # First handle the special cases ...
         if type == 'option':
             assert label in timeline_options, label
-            timeline_options[label] = int(start_isodate) # current container for the option value
+            timeline_options[label] = int(start_isodate or '0') # current container for the option value
 
         elif type == 'timespan':
             timespan(start_isodate, end_isodate)
